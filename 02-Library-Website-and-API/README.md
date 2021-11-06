@@ -766,28 +766,4 @@ In the next two chapters we will build our own Todo API back-end and connect it 
 powered front-end to demonstrate a complete working example that will help solidify how all
 this theory fits together in practice!
 
-<div dir="ltr">
-
-```shell
-
-```
-
-</div>
-
-<div dir="ltr">
-
-```shell
-
-```
-
-</div>
-
-<div dir="ltr">
-
-```shell
-
-```
-
-</div>
-
 </div>
