@@ -1,4 +1,4 @@
-<div dir="ltr">
+<div dir="rtl">
 
 
 # Viewsets and Routers
@@ -20,6 +20,8 @@ code.
 Currently we have the following API endpoints in our project. They are all prefixed with api/v1/
 which is not shown for brevity:
 
+<div dir="ltr">
+    
 Diagram
 ```code
 |Endpoint                              |HTTP Verb|
@@ -34,6 +36,7 @@ Diagram
 
 ```
 
+</div>
 
 
 The first two endpoints were created by us while dj-rest-auth provided the five others. Let’s
@@ -52,6 +55,9 @@ need to wire up new endpoints. This process always involves the following three 
 Start with our serializer. We need to import the User model and then create a UserSerializer
 class that uses it. Then add it to our existing posts/serializers.py file.
 
+    
+<div dir="ltr">
+    
 code
 ```python
 # posts/serializers.py
@@ -72,6 +78,8 @@ class UserSerializer(serializers.ModelSerializer): # new
       fields = ('id', 'username',)
 ```
 
+</div>
+    
 
 It’s worth noting that while we have used get_user_model to reference the User model here,
 there are actually three different ways to reference91 the User model in Django.
@@ -85,6 +93,10 @@ that provides a detail view of an individual user. Just as with our post views w
 ListCreateAPIView and RetrieveUpdateDestroyAPIView here. We also need to reference the
 users model via get_user_model so it is imported on the top line.
 
+ 
+<div dir="ltr">
+    
+    
 code
 ```python
 # posts/views.py
@@ -118,7 +130,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView): # new
 
 ```
 
-
+</div>
 
 If you notice, there is quite a bit of repetition here. Both Post views and User views have the
 exact same queryset and serializer_class. Maybe those could be combined in some way to
@@ -128,6 +140,8 @@ Finally we have our URL routes. Make sure to import our new UserList, and UserDe
 Then we can use the prefix users/ for each.
 
 
+<div dir="ltr">
+    
 code
 ```python
 # posts/urls.py
@@ -143,6 +157,8 @@ urlpatterns = [
 ]
 
 ```
+
+</div>
 
 And we’re done. Make sure the local server is still running and jump over to the browsable API
 to confirm everything works as expected.
@@ -176,6 +192,8 @@ familiar with viewsets. So it’s a trade-off.
 
 Here is what the code looks like in our updated posts/views.py file when we swap in viewsets.
 
+<div dir="ltr">
+    
 
 code
 ```python
@@ -198,6 +216,9 @@ class UserViewSet(viewsets.ModelViewSet): # new
     serializer_class = UserSerializer
 ```
 
+</div>
+    
+    
 At the top instead of importing generics from rest_framework we are now importing viewsets
 on the second line. Then we are using ModelViewSet93 which provides both a list view and a
 detail view for us. And we no longer have to repeat the same queryset and serializer_class
@@ -217,6 +238,8 @@ Django REST Framework has two default routers: SimpleRouter95 and DefaultRouter9
 use SimpleRouter but it’s also possible to create custom routers for more advanced functionality.
 Here is what the updated code looks like:
 
+<div dir="ltr">
+    
 
 ```python
 # posts/urls.py
@@ -230,7 +253,9 @@ router.register('', PostViewSet, basename='posts')
 
 urlpatterns = router.urls
 ```
-
+    
+</div>
+    
 
 On the top line SimpleRouter is imported, along with our views. The router is set to SimpleRouter
 and we “register” each viewset for Users and Posts. Finally, we set our URLs to use the new
@@ -276,3 +301,7 @@ Ultimately the decision of when to add viewsets and routers to your project is q
 A good rule of thumb is to start with views and URLs. As your API grows in complexity if you find
 yourself repeating the same endpoint patterns over and over again, then look to viewsets and
 routers. Until then, keep things simple.
+    
+
+</div>
+ 
