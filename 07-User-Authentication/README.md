@@ -364,12 +364,12 @@ If you navigate to the Django admin at http://127.0.0.1:8000/admin/ you’ll see
 a Tokens section at the top. Make sure you’re logged in with your superuser account to have
 access.                                                                                          
    
-![Admin Homepage with Tokens](images/1.png)
+![Admin Homepage with Tokens](images/1.jpg)
   
 Click on the link for Tokens. Currently there are no tokens which might be surprising.
 
                                                                                           
-![Admin Tokens Page](images/2.png)                                                                                          
+![Admin Tokens Page](images/2.jpg)                                                                                          
                                     
                                                                                           
 After all we have existing users. However, the tokens are only generated after there is an API call
@@ -480,14 +480,14 @@ Command Line
 We have a working log in endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/login/.
                                                                                           
                                                                                           
-![API Log In Endpoint](images/3.png)                                                                                          
+![API Log In Endpoint](images/3.jpg)                                                                                          
              
                                                                                           
 And a log out endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/logout/.                                                                                         
               
                                                                                           
                                                                                           
-![API Log Out Endpoint](images/4.png)                                                                                      
+![API Log Out Endpoint](images/4.jpg)                                                                                      
                                                                                           
 There are also endpoints for password reset, which is located at:
 
@@ -495,7 +495,7 @@ There are also endpoints for password reset, which is located at:
 http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset                                                                               
    
 
-![API Password Reset](images/5.png)
+![API Password Reset](images/5.jpg)
                                                                                           
                                                                                           
                                                                                           
@@ -504,7 +504,7 @@ And for password reset confirmed:
 http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/confirm                                                                                         
                                                                                           
                                                                                           
-![API Password Reset Confirm](images/6.png)                                                                                      
+![API Password Reset Confirm](images/6.jpg)                                                                                      
                                                                                           
  
 ### User Registration
@@ -651,7 +651,7 @@ There is now a user registration endpoint at http://127.0.0.1:8000/api/v1/dj-res
                                                                                           
                                                                                           
                                                                                           
-![API Register](images/7.png)                                                                                         
+![API Register](images/7.jpg)                                                                                         
                                                                                           
                                                                                           
 ### Tokens                                                                                        
@@ -661,14 +661,14 @@ To make sure everything works, create a third user account via the browsable API
 called my user testuser2. Then click on the “POST” button.                                                                                        
                                                                                           
                                                                                           
-![API Register New User](images/8.png)                                                                                        
+![API Register New User](images/8.jpg)                                                                                        
                                                                                           
 The next screen shows the HTTP response from the server. Our user registration POST was
 successful, hence the status code HTTP 201 Created at the top. The return value key is the
 auth token for this new user.                                                                                         
                                                                                           
                                                                                           
-![API Auth Key](images/9.png)                                                                                         
+![API Auth Key](images/9.jpg)                                                                                         
                                                                                           
                                                                                           
 If you look at the command line console, an email has been automatically generated by django-allauth.
@@ -712,7 +712,7 @@ the page. You will be redirected to the Tokens page.
                                                                                         
                                                                                           
                                                                                           
-![Admin Tokens](images/10.png)                                                                                        
+![Admin Tokens](images/10.jpg)                                                                                        
                                                                                           
                                                                                           
 A single token has been generated by Django REST Framework for the testuser2 user. As
@@ -730,7 +730,7 @@ account. Click on the “POST” button.
                                                                                           
                                                                                           
                                                                                           
-![API Log In testuser2](images/11.png)                                                                                          
+![API Log In testuser2](images/11.jpg)                                                                                          
          
   
 Two things have happened. In the upper righthand corner, our user account testuser2 is visible,
@@ -738,7 +738,7 @@ confirming that we are now logged in. Also the server has sent back an HTTP resp
 token.                                                                                       
 
   
-![API Log In Token](images/12.png)
+![API Log In Token](images/12.jpg)
   
   
 In our front-end framework, we would need to capture and store this token. Traditionally this
