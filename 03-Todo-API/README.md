@@ -175,7 +175,7 @@ If you navigate to http://127.0.0.1:8000/admin/ you can now log in. Click on “
 Todos and create 3 new todo items, making sure to add a title and body for both. Here’s what
 mine looks like:
 
-![Image 2](image/2.jpg)
+![Image 2](images/2.jpg)
 
 We’re actually done with the traditional Django part of our Todo API at this point. Since we are
 not bothering to build out webpages for this project, there is no need for website URLs, views,
