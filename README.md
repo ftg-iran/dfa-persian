@@ -9,8 +9,8 @@
 | تاریخ اتمام ترجمه |       مترجم      |             فصل             |
 |:-----------------:|:----------------:|:---------------------------:|
 |         ?         |         ?        |                introduction |
-|         ?         |         ?        |                  Web-APIs-1 |
-|         ?         |         ?        |   Library-Website-and-API-2 |
+|         ?         |Khalil Farashiani |                  Web-APIs-1 |
+|         ?         |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
 |         ?         |    Amirhossein   |                  Todo-API-3 |
 |         ?         |  Sahar Mokarrami |      Todo-React-Front-end-4 |
 |         ?         | Shamim Sanisales |                  Blog-Api-5 |
