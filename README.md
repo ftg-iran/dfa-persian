@@ -8,7 +8,7 @@
 
 | تاریخ اتمام ترجمه |       مترجم      |             فصل             |
 |:-----------------:|:----------------:|:---------------------------:|
-|         ?         |  Mostafa Karimi  |                introduction |
+|       11/1        |  Mostafa Karimi  |                introduction |
 |       12/1        |Khalil Farashiani |                  Web-APIs-1 |
 |       11/15       |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
 |         ?         |    Amirhossein   |                  Todo-API-3 |
