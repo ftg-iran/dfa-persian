@@ -90,7 +90,50 @@ REST_FRAMEWORK = {
     ]
 }
 ```
-  
 </div>
+
+### مجوز در سطح نما
   
+آنچه اکنون می‌خواهیم این است که دسترسی کاربران را به API محدود کنیم. چندین روش برای این منظور وجود دارد :در سطح پروژه، در سطح نما(view) یا در سطح شیء اما از آنجایی که ما فقط دو نما داریم پس بیایید از آنجا شروع کنیم و برای هر کدام مجوز تعیین کنیم.
+  
+در فایل `posts/views.py`،ماژول permissions را وارد کنید و سپس به هر فیلد `permisson_classes` را اضافه کنید.
+  
+کد
+
+```
+# posts/views.py
+from rest_framework import generics, permissions # new
+from .models import Post
+from .serializers import PostSerializer
+  
+  
+class PostList(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,) # new
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+  
+  
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,) # new
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer  
+```
+این تمام چیزی بود که نیاز داشتیم. صفحه را در /http://127.0.0.1:8000/api/v1 رفرش کنید. ببینید چه اتفاقی افتاد!
+
+![API Post List Logged Out](images/8.jpg)
+  
+ما دیگر نمی‌توانیم لیست پست‌ها را ببینیم. در عوض با پیام HTTP 403 که کد وضعیت ممنوع می‌باشد زیرا ما لاگین نشده‌ایم. و از آنجایی که مجوز نداریم هیچ فرمی در API برای ویرایش داده‌ها وجود ندارد.
+  
+اگر به مسیر جزئیات پست درhttp://127.0.0.1:8000/api/v1/ بروید پیامی مشابه را خواهید دید و همچنین  فرمی برای ویرایش وجود ندارد.
+  
+![API Detail Logged Out](images/9.jpg)  
+  
+بنابراین از این لحظه تنها کاربران لاگین شده می‌توانند صفحه API را ببینند. اگر با حساب testuser‌ یا superuser خود وارد شوید این صفحات در دسترس هستند.
+  
+اما به این فکر کنید که اگر API از نظر پیچیدگی گسترده‌تر شود. در واقع ما در نماها و صفحات بیشتری را در آینده خواهیم داشت. که اضافه کردن `permission_classes`اختصاصی برای هر نما اگر بخواهیم از تنظیمات مجوز مشابه در تمام API استفاده کنیم کاری تکراری  به نظر می‌آید.
+  
+آیا بهتر نیست که مجوزها را یکبار برای همیشه، برای سطح پروژه   انجام دهیم، تا اینکه به ازای هر نما اینکار را انجام دهیم؟
+  
+  
+
 </div> 
