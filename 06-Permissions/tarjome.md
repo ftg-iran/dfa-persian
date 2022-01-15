@@ -134,6 +134,64 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
   
 آیا بهتر نیست که مجوزها را یکبار برای همیشه، برای سطح پروژه   انجام دهیم، تا اینکه به ازای هر نما اینکار را انجام دهیم؟
   
+### مجوز در سطح پروژه
+ 
+در این مرحله باید سر خود را به نشانه موافقت تکان دهید. این یک روش ساده‌تر و امن‌تر برای تنظیم سیاست محدودیت‌‌های دسترسی در سطح پروژه و در حد نیاز اعمال آن در سطح نما می‌باشد. این کاری است که انجام می‌دهیم.
   
+خوشبختانه `Django REST Framework` با تعدادی از تنظیمات مجوزها  در سطح پروژه همراه می‌باشد که می‌توانیم استفاده کنیم، شامل:
+  
+- [AllowAny](http://www.django-rest-framework.org/api-guide/permissions/#allowany)  - هر کاربری، احراز هویت شده باشد یا نه، اجازه دسترسی کامل را دارد.  
+- [IsAuthenticated](http://www.django-rest-framework.org/api-guide/permissions/#isauthenticated) - کاربران ثبت‌نام شده و احراز هویت شده فقط اجازه دسترسی دارند.
+- [IsAdminUser](http://www.django-rest-framework.org/api-guide/permissions/#isadminuser) - تنها ادمین یا کاربران سوپر اجازه دسترسی خواهند داشت
+- [IsAuthenticatedOrReadOnly](http://www.django-rest-framework.org/api-guide/permissions/#isauthenticatedorreadonly) - تمام کاربران می‌توانند هر صفحه‌ای را ببینند، اما تنها کاربران احراز هویت شده اجازه نوشتن، ویرایش، یا حذف را خواهند داشت
+  
+پیاده‌سازی هر کدام از این چهار مورد مستلزم به بروزرسانی  `DEFAULT_PERMISSION_CLASSES` و رفرش صفحه‌ی مرورگر می‌باشد. همین!
+  
+بیایید تنظیمات را روی IsAuthenticated  قرار دهیم تا تنها کاربران احراز هویت و لاگین شده بتوانند صفحه API را ببینند.
+فایل config/settings.py را به صورت زیر آپدیت کنید. 
+  
+<div dir="ltr">
+  
+Code
+  
+```python
+# config/settings.py
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', # new
+    ]
+}
+```
+  
+</div>  
 
+حال به فایل posts/views.py بروید و تغییرات مجوزهایی که همین الان انجام دادیم را حذف کنید.  
+  
+<div dir="ltr">
+  
+Code
+  
+```python
+# posts/views.py
+from rest_framework import generics
+from .models import Post
+from .serializers import PostSerializer
+  
+  
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+  
+  
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+```
+  
+</div>  
+  
+اگر صفحات لیست پست‌ها و جزئیات  APIرا  رفرش کنید، هنوز کد وضعیت ۴۰۳ را خواهید دید.    
+حال همه‌ي کاربران برای دسترسی به API نیاز به احراز هویت دارند، اما همیشه می‌توانیم تغییراتی اضافی در سطح نما در صورت نیاز ایجاد کنیم.
+  
+  
 </div> 
