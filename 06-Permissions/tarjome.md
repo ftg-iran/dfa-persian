@@ -193,5 +193,118 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 اگر صفحات لیست پست‌ها و جزئیات  APIرا  رفرش کنید، هنوز کد وضعیت ۴۰۳ را خواهید دید.    
 حال همه‌ي کاربران برای دسترسی به API نیاز به احراز هویت دارند، اما همیشه می‌توانیم تغییراتی اضافی در سطح نما در صورت نیاز ایجاد کنیم.
   
+### مجوزهای سفارشی
+  
+نوبت به اولین مجوز سفارشی ما می‌باشد. به عنوان خلاصه‌ای از جایی که الان هستیم: دو کاربر داریم، testuser و دیگری superuser. یک پست وبلاگ در پایگاه‌داده ما وجود دارد، که توسط کاربر superuser ساخته شده‌است.
+  
+می‌خواهیم تنها نویسنده آن پست مشخص اجازه دسترسی به ویرایش و یا حذف آن را داشته باشد، در غیر اینصورت پست وبلاگ باید از نوع فقط  خواندنی باشد. بنابراین حساب superuser باید دسترسی کامل به عملیات CRUD برای هر پست داشته باشد، اما کاربر معمولی یا همان testuser نباید این مجوزها را داشته‌باشد.   
+  
+سرور محلی را با دکمه‌های ترکیبی Control+c متوقف کرده و یک فایل جدید در مسیر اپلیکیشن posts به نام permissions.py ایجاد کنید.  
+  
+خط فرمان 
+  
+``` (blogapi) $ touch posts/permissions.py ```
+
+به صورت پیش‌فرض `Django REST Framework` متکی بر کلاس BasePermission می‌باشد که تمام دیگر کلاس‌های مربوط به مجوزها از آن ارث‌بری می‌کنند. این به این معنی است که تنظیمات مجوزهای از پیش ساخته شده‌ای مثل `AllowAny` و `IsAuthenticated` و سایر تنظیمات آنرا گسترش می‌ٔدهند. سورس کد اصلی آن 
+[در گیت‌هاب در دسترس است. ](https://github.com/encode/django-rest-framework):  
+  
+<div dir="ltr">
+  
+کد
+  
+```python
+class BasePermission(object):
+    """
+    A base class from which all permission classes should inherit.
+    """
+  
+    def has_permission(self, request, view):
+        """
+        Return `True` if permission is granted, `False` otherwise.
+        """
+        return True
+  
+    def has_object_permission(self, request, view, obj):
+        """
+        Return `True` if permission is granted, `False` otherwise.
+        """
+        return True
+```
+  
+</div>
+  
+برای ساخت مجوز سفارشی شده خود، ما تابع `has_object_permission` را اورراید(یا باطل) می‌کنیم
+به طور مشخص می‌خواهیم مجوز فقط خواندنی را به همه درخواست‌ها بدهیم اما برای هر درخواست نوشتن، مانند ویرایش یا حذف، نویسنده باید همانی باشد که به سایت وارد شده و لاگین کرده‌است.  
+در اینجا فایل `posts/permissions.py` ما به صورت زیر می‌باشد.  
+  
+<div dir="ltr">
+  
+کد
+  
+```python
+# posts/permissions.py
+from rest_framework import permissions
+  
+  
+class IsAuthorOrReadOnly(permissions.BasePermission):
+  
+def has_object_permission(self, request, view, obj):
+    # Read-only permissions are allowed for any request
+    if request.method in permissions.SAFE_METHODS:
+        return True
+  
+    # Write permissions are only allowed to the author of a post
+    return obj.author == request.user
+```
+ 
+</div>  
+
+ابتدا کلاس `permissions` را وارد کرده‌ایم و کلاس خود را `IsAuthorOrReadOnly` که کلاس BasePermissions را گسترش می‌دهد و از آن ارث‌بری می‌کند را ساخته‌ایم. سپس تابع has_object_permission را اورراید کرده‌ایم. اگر در خواست شامل افعال HTTP شامل متدهای امن که یک تاپل شامل GET و OPTIONS و HEAD، باشد پس از نوع درخواست فقط خواندنی است و مجوز مربوط داده می‌شود.
+  
+در غیراینصورت درخواست برای نوشتن از هر نوعی می‌باشد، که به معنی بروزرسانی منابع API بنابراین ایجاد، حذف و یا ویرایش می‌باشد. در این مورد، بررسی می‌کنیم که نویسنده‌ای که در شیء(آبجکت) درخواست وجود دارد، که همان `obj.author` پست وبلاگ می‌باشد، با همان کاربری که درخواست را ارسال کرده مطابقت دارد.
+  
+در فایل `views.py`‌باید `IsAuthorOrReadOnly` را وارد کنیم و سپس می‌توانیم برای نمای جزئیات پست(PostDetail) permission_classes را اضافه کنیم.  
+  
+<div dir="ltr">
+  
+کد
+  
+```python
+# posts/views.py
+from rest_framework import generics
+from .models import Post
+from .permissions import IsAuthorOrReadOnly # new
+from .serializers import PostSerializer
+  
+  
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+  
+  
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthorOrReadOnly,) # new
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+```
+  
+</div>  
+
+و کار ما به پایان رسید، حالا بیایید مجوزها را آزمایش کنیم. به  صفحه جزئیات پست که در آدرس /http://127.0.0.1:8000/api/v1/1 می‌باشد، بروید. مطمئن شوید که به عنوان کاربر superuser که نویسنده پست می‌باشد،  وارد شده‌باشید. نام‌کاربری باید در قسمت سمت راست بالای صفحه مشخص باشد
+
+![API Detail Superuser](images/10.jpg)
+
+اگرچه، اگر خارج شوید و با کاربر testuser وارد شوید، صفحه تغییر می‌کند.
+
+![API Detail Testuser](images/11.jpg)
+
+ما ***می‌توانیم*** این صفحه را ببینیم زیرا دسترسی‌های فقط خواندنی مجاز هستند. اگرچه به دلیل کلاس مجوز `IsAuthorOrReadOnly ` که ساختیم  ***نمی‌توانیم*** درخواست‌ّهایی نظیر PUT , DELETE بفرستیم.
+  
+دقت کنید که نماهای عمومی تنها مجوزهای در سطح آبجکت را برای نماهایی که تنها یک مدل نمونه را بازمی‌گردانند،بررسی می‌کنند. اگر به فیلتر سطح آبجکت برای نماهایی که لیستی از نمونه‌ها را بازمی‌گردانند نیاز دارید، نیاز به فیلتر با [اووراید کردن کوئری‌ست اولیه ](https://www.django-rest-framework.org/api-guide/filtering/#overriding-the-initial-queryset) دارید.   
+
+### نتیجه‌گیری
+
+اعمال تنظیمات مناسب بخش مهمی از هر API می‌باشد. به عنوان یک استراتژی عمومی، ایده‌ی خوبی است که از مجوزهای سختگیرانه سطح  پروژه استفاده کنید تا فقط کاربران احراز هویت شده دسترسی به API داشته باشند. سپس در صورت نیاز برای نماهای مختلف API مجوزهای در سطح نما یا مجوزهای سفارشی شده خود را ایجاد کنید.
+  
   
 </div> 
