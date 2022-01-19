@@ -1,4 +1,4 @@
-# Django for APIs
+# ترجمه آزاد کتاب Django for APIs
 
 ### ترجمه آزاد و گروهی کتاب Django for APIs: Build Web APIs with Python and Django
 
