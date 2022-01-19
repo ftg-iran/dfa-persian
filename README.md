@@ -101,16 +101,15 @@
 </details>
   
 <details>
-  <summary>مجوز ها</summary>
+  <summary>مجوز ها &check;</summary>
   <br>
   
-  - Create a new user
-  - Add login to the browsable API
-  - AllowAny
-  - View-Level Permissions
-  - Custom permissions
-  - نتیجه گیری
-  
+  - Create a new user &check;
+  - Add login to the browsable API &check;
+  - AllowAny &check;
+  - View-Level Permissions &check;
+  - Custom permissions &check;
+  - نتیجه گیری &check;  
 </details>
   
 <details>
