@@ -176,3 +176,7 @@
 |         ?         | Majid Aghamohamad|                  Conclusion |
   
 </div>
+
+## ممنون از افرادی که در ترجمه این کتاب مشارکت داشتند :heart:
+
+[![People](https://contrib.rocks/image?repo=ftg-iran/dfa-persian)](https://github.com/ftg-iran/dfa-persian/graphs/contributors)
