@@ -3,7 +3,8 @@
 
 # Viewsets and Routers
 
-Viewsets89 and routers90 are tools within Django REST Framework that can speed-up API
+[Viewsets](http://www.django-rest-framework.org/api-guide/viewsets/) and [routers](https://www.django-rest-framework.org/api-guide/routers/)
+are tools within Django REST Framework that can speed-up API
 development. They are an additional layer of abstraction on top of views and URLs. The primary
 benefit is that a single viewset can replace multiple related views. And a router can automatically
 generate URLs for the developer. In larger projects with many endpoints this means a developer
@@ -82,10 +83,11 @@ class UserSerializer(serializers.ModelSerializer): # new
     
 
 It’s worth noting that while we have used get_user_model to reference the User model here,
-there are actually three different ways to reference91 the User model in Django.
+there are actually [three different ways to reference](https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#referencing-the-user-model) the User model in Django.
 
 By using get_user_model we ensure that we are referring to the correct user model, whether it
-is the default User or a custom user model92 as is often defined in new Django projects.
+is the default User or a [custom user model](https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#specifying-a-custom-user-model)
+as is often defined in new Django projects.
 
 Moving on we need to define views for each endpoint. First add UserSerializer to the list
 of imports. Then create both a UserList class that lists out all users and a UserDetail class
@@ -170,7 +172,6 @@ Our user list endpoint is located at http://127.0.0.1:8000/api/v1/users/
 
 
 
-
 The status code is 200 OK which means everything is working. We can see our three existing
 users.
 
@@ -220,7 +221,7 @@ class UserViewSet(viewsets.ModelViewSet): # new
     
     
 At the top instead of importing generics from rest_framework we are now importing viewsets
-on the second line. Then we are using ModelViewSet93 which provides both a list view and a
+on the second line. Then we are using [ModelViewSet](http://www.django-rest-framework.org/api-guide/viewsets/#modelviewset) which provides both a list view and a
 detail view for us. And we no longer have to repeat the same queryset and serializer_class
 for each view as we did previously!
 
@@ -229,12 +230,12 @@ URL paths. Let’s set those next.
 
 
 ### Routers
-Routers94 work directly with viewsets to automatically generate URL patterns for us. Our current
+[Routers](https://www.django-rest-framework.org/api-guide/routers/) work directly with viewsets to automatically generate URL patterns for us. Our current
 posts/urls.py file has four URL patterns: two for blog posts and two for users. We can instead
 adopt a single route for each viewset. So two routes instead of four URL patterns. That sounds
 better, right?
 
-Django REST Framework has two default routers: SimpleRouter95 and DefaultRouter96. We will
+Django REST Framework has two default routers: [SimpleRouter](https://www.django-rest-framework.org/api-guide/routers/#simplerouter) and [DefaultRouter](https://www.django-rest-framework.org/api-guide/routers/#defaultrouter). We will
 use SimpleRouter but it’s also possible to create custom routers for more advanced functionality.
 Here is what the updated code looks like:
 
@@ -267,7 +268,7 @@ manage.py runserver`.
 
 Note that the User List is the same, however the detail view is a little different. It is now called
 “User Instance” instead of “User Detail” and there is an additional “delete” option which is built-in
-to ModelViewSet97
+to [ModelViewSet](https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset).
 
 ![Image 4](images/4.png)
 
