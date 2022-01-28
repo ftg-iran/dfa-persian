@@ -1,25 +1,23 @@
 <div dir="rtl">
 
 
-# Viewsets and Routers
+# ویوست و روتر ها Viewsets and Routers 
 
-[Viewsets](http://www.django-rest-framework.org/api-guide/viewsets/) and [routers](https://www.django-rest-framework.org/api-guide/routers/)
-are tools within Django REST Framework that can speed-up API
-development. They are an additional layer of abstraction on top of views and URLs. The primary
-benefit is that a single viewset can replace multiple related views. And a router can automatically
-generate URLs for the developer. In larger projects with many endpoints this means a developer
-has to write less code. It is also, arguably, easier for an experienced developer to understand and
-reason about a small number of viewset and router combinations than a long list of individual
-views and URLs.
+[ویوست ها (Viewsets)](https://www.django-rest-framework.org/api-guide/viewsets/) و [روتر ها routers](https://www.django-rest-framework.org/api-guide/routers/) 
+ابزارهایی در Django REST Framework هستند که می توانند سرعت توسعه API را افزایش دهند.
+آنها یک لایه اضافی از انتزاع در بالای ویوها و URL ها هستند. مزیت اصلی, این است که یک viewset می تواند جایگزین چندین view مرتبط شود. 
+و یک router میتواند به طور خودکار url برای توسعه دهنده ایجاد کند. در پروژه های بزرگتر با endpoint زیاد، این بدان معناست که یک توسعه دهنده باید کد کمتری بنویسد.
+همچنین, مسلماً برای یک توسعه دهنده با تجربه, درک و استدلال در مورد تعداد کمی از viewset و ترکیبات router آسان تر از یک لیست طولانی از view ها و URL ها است.  
 
-In this chapter we will add two new API endpoints to our existing project and see how switching
-from views and URLs to viewsets and routers can achieve the same functionality with far less
-code.
+ 
+در این فصل ما دو API endpoint جدید را به پروژه فعلی خود اضافه خواهیم کرد و خواهیم دید که چگونه تغییر از
+view ها و URL ها به viewset ها و router ها می تواند به همان عملکرد با کد بسیار کمتر دست یافت.
+  
+  
 
-
-### User endpoints
-Currently we have the following API endpoints in our project. They are all prefixed with api/v1/
-which is not shown for brevity:
+### اندپوینت های کاربر User endpoints
+  
+در حال حاضر ما API endpoit های زیر را در پروژه خود داریم. همه آنها با پیشوند `api/v1/` هستند که برای اختصار نشان داده نشده است:
 
 <div dir="ltr">
     
@@ -40,21 +38,20 @@ Diagram
 </div>
 
 
-The first two endpoints were created by us while dj-rest-auth provided the five others. Let’s
-now add two additional endpoints to list all users and individual users. This is a common feature
-in many APIs and it will make it clearer why refactoring our views and URLs to viewsets and
-routers can make sense.
+دو endpoint توسط ما ایجاد شد در حالی که dj-rest-auth پنج تای دیگر را ارائه می دهد . بیاید اکنون
+دو endpoint دیگر برای فهرست کردن همه و تک تک کاربران اضافه کنیم . این یک ویژگی مشترک در بسیاری
+از api ها است که واضح تر می کند view ها و URL ها به viewset ها و router ها می تواند منطقی باشد.
 
-Traditional Django has a built-in User model class that we have already used in the previous
-chapter for authentication. So we do not need to create a new database model. Instead we just
-need to wire up new endpoints. This process always involves the following three steps:
+جنگو یک مدل کلاس کاربر داخلی (User) مرسوم دارد که در فصل قبل برای احراز هویت از آن استفاده کرده ایم. 
+بنابراین نیازی به ایجاد مدل جدید در دیتابیس نداریم.
+در عوض ما فقط باید endpoint های جدید را سیم کشی کنیم . این فرآیند همیشه شامل سه مرحله زیر است:
 
-- new serializer class for the model
-- new views for each endpoint
-- new URL routes for each endpoint
+- کلاس serializer جدید برای مدل
+- view های جدید برای هر endpoint
+- مسیرهای URL جدید برای هر endpoint
 
-Start with our serializer. We need to import the User model and then create a UserSerializer
-class that uses it. Then add it to our existing posts/serializers.py file.
+با serializer شروع کنید. ما نیاز داریم مدل User را import کنیم و یک کلاس UserSerializer
+ایجاد کنیم که از آن استفاده کند. سپس آن را به فایل `posts/serializers.py` موجود خود اضافه می کنیم.
 
     
 <div dir="ltr">
@@ -81,19 +78,24 @@ class UserSerializer(serializers.ModelSerializer): # new
 
 </div>
     
+ 
+شایان ذکر است که در حالی که ما از get_user_model برای ارجاع به مدل User در اینجا استفاده کرده ایم ,
+در واقع [سه راه مختلف برای ارجاع](https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#referencing-the-user-model) 
+به مدل User در جنگو وجود دارد.
 
-It’s worth noting that while we have used get_user_model to reference the User model here,
-there are actually [three different ways to reference](https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#referencing-the-user-model) the User model in Django.
+با استفاده از get_user_model اطمینان حاصل می کنیم که به مدل User صحیح اشاره می کنیم,
+چه User پیش فرض باشد یا یک مدل [User سفارشی](https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#specifying-a-custom-user-model)
+همانطور که اغلب در پروژه های جنگو جدید تعریف می شود.
+ 
+ 
 
-By using get_user_model we ensure that we are referring to the correct user model, whether it
-is the default User or a [custom user model](https://docs.djangoproject.com/en/3.1/topics/auth/customizing/#specifying-a-custom-user-model)
-as is often defined in new Django projects.
-
-Moving on we need to define views for each endpoint. First add UserSerializer to the list
-of imports. Then create both a UserList class that lists out all users and a UserDetail class
-that provides a detail view of an individual user. Just as with our post views we can use
-ListCreateAPIView and RetrieveUpdateDestroyAPIView here. We also need to reference the
-users model via get_user_model so it is imported on the top line.
+ 
+ 
+در ادامه باید برای هر endpoint نماها(views) را تعریف کنیم. ابتدا `UserSerializer` را به لیست import ها اضافه کنید.
+سپس هم یک کلاس UserList ایجاد کنید که همه
+کاربران را فهرست می کند و هم یک کلاس UserDetails که نمای جزئیات یک کاربر را ارائه می دهد.
+درست مانند view های پست خود، می توانیم از `ListCreateAPIView` و `RetrieveUpdateDestroyAPIView` در اینجا استفاده کنیم. ما همچنین نیاز به ارجاع به
+مدل کاربران از طریق get_user_model داریم بنابراین در خط بالا import می شود.
 
  
 <div dir="ltr">
@@ -134,12 +136,11 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView): # new
 
 </div>
 
-If you notice, there is quite a bit of repetition here. Both Post views and User views have the
-exact same queryset and serializer_class. Maybe those could be combined in some way to
-save code?
+اگر متوجه شده باشید، در اینجا کمی تکرار وجود دارد. هم view های پست و هم view های کاربر queryset و serializer_class 
+یکسانی دارند. شاید بتوان این را به نوعی برای ذخیره کد ترکیب کرد؟
 
-Finally we have our URL routes. Make sure to import our new UserList, and UserDetail views.
-Then we can use the prefix users/ for each.
+در نهایت ما مسیرهای URL خود را داریم. اطمینان حاصل کنید که view های UserList و UserDetail را import کرده اید.
+سپس می توانیم از پیشوند users/ برای هر کدام استفاده کنیم.
 
 
 <div dir="ltr">
@@ -162,23 +163,19 @@ urlpatterns = [
 
 </div>
 
-And we’re done. Make sure the local server is still running and jump over to the browsable API
-to confirm everything works as expected.
+و ما تمام کردیم. اطمینان حاصل کنید که سرور محلی همچنان در حال اجرا است و به 
+API قابل مرور (browsable API) بروید تا تأیید کنید همه چیز همانطور که انتظار می رود کار می کند.
 
-Our user list endpoint is located at http://127.0.0.1:8000/api/v1/users/
+لیست endpoint کاربران ما در http://127.0.0.1:8000/api/v1/users/ قرار دارد.
 
+![API Users List](images/1.png)
 
-![Image 1](images/1.png)
-
-
-
-The status code is 200 OK which means everything is working. We can see our three existing
-users.
-
-A user detail endpoint is available at the primary key for each user. So our superuser account is
-located at: http://127.0.0.1:8000/api/v1/users/1/.  
-
-![Image 2](images/2.png)
+کد وضعیت (status code) برابر 200 OK است که به این معنی است که همه چیز کار می کند. ما می توانیم سه کاربر موجود خود را ببینیم.
+ 
+نقطه پایانی (endpint) جزئیات کاربر در کلید اصلی برای هر کاربر در دسترس است. بنابراین حساب کاربری superuser
+ما در آدرس زیر قرار دارد: http://127.0.0.1:8000/api/v1/users/1/.
+ 
+![API User Instance](images/2.png)
 
 
 ### Viewsets
