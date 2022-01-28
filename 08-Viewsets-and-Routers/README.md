@@ -217,13 +217,12 @@ class UserViewSet(viewsets.ModelViewSet): # new
 </div>
     
     
-At the top instead of importing generics from rest_framework we are now importing viewsets
-on the second line. Then we are using [ModelViewSet](http://www.django-rest-framework.org/api-guide/viewsets/#modelviewset) which provides both a list view and a
-detail view for us. And we no longer have to repeat the same queryset and serializer_class
-for each view as we did previously!
+در بالا به جای import کردن generics از rest_framework، اکنون در حال import کردن viewsets در خط دوم هستیم.
+سپس ما از [ModelViewSet](http://www.django-rest-framework.org/api-guide/viewsets/#modelviewset) استفاده می کنیم  که هم ویو لیست و هم ویو جزئیات
+را برای ما فراهم می کند . و دیگر مجبور نیستیم همان `queryset` و `serializer_class` را برای هر view تکرار کنیم.
 
-At this point, the local web server will stop as Django complains about the lack of corresponding
-URL paths. Let’s set those next.
+در این مرحله، وب سرور محلی متوقف می شود زیرا جنگو از عدم وجود مسیرهای URL مربوطه شکایت می کند. بیایید آن ها را در کار بعدی تنظیم کنیم.
+
 
 
 ### Routers
