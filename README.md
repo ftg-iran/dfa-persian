@@ -5,19 +5,19 @@
 <div dir='rtl'>
   
 <details>
-  <summary>مقدمه</summary>
+  <summary>مقدمه &check;</summary>
   <br>
   
-  - پیش نیاز ها
-  - چرا API ها
-  - چارچوب REST API جنگو
-  - چرا این کتاب
-  - نتیجه گیری
+  - پیش نیاز ها &check;
+  - چرا API ها &check;
+  - چارچوب REST API جنگو &check;
+  - چرا این کتاب &check;
+  - نتیجه گیری &check;
   
 </details>
   
 <details>
-  <summary>API های وب</summary>
+  <summary>فصل اول : API های وب</summary>
   <br>
   
   - WWW
@@ -34,7 +34,7 @@
 </details>
   
 <details>
-  <summary>API کتابخانه و سایت</summary>
+  <summary>فصل دوم : API کتابخانه و سایت</summary>
   <br>
   
   - جنگو
@@ -55,7 +55,7 @@
 </details>
   
 <details>
-  <summary>TODO API</summary>
+  <summary>فصل سوم : TODO API</summary>
   <br>
 
   - Init setup
@@ -73,19 +73,19 @@
 </details>
   
 <details>
-  <summary>برنامه TODO با فرانت اند React</summary>
+  <summary>فصل چهارم : برنامه TODO با فرانت اند React &check;</summary>
   <br>
   
-  - Install Node
-  - Install React
-  - Mock data
-  - Django rest framwork
-  - نتیجه گیری
+  - Install Node &check;
+  - Install React &check;
+  - Mock data &check;
+  - Django rest framwork &check;
+  - نتیجه گیری &check;
   
 </details>
   
 <details>
-  <summary>API بلاگ</summary>
+  <summary>فصل پنجم : API بلاگ</summary>
   <br>
   
   - Init setup
@@ -101,7 +101,7 @@
 </details>
   
 <details>
-  <summary>مجوز ها &check;</summary>
+  <summary>فصل ششم : مجوز ها &check;</summary>
   <br>
   
   - Create a new user &check;
@@ -113,7 +113,7 @@
 </details>
   
 <details>
-  <summary>احراز هویت کاربر</summary>
+  <summary>فصل هفتم : احراز هویت کاربر</summary>
   <br>
 
   - Basic authentication
@@ -130,7 +130,7 @@
 </details>
   
 <details>
-  <summary>نماها و مسیر ها</summary>
+  <summary>فصل هشتم : نماها و مسیر ها</summary>
   <br>
 
   - نقاط پایانی کاربر &check;
@@ -141,7 +141,7 @@
 </details>
   
 <details>
-  <summary>طرح ها و مستندات</summary>
+  <summary>فصل نهم : طرح ها و مستندات</summary>
   <br>
   
   - طرح ها
