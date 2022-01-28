@@ -178,17 +178,17 @@ API قابل مرور (browsable API) بروید تا تأیید کنید همه
 ![API User Instance](images/2.png)
 
 
-### Viewsets
+### ویوست ها Viewsets
 
-A viewset is a way to combine the logic for multiple related views into a single class. In other
-words, one viewset can replace multiple views. Currently we have four views: two for blog posts
-and two for users. We can instead mimic the same functionality with two viewsets: one for blog
-posts and one for users.
+ویوست ها راهی برای ترکیب منطق برای چندین view مرتبط در یک کلاس واحد است. به عبارت دیگر،
+یک ویوست می تواند جایگزین چندین ویو شود. در حال حاضر ما چهار ویو (view) داریم: دو مورد برای پست های وبلاگ و دو مورد برای کاربران. 
+در عوض می توانیم عملکرد یکسانی را با دو ویوست تقلید کنیم: یکی برای پست های وبلاگ و دیگری برای کاربران.
 
-The tradeoff is that there is a loss in readability for fellow developers who are not intimately
-familiar with viewsets. So it’s a trade-off.
-
-Here is what the code looks like in our updated posts/views.py file when we swap in viewsets.
+معامله این است که کمبود خوانایی برای اشخاص توسعه دهنده که با ویوست ها آشنایی ندارند وجود دارد.  بنابراین این یک معامله است.
+ 
+ 
+اینجاست که کد در فایل آپدیت شده ی ما `posts/views.py` ظاهر می شود وقتی که ویو ست هارا با هم عوض می کنیم.
+ 
 
 <div dir="ltr">
     
