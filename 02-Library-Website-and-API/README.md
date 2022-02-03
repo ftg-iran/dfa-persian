@@ -1,203 +1,146 @@
-<div dir="rtl">
+Django REST Framework در کنار Django web Framework برای ایجاد رابط های برنامه های کاربردی وب
 
-# Library Website and API
+(web APIs) ها کار می کند. ما نمی توانیم تنها با استفاده از Django REST Framework برای ساخت یک رابط برنامه کاربردی وب استفاده کنیم بلکه همواره باید آن را بعد از نصب و پیکربندی Django به پروژه اضافه کنیم.
 
-Django REST Framework works alongside the Django web framework to create web APIs. We
-cannot build a web API with only Django Rest Framework; it always must be added to a project
-after Django itself has been installed and configured.
+در این فصل، ما شباهت ها و تفاوت های بین جنگو مرسوم(Traditional Django یا Django web Framework) و Django REST Framework می پردازیم. مهمترین تفاوت این است که جنگو وبسایت هایی محتوی صفحات وب را ایجاد می کند درحالیکه Django REST Framework به ایجاد رابط برنامه های کاربردی می پردازد که مجموعه ای از نقاط پایانی(endpoint) را که شامل متد های HTTP در دسترس که پاسخی در قالب JSON باز میگردانند، می باشند.
 
-In this chapter, we will review the similarities and differences between traditional Django
-and Django REST Framework. The most important takeaway is that Django creates websites
-containing webpages, while Django REST Framework creates web APIs which are a collection
-of URL endpoints containing available HTTP verbs that return JSON.
+برای نشان دادن این مفاهیم، ما یک وبسایت کتابخانه با جنگوی مرسوم می سازیم و سپس آن را با کمک Django REST Framework به یک web API تبدیل می کنیم.
 
-To illustrate these concepts, we will build out a basic Library website with traditional Django and
-then extend it into a web API with Django REST Framework.
+مطمئن شوید که Python 3 و [Pipenv](https://pypi.org/project/pipenv/) بر روی کامپیوتر شما نصب شده باشد. اگر به راهنمایی نیاز دارید، دستورالعمل کامل در [اینجا](https://djangoforbeginners.com/initial-setup/) می باشد.
 
-Make sure you already have Python 3 and Pipenv22 installed on your computer. Complete
-instructions can be found here23 if you need help.
 
-### Traditional Django
 
-First, we need a dedicated directory on our computer to store the code. This can live anywhere
-but for convenience, if you are on a Mac, we can place it in the Desktop folder. The location really
-does not matter; it just needs to be easily accessible.
+## جنگو مرسوم
 
-<div dir="ltr">
+ابتدا ما نیاز داریم که محلی را برای ذخیره کد بر روی کامپیوترمان اختصاص دهیم. این محل میتواند هر جایی در سیستم شما باشد اما اگر از مک(macOS) استفاده می کنید برای راحتی آن را در پوشه Desktop قرار دهید. محل قرارگیری واقعا اهمیتی ندارد و فقط باید به راحتی قابل دسترسی باشد.
 
-```shelll
+```powershell
 $ cd ~/Desktop
-$ mkdir code && cd code
+$ mkdir code && cd code 
 ```
 
-</div>
+این پوشه code محل قرارگیری تمام کدهای داخل این کتاب خواهد بود. قدم بعدی ایجاد یک محل اختصاصی برای وبسایت کتابخانه مان، نصب جنگو با Pipenv، و بعد ورود به محیط مجازی با استفاده از دستور shell است. شما همیشه باید یک محیط مجازی اختصاصی برای هر پروژه جدید پایتون استفاده کنید.
 
-This code folder will be the location for all the code in this book. The next step is to create a
-dedicated directory for our library site, install Django via Pipenv, and then enter the virtual
-environment using the shell command. You should always use a dedicated virtual environment
-for every new Python project.
-
-<div dir="ltr">
-
-```shell
+```powershell
 $ mkdir library && cd library
-$ pipenv install django~=3.1.0
+$ pipenv install django==2.2.6
 $ pipenv shell
 (library) $
 ```
 
-</div>
+Pipenv درون مسیر و محل فعلی یک Pipfile و Pipfile.lock میسازد. کلمه library(اسم محیط مجازی) داخل پرانتز نشان دهنده این است که محیط مجازی ما فعال است.
 
-Pipenv creates a Pipfile and a Pipfile.lock within our current directory. The (library) in
-parentheses before the command line shows that our virtual environment is active.
+یک وبسایت جنگویی مرسوم از یک پروژه تنها و یک یا بیشتر از یک برنامه(app) که اعمال جداگانه ای را برعهده دارند، تشکیل شده اند. بیاید با دستور startproject یک پروژه جدید ایجاد کنیم. گذاشتن علامت نقظه را در آخر دستور برای نصب کدها در محل فعلی فراموش نکنید. اگر نقطه را نگذارید، جنگو یک پوشه اضافی بصورت پیش فرض میسازد.
 
-A traditional Django website consists of a single project and one (or more) apps representing
-discrete functionality. Let’s create a new project with the startproject command. Don’t forget
-to include the period . at the end which installs the code in our current directory. If you do not
-include the period, Django will create an additional directory by default.
-
-<div dir="ltr">
-
-```shell
-(library) $ django-admin startproject config .
+```powershell
+(library) $ django-admin startproject library_project .
 ```
 
-</div>
+جنگو بصورت خودکار یک پروژه جدید برای ما تولید میکند که میتوانیم با دستور tree آن را مشاهده کنیم.(توجه: اگر tree برای شما در Mac کار نمیکند، آن را با [Homebrew](https://brew.sh/) نصب کنید: brew install tree).
 
-Django automatically generates a new project for us which we can see with the tree command.
-(Note: If tree doesn’t work for you on a Mac, install it with Homebrew24 : brew install tree.)
-
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ tree
 .
-├── Pipfile
-├── Pipfile.lock
-├── config
-│
-├── __init__.py
-│
-├── asgi.py
-│
-├── settings.py
-│
-├── urls.py
-│
-└── wsgi.py
-└── manage.py
-
-1 directory, 8 files
+|-- Pipefile
+|-- pipfile.lock
+|   |-- __init__.py
+|   |-- settings.py
+|   |-- urls.py
+|   |-- wsgi.py
+|-- manage.py
 ```
 
-</div>
+فایل ها وظایف زیر را برعهده دارند:
 
-The files have the following roles:
+__init____.py__ یک روش پایتونی است برای رفتار کردن با یک محل یا دایرکتوری مانند یک پکیج؛ این فایل خالی است.
 
-- `__init__.py` is a Python way to treat a directory as a package; it is empty
-- asgi.py stands for Asynchronous Server Gateway Interface and is a new option in Django
-3.0+
-- settings.py contains all the configuration for our project
-- urls.py controls the top-level URL routes
-- wsgi.py stands for Web Server Gateway Interface and helps Django serve the eventual web
-pages
-- manage.py executes various Django commands such as running the local web server or
-creating a new app.
+settings.py تمامی تنظیمات و پیکربندی های پروژه ما را شامل میشود.
 
-Run migrate to sync the database with Django’s default settings and start up the local Django
-web server.
+urls.py مسیرهای URL سطح بالا را کنترل میکند.
 
-<div dir="ltr">
+wsgi.py مخفف web server gateway interface است و به جنگو کمک میکند که صفحات وب نهایی را سرویس دهی کند.
 
-```shell
+manage.py دستورات مختلف جنگو را از قبیل اجرا کردن وب سرور محلی(local web server ) یا ایجاد یک برنامه جدید را اجرا میکند.
+
+
+
+دستور migrate را برای همگام سازی پایگاه داده با تنظیمات پیش فرض جنگو اجرا کنید و وب سرور محلی جنگو را بالا بیاورید.
+
+```powershell
 (library) $ python manage.py migrate
 (library) $ python manage.py runserver
 ```
 
-</div>
 
-Open a web browser to http://127.0.0.1:8000/25 to confirm our project is successfully installed.
 
-![Image 1](images/1.jpg)
+یک مرورگر وب باز کنید و به آدرس http://127.0.0.1:8000/ بروید تا از نصب درست پروژه اطمینان حاصل کنید.
 
-### First App
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\1.png)
 
-The typical next step is to start adding apps, which represent discrete areas of functionality. A
-single Django project can support multiple apps.
 
-Stop the local server by typing Control+c and then create a books app.
 
-<div dir="ltr">
 
-```shell
+
+## اولین برنامه
+
+قدم بعدی اضافه کردن برنامه هایی است که مسئول محدوده های مجزایی از عملکرد پروژه هستند. یک پروژه جنگو میتواند دارای چندین برنامه باشد.
+
+سرور محلی را با کلیدهای ترکیبی Control+c متوقف کنید و سپس یک برنامه بنام books ایجاد کنید.
+
+```powershell
 (library) $ python manage.py startapp books
 ```
 
-</div>
 
-Now let’s see what files Django has generated.
 
-<div dir="ltr">
+حالا بیاید ببینیم که جنگو چه فایلهایی تولید کرده است.
 
-```shell
+```powershell
 (library) $ tree
 .
-├── Pipfile
-├── Pipfile.lock
-├── books
-│
-├── __init__.py
-│
-├── admin.py
-│
-├── apps.py
-│
-├── migrations
-│
-│
-└── __init__.py
-│
-├── models.py
-│
-├── tests.py
-│
-└── views.py
-├── config
-│
-├── __init__.py
-│
-├── asgi.py
-│
-├── settings.py
-│
-├── urls.py
-│
-└── wsgi.py
-├── db.sqlite3
-└── manage.py
+|-- Pipefile
+|-- Pipefiel.lock
+|-- books
+|   |-- __init__.py
+|   |-- admin.py
+|   |-- apps.py
+|   |-- migrations.py
+|   |   |-- __init__.py
+|   |-- models.py
+|   |-- tests.py
+|   |-- views.py
+|-- library_project
+|   |-- __init__.py
+|   |-- settings.py
+|   |-- urls.py
+|   |-- wsgi.py
+|-- manage.py
 ```
 
-</div>
+هر برنامه یک فایل __init____.py__ دارد که آن را به عنوان یک پکیج پایتون معرفی می کند. 6 فایل جدید ایجاد شده اند.
 
-Each app has a `__init__.py` file identifying it as a Python package. There are 6 new files created:
+admin.py یک فایل پیکربندی برای برنامه داخلی مدیر جنگو.
 
-- admin.py is a configuration file for the built-in Django Admin app
-- apps.py is a configuration file for the app itself
-- the migrations/ directory stores migrations files for database changes
-- models.py is where we define our database models
-- tests.py is for our app-specific tests
-- views.py is where we handle the request/response logic for our web app
+apps.py یک فایل پیکربندی برای خود برنامه.
 
-Typically, developers will also create an urls.py file within each app, too, for routing.
+دایرکتوری migrations فایلهای migrations را برای تغییرات پایگاه داده ذخیره می کند.
 
-Let’s build out the files so that our Library project lists out all books on the homepage. Open the
-text editor of your choice to the config/settings.py file. The first step is to add the new app to
-our INSTALLED_APPS configuration.
+models.py جائیکه ما مدل های پایگاه داده را تعریف می کنیم.
 
-<div dir="ltr">
+tests.py برای تست های خاص برنامه می باشد.
+
+views.py جایی است که ما منطق درخواست و پاسخ(request/response) برنامه وب(web app) خود را پیاده می کنیم.
+
+معمولا توسعه دهندگان در هر برنامه یک فایل urls.py هم برای مسیردهی ایجاد می کنند.
+
+
+
+بیایید فایل‌ها را بسازیم تا پروژه کتابخانه ما همه کتاب‌ها را در صفحه اصلی فهرست کند. 
+
+فایل settings.py را باز کنید. اولین قدم اضافه کردن برنامه های جدید به تنظیمات INSTALLED_APPS می باشد. ما همیشه برنامه های جدید را به آخر این لیست اضافه می کنیم چون جنگو آن ها را به ترتیب می خواند و ما می خواهیم که برنامه های هسته داخلی جنگو مانند admin و auth قبل از برنامه های ما بارگیری شوند.
 
 ```python
-# config/settings.py
+# library_project/settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -205,22 +148,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # Local
-    'books', # new
+    'books.apps.BooksConfig', # new
 ]
 ```
 
-</div>
+سپس دستور migrate را برای همگام سازی پایگاه داده با تغییرات، اجرا می کنیم.
 
-Each web page in traditional Django requires several files: a view, url, and template. But first we
-need a database model so let’s start there.
+```powershell
+(library) $ python manage.py migrate
+```
 
-### Models
 
-In your text editor, open up the file books/models.py and update it as follows:
 
-<div dir="ltr">
+هر صفحه وب در جنگو مرسوم به چندین فایل نیاز دارد: یک view، یک url و یک template. اماقبل از همه ما به مدل های پایگاه داده نیاز داریم بنابراین بیاید از فایل models.py شروع کنیم.
+
+
+
+## مدل ها
+
+فایل books/models.py را در ویرایشگر متن(text editor) خود باز کنید و تغییرات زیر را در آن اعمال کنید:
 
 ```python
 # books/models.py
@@ -231,66 +178,45 @@ class Book(models.Model):
     subtitle = models.CharField(max_length=250)
     author = models.CharField(max_length=100)
     isbn = models.CharField(max_length=13)
-
+    
     def __str__(self):
         return self.title
 ```
 
-</div>
+این یک مدل ساده جنگو است که در خط اول آن ما از models را از Django وارد کرده ایم و سپس یک کلاس book ایجاد کرده ایم که از آن ارث بری می کند. درون این کلاس چهار فیلد وجود دارد: author، subtitle، title و isbn. ما همچنین یک متد __str____.py__ ساخته ایم که عنوان کتاب را در پنل مدیریت جنگو نشان دهد.
 
-This is a basic Django model where we import models from Django on the top line and then create
-a Book class that extends it. There are four fields: title, subtitle, author, and isbn. We also include a `__str__` method so that the title of a book will display in the admin later on.
+توجه داشته باشید که ISBN یک شناسه 13 کاراکتری یکتا میباشد که به هر کتاب منتشر شده ای اختصاص داده می شود.
 
-Note that an ISBN26 is a unique, 13-character identifier assigned to every published book.
+چون ما یک مدل پایگاه داده جدید ساخته ایم نیاز به ساخت یک فایل migration داریم تا تغییر ایجاد شده در پایگاه داده هم اعمال شود. مشخص کردن نام برنامه اختیاری است اما اینجا توصیه می شود.
 
-Since we created a new database model we need to create a migration file to go along with
-it. Specifying the app name is optional but recommended here. We could just type python
-manage.py makemigrations but if there were multiple apps with database changes, both would
-be added to the migrations file which makes debugging in the future more of a challenge. Keep
-your migrations files as specific as possible.
+می توانیم تنها تایپ کنیم python manage.py makemigrations اما اگر چندین برنامه که تغییرات پایگاه داده ای داشته اند، وجود داشته باشد، همه آنها به فایل migrations اضافه میشوند که خطایابی و رفع اشکال را در آینده تبدیل به یک چالش میکند. فایل های migrations خود را تا جای ممکن مجزا نگه دارید.
 
-Then run migrate to update our database.
+سپس دستور migrate را برای بروزرسانی پایگاه داده اجرا کنید.
 
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ python manage.py makemigrations books
-Migrations for 'books':
-    books/migrations/0001_initial.py
-        - Create model Book
 (library) $ python manage.py migrate
-Operations to perform:
-    Apply all migrations: admin, auth, books, contenttypes, sessions
-Running migrations:
-    Applying books.0001_initial... OK
 ```
 
-</div>
 
-So far so good. If any of this feels new to you, I suggest you pause and review Django for
-Beginners27 for a more-detailed explanation of traditional Django.
 
-### Admin
+اگر هرکدام از مطالبی که تا اینجا بررسی کردیم برای شما جدید بنظر می آید، به شما پیشنهاد می کنم مطالعه این کتاب را همینجا خاتمه دهید و برای تشریح جزئی تر جنگو مرسوم، کتاب [Django for Beginners](https://djangoforbeginners.com/) را مرور کنید.
 
-We can start entering data into our new model via the built-in Django app. But we must do two
-things first: create a superuser account and update admin.py so the books app is displayed.
 
-Start with the superuser account. On the command line run the following command:
 
-<div dir="ltr">
 
-```shell
+
+## ادمین
+
+ما می توانیم وارد کردن داده به مدل جدیدمان را با استفاده از برنامه داخلی جنگو انجام دهیم. اما اول باید دو کار را انجام دهیم: ایجاد یک حساب کاربری superuser و بروزرسانی فایل admin.py تا برنامه books نمایش داده شود.
+
+```powershell
 (library) $ python manage.py createsuperuser
 ```
 
-</div>
+مطابق درخواست ها یک email، username و password وارد کنید. توجه داشته باشید که به دلایل امنیتی، متن در هنگام وارد کردن password بر روی صفحه نمایش داده نمی شود.
 
-Follow the prompts to enter a username, email, and password. Note that for security reasons,
-text will not appear on the screen while entering your password.
-
-Now update our book app’s admin.py file.
-
-<div dir="ltr">
+حالا فایل admin.py را بروزرسانی کنید.
 
 ```python
 # books/admin.py
@@ -300,47 +226,58 @@ from .models import Book
 admin.site.register(Book)
 ```
 
-</div>
+این تمام کاری بود که باید انجام می دادیم! سرور محلی را دوباره بالا بیاورید.
 
-That’s all we need! Start up the local server again.
-
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ python manage.py runserver
 ```
 
-</div>
+به آدرس http://127.0.0.1:8000/admin بروید و وارد شوید.
 
-Navigate to http://127.0.0.1:8000/admin and log in. You will be redirected to the admin
-homepage.
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\2.png)
 
-![Image 2](images/2.jpg)
 
-Click on the “+ Add” link next to Books.
 
-![Image 3](images/3.jpg)
+شما به صفحه اصلی admin منتقل خواهید شد.
 
-I’ve entered in the details for my Django for Beginners book. You can enter whatever text
-you want here. It’s purely for demonstration purposes. After clicking the “Save” button we are
-redirected to the “Books” page that lists all current entries.
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\3.png)
 
-![Image 4](images/4.jpg)
 
-Our traditional Django project has data now but we need a way to expose it as a web page. That means creating views, URLs, and template files. Let’s do that now.
 
-### Views
+روی لینک Books کلیک کنید.
 
-The views.py file controls how the database model content is displayed. Since we want to list all
-books we can use the built-in generic class ListView28.
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\4.png)
 
-Update the books/views.py file.
 
-<div dir="ltr">
+
+سپس روی دکمه + Add Book در گوشه بالا سمت راست کلیک کنید.
+
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\5.png)
+
+
+
+من جزئیات را برای کتاب Django for Beginners خودم وارد کرده ام. شما می توانید هر متنی که بخواهید اینجا وارد کنید. این اطلاعات صرفا برای اهداف نمایشی است. بعد از کلیک کردن روی دکمه Save به صفحه Books که در آن تمام اطلاعات ثبت شده فعلی لیست شده اند، منتقل می شویم.
+
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\6.png)
+
+
+
+پروژه جنگو مرسوم ما الآن داده دارد اما ما یک راه برای نمایش آن به عنوان یک صفحه وب نیاز داریم. این یعنی ایجاد فایل های URLs، views و templates. بیاید اینکار را الآن انجام دهیم.
+
+
+
+
+
+## نما ها(views)
+
+فایل views.py نحوه نمایش محتوای مدل های پایگاه داده را کنترل می کند. از آنجاییکه ما میخواهیم تمام کتابها را لیست کنیم می توانیم از کلاس عمومی داخلی ListView استفاده کنیم.
+
+فایل books/views.py را بروزرسانی کنید.
 
 ```python
 # books/views.py
 from django.views.generic import ListView
+
 from .models import Book
 
 class BookListView(ListView):
@@ -348,24 +285,20 @@ class BookListView(ListView):
     template_name = 'book_list.html'
 ```
 
-</div>
+در دو خط اول ما ListView و مدل Book خودمان را وارد کرده ایم. سپس یک کلاس BookListView که مشخص میکند از چه مدل و قالبی(template) باید استفاده شود، ایجاد کرده ایم.(توجه داشته باشید که قالب را هنوز نساخته ایم.)
 
-On the top lines we’ve imported ListView and our Book model. Then we create a BookListView
-class that specifies the model to use and the template (not created yet).
+دو گام دیگر برای اینکه یک صفحه پیج آماده داشته باشیم، باقیمانده است: درست کردن قالب و پیکربندی URL ها. بیاید با URL ها شروع کنیم.
 
-Two more steps before we have a working web page: make our template and configure our URLs.
-Let’s start with the URLs.
 
-### URLs
 
-We need to set up both the project-level urls.py file and then one within the books app. When
-a user visits our site they will first interact with the config/urls.py file so let’s configure that
-first. Add the include import on the second line and then a new path for our books app.
 
-<div dir="ltr">
+
+## URLs
+
+نیاز است که هم فایل urls.py اصلی که مربوط به پروژه و هم فایلی که داخل برنامه books داریم را تنظیم کنیم. وقتی یک کاربر از سایت ما بازدید می کند ابتدا با فایل library_project/urls.py تعامل خواهد داشت بنابراین ابتدا پیکربندیهای مربوط به این فایل را انجام می دهیم.
 
 ```python
-# config/urls.py
+# library_project/urls.py
 from django.contrib import admin
 from django.urls import path, include # new
 
@@ -375,32 +308,20 @@ urlpatterns = [
 ]
 ```
 
-</div>
+دو خط اول، برنامه داخلی admin، متد path برای مسیرهای ما و متد include که با برنامه books ما استفاده می شود را وارد می کنند. اگر کاربر به /admin/ برود به برنامه admin منتقل می شود. ما برای مسیر برنامه books از رشته خالی '' استفاده کردیم که این معنی را می دهد که یک کاربر در صفحه اصلی بطور مستقیم به برنامه books منتقل می شود.
 
-The top two lines import the built-in admin app, path for our routes, and include which will be
-used with our books app. If a user goes to /admin/ they will be redirected to the admin app. We
-use the empty string, '', for the books app route which means a user on the homepage will be
-redirected directly to the books app.
+حالا ما می توانیم فایل books/urls.p را تنظیم کنیم. اما جنگو به دلایلی بطور پیش فرض شامل فایل urls.py در برنامه ها نمی باشد بنابراین خود ما باید آن را ایجاد کنیم.
 
-Now we can configure our books/urls.py file. But, oops! Django for some reason does not
-include a urls.py file by default in apps so we need to create it ourself. If you are on a Mac
-you can use the touch command; Windows users must create the file within the text editor.
-
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ touch books/urls.py
 ```
 
-</div>
-
-Now within a text editor update the new file.
-
-<div dir="ltr">
+حالا با استفاده از یک ویرایشگر متن فایل جدید را بروزرسانی کنید.
 
 ```python
 # books/urls.py
 from django.urls import path
+
 from .views import BookListView
 
 urlpatterns = [
@@ -408,106 +329,81 @@ urlpatterns = [
 ]
 ```
 
-</div>
+ما فایل views.py خودمان را وارد کردیم، BookListView را در آدرس رشته خالی '' تنظیم کردیم و یک [named URL](https://docs.djangoproject.com/en/2.1/topics/http/urls/#naming-url-patterns) با مقدار home به عنوان یک best practice اضافه کردیم.
 
-We import our views file, configure BookListView at the empty string '', and add a named URL29
-home as a best practice.
+روشی که جنگو کار می‌کند، حالا وقتی کاربران به صفحه اصلی وب‌سایت ما می‌روند، آنها نخست به فایل  library_project/urls.py می رسند سپس به books/urls.py هدایت می شوند که مشخص می کند باید از اBookListView استفاده شود. در این فایل view از مدل Book به همراه ListView برای فهرست کردن همه کتاب ها استفاده شده است.
 
-The way Django works, now when a user goes to the homepage of our website they will first
-hit the config/urls.py file, then be redirected to books/urls.py which specifies using the
-BookListView. In this view file, the Book model is used along with ListView to list out all books.
+قدم نهایی ایجاد فایل قالب است که چیدمان در صفحه حقیقی وب را کنترل می کند. ما قبلا نام آن(book_list.html) را در فایل view مشخص کرده ایم. دو گزینه برای مکان آن وجود دارد: Django template loader بطور پیش فرض داخل برنامهbooks ما در مسیر books/templates/books/book_list.html بدنبال قالب ها می گردد. همچنین ما می توانیم یک دایرکتوری templates جدا هم سطح پروژه ایجاد کنیم و فایل settings.py را برای رفتن به آن مکان برای یافتن قالب ها بروزرسانی کنیم.
 
-The final step is to create our template file that controls the layout on the actual web page.
-We have already specified its name as book_list.html in our view. There are two options for its
-location: by default the Django template loader will look for templates within our books app in the
-following location: books/templates/books/book_list.html. We could also create a separate,
-project-level templates directory instead and update our config/settings.py file to point there.
+اینکه شما در پروژ های خود از کدام روش استفاده کنید یک ترجیح شخصی است. ما در اینجا از ساختار پیشفرض استفاده می کنیم. اگر درباره روش دوم کنجکاو هستید، کتاب [Django for Beinners](https://djangoforbeginners.com/) را بررسی کنید.
 
-Which one you ultimately use in your own projects is a personal preference. We will use the
-default structure here. If you are curious about the second approach, check out the book Django
-For Beginners30.
+با ساخت یک پوشه templates در برنامه books شروع می کنیم، سپس داخل آن یک پوشه books و در آخر یک فایل book_list.html در آن می سازیم.
 
-Start by making a new templates folder within the books app, then within it a books folder, and
-finally a book_list.html file.
-
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ mkdir books/templates
 (library) $ mkdir books/templates/books
 (library) $ touch books/templates/books/book_list.html
 ```
 
-</div>
-
-Now update the template file.
-
-<div dir="ltr">
+حالا فایل template را بروزرسانی می کنیم.
 
 ```html
 <!-- books/templates/books/book_list.html -->
 <h1>All books</h1>
 {% for book in object_list %}
-    <ul>
-        <li>Title: {{ book.title }}</li>
-        <li>Subtitle: {{ book.subtitle }}</li>
-        <li>Author: {{ book.author }}</li>
-        <li>ISBN: {{ book.isbn }}</li>
-    </ul>
+	<ul>
+		<li>Title: {{ book.title }}</li>
+		<li>Subtitle: {{ book.subtitle }}</li>
+		<li>Author: {{ book.author }}</li>
+		<li>ISBN: {{ book.isbn }}</li>
+	</ul>
 {% endfor %}
 ```
 
-</div>
+جنگو با زبان قالبی([template language](https://docs.djangoproject.com/en/2.1/ref/templates/language/)) عرضه می شود که اجازه اعمال عملیات های منطقی ساده را در قالب های html به ما می دهد. در اینجا ما از تگ [for](https://docs.djangoproject.com/en/2.1/ref/templates/builtins/#std:templatetag-for) برای حلقه زدن بر روی تمام کتاب های موجود استفاده کرده ایم. تگ های قالب باید همیشه باید شامل براکت های باز و بسته باشند. بنابراین فرمت همیشه بصورت {% ... for %} می باشد و ما باید حلقه را با {% endfor %} خاتمه دهیم.
 
-Django ships with a template language31 that allows for basic logic. Here we use the for32 tag to
-loop over all available books. Template tags must be included within opening/closing brackets
-and parentheses. So the format is always {% for ... %} and then we must close our loop later
-with {% endfor %}.
+چیزی که ما درحال حقه زدن بر روی آن هستیم، شئ ای است که شامل تمامی کتابهای در دسترس در مدل ما می باشد. نام این شئ object_list است. بنابراین برای حلقه زدن بر روی هر کتاب ما می نویسیم 
 
-What we are looping over is the object containing all available books in our model courtesy of
-ListView. The name of this object is object_list. Therefore to loop over each book we write {%
-for book in object_list %}. And then display each field from our model.
+{% for book in object_list %}. و سپس هر فیلد از مدل را نمایش می دهیم.
 
-### Webpage
 
-Now we can start up the local Django server and see our web page.
 
-<div dir="ltr">
 
-```shell
+
+## صفحه وب
+
+حالا میتوانیم سرور محلی جنگو را بالا بیاوریم و صفحه وب خود را مشاهده کنیم.
+
+```powershell
 (library) $ python manage.py runserver
 ```
 
-</div>
+به آدرس صفحه اصلی که http://127.0.0.1:8000/ میباشد بروید.
 
-Navigate to the homepage which is at http://127.0.0.1:8000/.
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\7.png)
 
-![Image 5](images/5.jpg)
 
-If we add additional books in the admin, they will each appear here, too.
-This was a very quick run-through of a traditional Django website. Now let’s add an API to it!
 
-### Django REST Framework
+اگر ما کتاب های دیگری را در admin اضافه کنیم، آنها نیز در اینجا به نمایش درخواهند آمد.
 
-Django REST Framework is added just like any other third-party app. Make sure to quit the local
-server Control+c if it is still running. Then on the command line type the below.
+این یک مرور سریع از وبسایت جنگویی مرسوم بود. حالا بیایید به آن رابط برنامه کاربردی هم اضافه کنیم!
 
-<div dir="ltr">
 
-```shell
-(library) $ pipenv install djangorestframework~=3.11.0
+
+
+
+## Django REST Framework
+
+Django REST Framework هم مانند بقیه برنامه های شخص ثالث نصب می شود. ابتدا مطمئن شوید که سرور محلی در حال اجرا نباشد و اگر در حال اجرا است آن را با کلیدهای ترکیبی Control+c متوقف کنید. سپس در خط فرمان دستور زیر را تایپ کنید.
+
+```powershell
+(library) $ pipenv install djangorestframework==3.10.3
 ```
 
-</div>
-
-Add rest_framework to the INSTALLED_APPS config in our config/settings.py file. I like to make
-a distinction between third-party apps and local apps as follows since the number of apps grows
-quickly in most projects.
-
-<div dir="ltr">
+rest_framework را به تنظیمات INSTALLED_APPS در فایل settings.py اضافه کنید. من عادت دارم که یک فاصله بین برنامه های شخص ثالث و محلی قرار دهم به این دلیل که تعداد برنامه ها در بیشتر پروژه ها به سرعت افزایش پیدا می کنند و در نتیجه این کار باعث سهولت پیدا کردن نام برنامه می شود.
 
 ```python
-# config/settings.py
+# library_project/settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -520,250 +416,195 @@ INSTALLED_APPS = [
     'rest_framework', # new
     
     # Local
-    'books',
+    'books.apps.BooksConfig',
 ]
 ```
 
-</div>
+در نهایت رابط برنامه کاربردی ما یک نقطه پایانی که تمام کتاب ها را در فرمت JSON لیست می کند، نمایش می دهد. بنابراین ما یک مسیر URL جدید، یک view جدید و یک فایل serializer جدید(درباره این فایل بزودی بیشتر می خوانید) نیاز داریم.
 
-Ultimately, our API will expose a single endpoint that lists out all books in JSON. So we will need
-a new URL route, a new view, and a new serializer file (more on this shortly).
+برای سازمان دهی این فایل ها راه های زیادی وجود دارد اگرچه ترجیح من این است که یک برنامه مختص به رابط های برنامه کاربردی ایجاد کنیم. در این روش حتی اگر در آینده هم برنامه های بیشتری اضافه کنیم، هر برنامه میتواند شامل model ها، view ها، template ها و url های مورد نیاز برای صفحات وب باشد اما تمام فایل های مختص به رابط های برنامه کاربردی مربوط به کل پروژه درون یک برنامه اختصاص یافته به رابط های برنامه کاربردی قرار می گیرند.
 
-There are multiple ways we can organize these files however my preferred approach is to create
-a dedicated api app. That way even if we add more apps in the future, each app can contain the
-models, views, templates, and urls needed for dedicated webpages, but all API-specific files for
-the entire project will live in a dedicated api app.
+بیایید ابتدا یک برنامه جدید بنام api بسازیم.
 
-Let’s first create a new api app.
-
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ python manage.py startapp api
 ```
 
-</div>
-
-Then add it to INSTALLED_APPS.
-
-<div dir="ltr">
+سپس آن را به INSTALLED_APPS اضافه کنیم.
 
 ```python
-# config/settings.py
+# library_project/settings.py
 INSTALLED_APPS = [
-    # Local
-    'books.apps.BooksConfig',
-    'api.apps.ApiConfig', # new
-
-    # 3rd party
-    'rest_framework',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # 3rd party
+    'rest_framework',
+    
+    # Local
+    'books.apps.BooksConfig',
+    'api.apps.ApiConfig', # new
 ]
 ```
 
-</div>
+برنامه api مدل پایگاه داده ای مختص به خود ندارد بنابراین نیازی به ایجاد یک فایل مهاجرت و بروزرسانی پایگاه داده نیست.
 
-The api app will not have its own database models so there is no need to create a migration file
-and run migrate to update the database.
 
-### URLs
 
-Let’s start with our URL configs. Adding an API endpoint is just like configuring a traditional
-Django app’s routes. First at the project-level we need to include the api app and configure its
-URL route, which will be api/.
 
-<div dir="ltr">
+
+## URLs
+
+با تنظیم URL ها شروع می کنیم. اضافه کردن یک نقطه پایانی درست مشابه پیکربندی مسیرهای یک برنامه جنگوی مرسوم می باشد. ابتدا نیاز است که برنامه api و مسیرهای آن را در فایل urls.py اصلی پروژه و در مسیر /api اضافه و تنظیم کنیم.
 
 ```python
-# config/urls.py
+# library_project/urls.py
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')), # new
     path('', include('books.urls')),
+    path('api/', include('api.urls')), # new
 ]
 ```
 
-</div>
+سپس یک فایل urls.py درون برنامه api می سازیم.
 
-Then create a urls.py file within the api app.
-
-<div dir="ltr">
-
-```shell
+```powershell
 (library) $ touch api/urls.py
 ```
 
-</div>
-
-And update it as follows:
-
-<div dir="ltr">
+و آن را به شکل زیر بروزرسانی می کنیم:
 
 ```python
 # api/urls.py
 from django.urls import path
+
 from .views import BookAPIView
+
 urlpatterns = [
-    path('', BookAPIView.as_view()),
+	path('', BookAPIView.as_view()),
 ]
 ```
 
-</div>
 
-All set.
 
-### Views
 
-Next up is our views.py file which relies on Django REST Framework’s built-in generic class
-views. These deliberately mimic traditional Django’s generic class-based views in format, but
-they are not the same thing.
 
-To avoid confusion, some developers will call an API views file apiviews.py or api.py. Personally,
-when working within a dedicated api app I do not find it confusing to just call a Django REST
-Framework views file views.py but opinion varies on this point.
+## نما ها
 
-Within our views.py file, update it to look like the following:
+مرحله بعد فایل views.py ما است که متکی به نماهای کلاسی عمومی داخلی Django REST Framework می باشد. این نما ها از نما های کلاسی عمومی جنگوی مرسوم تقلید می کند اما این دو گروه از نما ها یکی نیستند.
 
-<div dir="ltr">
+برای جلوگیری از سردرگمی، بعضی از توسعه دهندگان یک فایل API views را apiviews.py یا api.py می نامند. شخصا، وقتی که در یک برنامه مختص به رابط های برنامه کاربردی کار می کنم دچار سردرگمی نمی شوم اگر که نما های مربوط به Django REST Framework را views.py بنامم اما نظر ها در اینباره متفاوت هستند.
+
+فایل views.py درون برنامه api را بصورت زیر بروزرسانی کنید:
 
 ```python
-
 # api/views.py
 from rest_framework import generics
+
 from books.models import Book
 from .serializers import BookSerializer
 
 class BookAPIView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-
 ```
 
-</div>
+ در خطوط بالا نما های کلاسی عمومی Django REST Framework، مدل های برنامه books و فایل serializer(فایل serializer را بعد میسازیم) را از برنامه api وارد کرده ایم.
 
-On the top lines we import Django REST Framework’s generics class of views, the models from
-our books app, and serializers from our api app (we will make the serializers next).
+سپس یک BookAPIView که از ListAPIVIew استفاده می کند، برای ایجاد یک نقطه پایانی فقط خواندنی برای تمام نمونه(instance) های کتاب ساخته ایم و سپس serializer_class را تعریف و مقدار آن را برابر با BookSerializer قرار می دهیم.
 
-Then we create a BookAPIView that uses ListAPIView to create a read-only endpoint for all
-book instances. There are many generic views available and we will explore them further in later
-chapters.
 
-The only two steps required in our view are to specify the queryset which is all available books,
-and then the serializer_class which will be BookSerializer.
 
-### Serializers
 
-A serializer translates data into a format that is easy to consume over the internet, typically
-JSON, and is displayed at an API endpoint. We will also cover serializers and JSON in more depth
-in following chapters. For now I want to demonstrate how easy it is to create a serializer with
-Django REST Framework to convert Django models to JSON.
 
-Make a serializers.py file within our api app.
+## Serializers
 
-<div dir="ltr">
+یک سریالایزر داده را به شکلی(معمولا JSON) درمی آورد که استفاده از آنها در اینترنت راحت باشد و آن را در یک نقطه پایان رابط برنامه تعاملی نمایش می دهد. در فصل های آینده سریالایزر ها و JSON جزئی تر پوشش داده می شوند. برای الآن من میخواهم نشان دهم که ساخت یک سریالایزر با استفاده از Django REST Framework برای تبدیل مدل های جنگو به JSON چقدر آسان است.
 
-```shell
+یک فایل serializer.py درون برنامه api درست کنید.
+
+```powershell
 (library) $ touch api/serializers.py
 ```
 
-</div>
+سپس آن را بصورت زیر بروزرسانی می کنیم.
 
-Then update it as follows in a text editor.
-
-<div dir="ltr">
-
-```shell
+```python
 # api/serializers.py
 from rest_framework import serializers
+
 from books.models import Book
+
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Book
-        fields = ('title', 'subtitle', 'author', 'isbn')
+    model = Book
+    fields = ('title', 'subtitle', 'author', 'isbn')
 ```
 
-</div>
+در خطوط اول ما کلاس سریالایزر Django REST Framework و مدل Book را از فایل مدل برنامه books وارد کرده ایم. ما Django REST Framework's ModelSerializer را در کلاس BookSerializer توسعه می دهیم و مدل پایگاه داده Book و فیلد های پایگاه داده ای که می خواهیم نمایش بدهیم(author، subtitle، title و isbn) را در آن مشخص می کنیم.
 
-On the top lines we import Django REST Framework’s serializers class and the Book model from
-our books app. We extend Django REST Framework’s ModelSerializer into a BookSerializer
-class that specifies our database model Book and the database fields we wish to expose: title,
-subtitle, author, and isbn.
 
-That’s it! We’re done.
 
-### cURL
 
-We want to see what our API endpoint looks like. We know it should return JSON at the URL
-http://127.0.0.1:8000/api/33 . Let’s ensure that our local Django server is running:
 
-<div dir="ltr">
+## cURL
 
-```shell
+ما میخواهیم ببینیم نقطه پایانی رابط برنامه کاربردی ای که ساخته ایم به چه شکلی است. می دانیم که باید در مسیر http://127.0.0.1:8000/api یک JSON برگرداند. ابتدا سرور محلی را اجرا کنید:
+
+```powershell
 (library) $ python manage.py runserver
 ```
 
-</div>
+حالا یک خط فرمان جدید باز کنید. از این خط فرمان برای رفتن به آدرس رابط برنامه کاربردی استفاده میکنیم.
 
-Now open a new, second command line console. We will use it to access the API running in the
-existing command line console.
+ما میتوانیم از برنامه محبوب [cURL](https://en.wikipedia.org/wiki/CURL) برای اجرا درخواست های HTTP در خط فرمان استفاده کنیم. تمام چیزی که برای یک درخواست GET ساده نیاز داریم این است که curl را بنویسیم و URL ای که می خواهیم صدا بزنیم، بعد آن بنویسیم.
 
-We can use the popular cURL34 program to execute HTTP requests via the command line. All we
-need for a basic GET request it to specify curl and the URL we want to call.
-
-<div dir="ltr">
-
-```shell
+```powershell
 $ curl http://127.0.0.1:8000/api/
 [
     {
         "title":"Django for Beginners",
         "subtitle":"Build websites with Python and Django",
         "author":"William S. Vincent",
-        "isbn":"9781735467207"
+        "isbn":"978-198317266"
     }
 ]
 ```
 
-</div>
+تمام داده ها به شکل JSON نمایش داده می شود اما نحوه نمایش به شکلی نیست که به راحتی تشخیص داده شود. خوشبختانه Django REST Framework یک شگفتی دیگر هم برای ما دارد: یک حالت بصری قدرتمند برای نقاط پایانی رابط های برنامه کاربردی ما.
 
-The data is all there, in JSON format, but it is poorly formatted and hard to make sense of.
-Fortunately Django REST Framework has a further surprise for us: a powerful visual mode for
-our API endpoints.
 
-### Browsable API
 
-With the local server still running in the first command line console, navigate to our API endpoint
-in the web browser at http://127.0.0.1:8000/api/.
 
-![Image 6](images/6.jpg)
 
-Wow look at that! Django REST Framework provides this visualization by default. And there is a
-lot of functionality built into this page that we will explore throughout the book. For now I want
-you to compare this page with the raw JSON endpoint. Click on the “GET” button and select
-“json” from the dropdown menu.
+## رابط برنامه کاربردی تحت مرورگر(Browsable API)
 
-![Image 7](images/7.jpg)
+در حالیکه سرور محلی همچنان در حال اجرا است، در مرورگر به آدرس http://127.0.0.1:8000/api بروید.
 
-This is what the raw JSON from our API endpoint looks like. I think we can agree the Django REST
-Framework version is more appealing.
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\8.png)
 
-### Conclusion
+ 
 
-We covered a lot of material in this chapter so don’t worry if things feel a little confusing
-right now. First we created a traditional Django Library website. Then we added Django REST Framework and were able to add an API endpoint with a minimal amount of code.
+عجب! به آن نگاه کنید! Django REST Framework این تجسم را برای ما بطور پیشفرض فراهم کرده است. و امکانات زیادی در این صفحه تعبیه شده است که در طول کتاب آن ها را بررسی می کنیم. حالا میخواهیم این صفحه را با نقطه پایانی JSON خام مقایسه کنیم. بر روی دکمه GET کلیک کنید و از منو گزینه json را انتخاب کنید.
 
-In the next two chapters we will build our own Todo API back-end and connect it with a React-
-powered front-end to demonstrate a complete working example that will help solidify how all
-this theory fits together in practice!
+![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\9.png)
 
-</div>
+
+
+این شکل JSON خام نقطه پایانی رابط برنامه کاربردی ما است. فکر می کنم میتوانیم توافق کنیم که نسخه Django REST Framework، جذاب تر است.
+
+
+
+
+
+## Conclusion
+
+ما در این فصل مباحث زیادی را پوشش دادیم پس اگر موضوعات الآن کمی گیج کننده بنظر می رسند، نگران نباشید. ابتدا یک وبسایت کتابخانه جنگویی مرسوم ساختیم. سپس Django REST Framework را اضافه کردیم و یک با تعداد کمی کد یک نقطه پایانی رابط برنامه کاربردی ساختیم.
