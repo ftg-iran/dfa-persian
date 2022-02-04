@@ -1,9 +1,7 @@
 <div style='text-align: justify;' dir="rtl">
-	Django REST Framework در کنار Django web Framework برای ایجاد رابط های برنامه های کاربردی وب
-(web APIs) ها کار می کند. ما نمی توانیم تنها با استفاده از Django REST Framework برای ساخت یک رابط برنامه کاربردی وب استفاده کنیم بلکه همواره باید آن را بعد از نصب و پیکربندی Django به پروژه اضافه کنیم.
+Django REST Framework در کنار Django web Framework برای ایجاد رابط های برنامه های کاربردی وب(web APIs) ها کار می کند. ما نمی توانیم تنها با استفاده از Django REST Framework برای ساخت یک رابط برنامه کاربردی وب استفاده کنیم بلکه همواره باید آن را بعد از نصب و پیکربندی Django به پروژه اضافه کنیم.
+در این فصل، ما شباهت ها و تفاوت های بین جنگو مرسوم(Traditional Django یا Django web Framework) و Django REST Framework می پردازیم. مهمترین تفاوت این است که جنگو وبسایت هایی محتوی صفحات وب را ایجاد می کند درحالیکه Django REST Framework به ایجاد رابط برنامه های کاربردی می پردازد که مجموعه ای از نقاط پایانی(endpoint) را که شامل متد های HTTP در دسترس که پاسخی در قالب JSON باز میگردانند، می باشند. برای نشان دادن این مفاهیم، ما یک وبسایت کتابخانه با جنگوی مرسوم می سازیم و سپس آن را با کمک Django REST Framework به یک web API تبدیل می کنیم.
 
-در این فصل، ما شباهت ها و تفاوت های بین جنگو مرسوم(Traditional Django یا Django web Framework) و Django REST Framework می پردازیم. مهمترین تفاوت این است که جنگو وبسایت هایی محتوی صفحات وب را ایجاد می کند درحالیکه Django REST Framework به ایجاد رابط برنامه های کاربردی می پردازد که مجموعه ای از نقاط پایانی(endpoint) را که شامل متد های HTTP در دسترس که پاسخی در قالب JSON باز میگردانند، می باشند.
-برای نشان دادن این مفاهیم، ما یک وبسایت کتابخانه با جنگوی مرسوم می سازیم و سپس آن را با کمک Django REST Framework به یک web API تبدیل می کنیم.
 مطمئن شوید که Python 3 و [Pipenv](https://pypi.org/project/pipenv/) بر روی کامپیوتر شما نصب شده باشد. اگر به راهنمایی نیاز دارید، دستورالعمل کامل در [اینجا](https://djangoforbeginners.com/initial-setup/) می باشد.
 
 
@@ -54,18 +52,17 @@ $ pipenv shell
 |-- manage.py
 ```
 <div style='text-align: justify;' dir="rtl">
-		فایل ها وظایف زیر را برعهده دارند:
+فایل ها وظایف زیر را برعهده دارند:
 
-	
-__init____.py__ = یک روش پایتونی است برای رفتار کردن با یک محل یا دایرکتوری مانند یک پکیج؛ این فایل خالی است.
+فایل __init____.py__ یک روش پایتونی است برای رفتار کردن با یک محل یا دایرکتوری مانند یک پکیج؛ این فایل خالی است.
 
-settings.py     = تمامی تنظیمات و پیکربندی های پروژه ما را شامل میشود.
+فایل settings.py تمامی تنظیمات و پیکربندی های پروژه ما را شامل میشود.
 
-urls.py         = مسیرهای URL سطح بالا را کنترل میکند.
+فایل urls.py مسیرهای URL سطح بالا را کنترل میکند.
 
-wsgi.py         = مخفف web server gateway interface است و به جنگو کمک میکند که صفحات وب نهایی را سرویس دهی کند.
+فایل wsgi.py مخفف web server gateway interface است و به جنگو کمک میکند که صفحات وب نهایی را سرویس دهی کند.
 
-manage.py       = دستورات مختلف جنگو را از قبیل اجرا کردن وب سرور محلی(local web server ) یا ایجاد یک برنامه جدید را اجرا میکند.
+فایل manage.py دستورات مختلف جنگو را از قبیل اجرا کردن وب سرور محلی(local web server ) یا ایجاد یک برنامه جدید را اجرا میکند.
 
 
 
@@ -81,10 +78,7 @@ manage.py       = دستورات مختلف جنگو را از قبیل اجرا
 
 یک مرورگر وب باز کنید و به آدرس http://127.0.0.1:8000/ بروید تا از نصب درست پروژه اطمینان حاصل کنید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\1.png)
-
-
-
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/1.png?raw=true)
 
 
 ## اولین برنامه
@@ -125,17 +119,17 @@ manage.py       = دستورات مختلف جنگو را از قبیل اجرا
 
 هر برنامه یک فایل __init____.py__ دارد که آن را به عنوان یک پکیج پایتون معرفی می کند. 6 فایل جدید ایجاد شده اند.
 
-admin.py یک فایل پیکربندی برای برنامه داخلی مدیر جنگو.
+فایل admin.py یک فایل پیکربندی برای برنامه داخلی مدیر جنگو.
 
-apps.py یک فایل پیکربندی برای خود برنامه.
+فایل apps.py یک فایل پیکربندی برای خود برنامه.
 
 دایرکتوری migrations فایلهای migrations را برای تغییرات پایگاه داده ذخیره می کند.
 
-models.py جائیکه ما مدل های پایگاه داده را تعریف می کنیم.
+فایل models.py جائیکه ما مدل های پایگاه داده را تعریف می کنیم.
 
-tests.py برای تست های خاص برنامه می باشد.
+فایل tests.py برای تست های خاص برنامه می باشد.
 
-views.py جایی است که ما منطق درخواست و پاسخ(request/response) برنامه وب(web app) خود را پیاده می کنیم.
+فایل views.py جایی است که ما منطق درخواست و پاسخ(request/response) برنامه وب(web app) خود را پیاده می کنیم.
 
 معمولا توسعه دهندگان در هر برنامه یک فایل urls.py هم برای مسیردهی ایجاد می کنند.
 
@@ -240,32 +234,30 @@ admin.site.register(Book)
 
 به آدرس http://127.0.0.1:8000/admin بروید و وارد شوید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\2.png)
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/2.png?raw=true)
 
 
 
 شما به صفحه اصلی admin منتقل خواهید شد.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\3.png)
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/3.png?raw=true)
 
 
 
 روی لینک Books کلیک کنید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\4.png)
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/4.png?raw=true)
 
 
 
 سپس روی دکمه + Add Book در گوشه بالا سمت راست کلیک کنید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\5.png)
-
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/5.png?raw=true)
 
 
 من جزئیات را برای کتاب Django for Beginners خودم وارد کرده ام. شما می توانید هر متنی که بخواهید اینجا وارد کنید. این اطلاعات صرفا برای اهداف نمایشی است. بعد از کلیک کردن روی دکمه Save به صفحه Books که در آن تمام اطلاعات ثبت شده فعلی لیست شده اند، منتقل می شویم.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\6.png)
-
+![books_list_page](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/6.png?raw=true)
 
 
 پروژه جنگو مرسوم ما الآن داده دارد اما ما یک راه برای نمایش آن به عنوان یک صفحه وب نیاز داریم. این یعنی ایجاد فایل های URLs، views و templates. بیاید اینکار را الآن انجام دهیم.
@@ -334,7 +326,8 @@ urlpatterns = [
     path('', BookListView.as_view(), name='home'),
 ]
 ```
-
+<div style='text-align: justify;' dir="rtl">
+	
 ما فایل views.py خودمان را وارد کردیم، BookListView را در آدرس رشته خالی '' تنظیم کردیم و یک [named URL](https://docs.djangoproject.com/en/2.1/topics/http/urls/#naming-url-patterns) با مقدار home به عنوان یک best practice اضافه کردیم.
 
 روشی که جنگو کار می‌کند، حالا وقتی کاربران به صفحه اصلی وب‌سایت ما می‌روند، آنها نخست به فایل  library_project/urls.py می رسند سپس به books/urls.py هدایت می شوند که مشخص می کند باید از اBookListView استفاده شود. در این فایل view از مدل Book به همراه ListView برای فهرست کردن همه کتاب ها استفاده شده است.
@@ -344,6 +337,8 @@ urlpatterns = [
 اینکه شما در پروژ های خود از کدام روش استفاده کنید یک ترجیح شخصی است. ما در اینجا از ساختار پیشفرض استفاده می کنیم. اگر درباره روش دوم کنجکاو هستید، کتاب [Django for Beinners](https://djangoforbeginners.com/) را بررسی کنید.
 
 با ساخت یک پوشه templates در برنامه books شروع می کنیم، سپس داخل آن یک پوشه books و در آخر یک فایل book_list.html در آن می سازیم.
+</div>
+
 
 ```powershell
 (library) $ mkdir books/templates
@@ -365,14 +360,12 @@ urlpatterns = [
 	</ul>
 {% endfor %}
 ```
-
+<div style='text-align: justify;' dir="rtl">
+	
 جنگو با زبان قالبی([template language](https://docs.djangoproject.com/en/2.1/ref/templates/language/)) عرضه می شود که اجازه اعمال عملیات های منطقی ساده را در قالب های html به ما می دهد. در اینجا ما از تگ [for](https://docs.djangoproject.com/en/2.1/ref/templates/builtins/#std:templatetag-for) برای حلقه زدن بر روی تمام کتاب های موجود استفاده کرده ایم. تگ های قالب باید همیشه باید شامل براکت های باز و بسته باشند. بنابراین فرمت همیشه بصورت {% ... for %} می باشد و ما باید حلقه را با {% endfor %} خاتمه دهیم.
 
-چیزی که ما درحال حقه زدن بر روی آن هستیم، شئ ای است که شامل تمامی کتابهای در دسترس در مدل ما می باشد. نام این شئ object_list است. بنابراین برای حلقه زدن بر روی هر کتاب ما می نویسیم 
-
-{% for book in object_list %}. و سپس هر فیلد از مدل را نمایش می دهیم.
-
-
+چیزی که ما درحال حقه زدن بر روی آن هستیم، شئ ای است که شامل تمامی کتابهای در دسترس در مدل ما می باشد. نام این شئ object_list است. بنابراین برای حلقه زدن بر روی هر کتاب ما می نویسیم{% for book in object_list %}. و سپس هر فیلد از مدل را نمایش می دهیم.
+</div>
 
 
 
@@ -386,7 +379,7 @@ urlpatterns = [
 
 به آدرس صفحه اصلی که http://127.0.0.1:8000/ میباشد بروید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\7.png)
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/7.png?raw=true)
 
 
 
@@ -397,8 +390,7 @@ urlpatterns = [
 
 
 
-
-## Django REST Framework
+## رست فریموورک جنگو(Django REST Framework)
 
 <div dir="rtl">
 	Django REST Framework هم مانند بقیه برنامه های شخص ثالث نصب می شود. ابتدا مطمئن شوید که سرور محلی در حال اجرا نباشد و اگر در حال اجرا است آن را با کلیدهای ترکیبی Control+c متوقف کنید. سپس در خط فرمان دستور زیر را تایپ کنید.
@@ -466,7 +458,7 @@ INSTALLED_APPS = [
 
 
 
-## URLs
+## مسیرها(URLs)
 
 با تنظیم URL ها شروع می کنیم. اضافه کردن یک نقطه پایانی درست مشابه پیکربندی مسیرهای یک برنامه جنگوی مرسوم می باشد. ابتدا نیاز است که برنامه api و مسیرهای آن را در فایل urls.py اصلی پروژه و در مسیر /api اضافه و تنظیم کنیم.
 
@@ -533,8 +525,8 @@ class BookAPIView(generics.ListAPIView):
 
 
 
-## Serializers
-
+## سریالایزرها(Serializers)
+S
 یک سریالایزر داده را به شکلی(معمولا JSON) درمی آورد که استفاده از آنها در اینترنت راحت باشد و آن را در یک نقطه پایان رابط برنامه تعاملی نمایش می دهد. در فصل های آینده سریالایزر ها و JSON جزئی تر پوشش داده می شوند. برای الآن من میخواهم نشان دهم که ساخت یک سریالایزر با استفاده از Django REST Framework برای تبدیل مدل های جنگو به JSON چقدر آسان است.
 
 یک فایل serializer.py درون برنامه api درست کنید.
@@ -564,7 +556,7 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 
-## cURL
+## کرل(cURL)
 
 ما میخواهیم ببینیم نقطه پایانی رابط برنامه کاربردی ای که ساخته ایم به چه شکلی است. می دانیم که باید در مسیر http://127.0.0.1:8000/api یک JSON برگرداند. ابتدا سرور محلی را اجرا کنید:
 
@@ -598,13 +590,13 @@ $ curl http://127.0.0.1:8000/api/
 
 در حالیکه سرور محلی همچنان در حال اجرا است، در مرورگر به آدرس http://127.0.0.1:8000/api بروید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\8.png)
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/8.png?raw=true)
 
  
 
 عجب! به آن نگاه کنید! Django REST Framework این تجسم را برای ما بطور پیشفرض فراهم کرده است. و امکانات زیادی در این صفحه تعبیه شده است که در طول کتاب آن ها را بررسی می کنیم. حالا میخواهیم این صفحه را با نقطه پایانی JSON خام مقایسه کنیم. بر روی دکمه GET کلیک کنید و از منو گزینه json را انتخاب کنید.
 
-![](D:\dfa_persian\dfa-persian\02-Library-Website-and-API\images\9.png)
+![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/9.png?raw=true)
 
 
 
