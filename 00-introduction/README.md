@@ -1,118 +1,85 @@
-<div dir="rtl">
+<div dir="rtl" style="font-family:Vazir;" >
 
-# Introduction
+## مقدمه
 
-The internet is powered by RESTful APIs. Behind the scenes even the simplest online task involves
-multiple computers interacting with one another.
+<p style="text-align:justify"> 
 
-An API (Application Programming Interface) is a formal way to describe two computers commu-
-nicating directly with one another. And while there are multiple ways to build an API, web APIs—
-which allow for the transfer of data over the world wide web—are overwhelmingly structured in
-a RESTful (REpresentational State Transfer) pattern.
+اینترنت توسط API های RESTful محیا می‌شود. در پشت صحنه، حتی ساده‌ترین وظایف آنلاین شامل کامپیوترهای چندگانه در تعامل با یکدیگر می‌باشد.
 
-In this book you will learn how to build multiple RESTful web APIs of increasing complexity from
-scratch using Django1 and Django REST Framework2 , one of the most popular and customizable
-ways to build web APIs, used by many of the largest tech companies in the world including Insta-
-gram, Mozilla, Pinterest, and Bitbucket. This approach is also uniquely well-suited to beginners
-because Django’s “batteries-included” approach masks much of the underlying complexity and
-security risks involved in creating any web API.
 
-### Prerequisites
+درواقع API (Application Programming Interface) روشی رسمی برای توصیف دو رایانه است که مستقیما با یکدیگر در ارتباط هستند در حالیکه راه‌های متعددی برای ساختن یک API وجود دراد، APIهای وب (که امکان انتقال داده‌ها را در سراسر وب فراهم می‌کنند) به طور عمده در یک الگوی Restfull (REpresentational State Transfer) ساختار یافته هستند.
 
-If you’re brand new to web development with Django, I recommend first reading my previous
-book Django for Beginners3 . The first several chapters are available for free online and cover
-proper set up, a Hello World app, and a Pages app. The full-length version goes deeper and
-covers a Blog website with forms and user accounts as well as a production-ready Newspaper
-site that features a custom user model, complete user authentication flow, emails, permissions,
-deployment, environment variables, and more.
 
-This background in traditional Django is important since Django REST Framework deliberately
-mimics many Django conventions.
+در این کتاب، نحوه ساخت چندین API وب RESTful با پیچیدگی فراوانی از ابتدا با استفاده از Django1  و Django REST Framework2 توضیح داده شده است، یکی از محبوب‌ترین و قابل تنظیم‌ترین راه‌ها برای ساخت APIهای وب، که توسط بسیاری از بزرگترین شرکت‌های فناوری در جهان استفاده می‌شود، آموزش داده خواهد شد. از جمله اینستاگرام، موزیلا، پینترست، و بیت باکت است. این رویکرد همچنین برای مبتدیان کاملاً مناسب است، زیرا رویکرد «batteries-included» جنگو بسیاری از پیچیدگی‌های اساسی و خطرات امنیتی موجود در ایجاد هر API وب را پنهان می‌کند.
 
-It is also recommended that readers have a basic knowledge of Python itself. Truly mastering
-Python takes years, but with just a little bit of knowledge you can dive right in and start building
-things.
 
-### Why APIs
+</p>
 
-Django was first released in 2005 and at the time most websites consisted of one large monolithic
-codebase. The “back-end” consisted of database models, URLs, and views which interacted with
-the “front-end” templates of HTML, CSS, and JavaScript that controlled the presentational layout
-of each web page.
+## پیش‌نیازها
 
-However in recent years an “API-first” approach has emerged as arguably the dominant paradigm
-in web development. This approach involves formally separating the back-end from the front-
-end. It means Django becomes a powerful database and API instead of just a website framework.
-Today Django is arguably used more often as just a back-end API rather than a full monolithic
-website solution at large companies!
+<p style="text-align:justify"> 
 
-An obvious question at this point is, “Why bother?” Traditional Django works quite well on its own
-and transforming a Django site into a web API seems like a lot of extra work. Plus, as a developer,
-you then have to write a dedicated front-end in another programming language.
-This approach of dividing services into different components, by the way, is broadly known as
-Service-oriented architecture4 .
+اگر در توسعه وب با Django کاملاً تازه کار هستید، توصیه می کنم ابتدا کتاب قبلی من Django for Beginners 3 را بخوانید. چندین فصل اول به صورت آنلاین رایگان در دسترس هستند و شامل راه اندازی مناسب، یک برنامه Hello World و یک برنامه Pages است. نسخه کامل کتاب عمیق‌تر می‌شود و یک وب‌سایت بلاگ را با فرم‌ها و حساب‌های کاربری و همچنین یک سایت روزنامه آماده تولید را پوشش می‌دهد که دارای یک مدل کاربر سفارشی، جریان احراز هویت کامل کاربر، ایمیل‌ها، مجوزها، استقرار، متغیرهای محیطی و موارد دیگر است.
 
-It turns out however that there are multiple advantages to separating the front-end from
-the back-end. First, it is arguably much more “future-proof” because a back-end API can be
-consumed by any JavaScript front-end. Given the rapid rate of change in front-end libraries–
-React5 was only released in 2013 and Vue6 in 2014!–this is highly valuable. When the current
-front-end frameworks are eventually replaced by even newer ones in the years to come, the
-back-end API can remain the same. No major rewrite is required.
+این پیشینه در جنگو سنتی مهم است زیرا چارچوب جنگو REST عمداً بسیاری از قراردادهای جنگو را تقلید می کند.
 
-Second, an API can support multiple front-ends written in different languages and frameworks.
-Consider that JavaScript is used for web front-ends, while Android apps require the Java programming language, and iOS apps need the Swift programming language. With a traditional
-monolithic approach, a Django website cannot support these various front-ends. But with an
-internal API, all three can communicate with the same underlying database back-end!
+همچنین توصیه می شود که خوانندگان دانش اولیه پایتون را داشته باشند. تسلط واقعی بر پایتون سال‌ها طول می‌کشد، اما فقط با کمی دانش، می‌توانید درست در آن شیرجه بزنید و شروع به ساختن کنید.
 
-Third, an API-first approach can be used both internally and externally. When I worked at
-Quizlet7 back in 2010, we did not have the resources to develop our own iOS or Android apps.
-But we did have an external API available that more than 30 developers used to create their own
-flashcard apps powered by the Quizlet database. Several of these apps were downloaded over
-a million times, enriching the developers and increasing the reach of Quizlet at the same time.
-Quizlet is now a top 20 website in the U.S. during the school year.
+</p>
 
-The major downside to an API-first approach is that it requires more configuration than a
-traditional Django application. However as we will see in this book, the fantastic Django REST
-Framework library removes much of this complexity.
+## چرا API ها
 
-### Django REST Framework
+<p style="text-align:justify"> 
 
-There are hundreds and hundreds of third-party apps available that add further functionality to
-Django. You can see a complete, searchable list over at Django Packages8 , as well as a curated
-list in the awesome-django repo9 . However, among all third-party applications, Django REST
-Framework is arguably the killer app for Django. It is mature, full of features, customizable,
-testable, and extremely well-documented. It also purposefully mimics many of Django’s tra-
-ditional conventions, which makes learning it much faster. And it is written in the Python
-programming language, a wonderful, popular, and accessible language.
+جنگو برای اولین بار در سال 2005 منتشر شد و در آن زمان بیشتر وب سایت ها از یک پایگاه کد یکپارچه بزرگ تشکیل شده بودند. «بک‌اند» شامل مدل‌های پایگاه داده، URL‌ها و نماهایی بود که با قالب‌های HTML، CSS و جاوا اسکریپت که طرح انیمیشنی هر صفحه وب را که «front-end» کنترل می‌کردند، تعامل داشتند.
 
-If you already know Django, then learning Django REST Framework is a logical next step. With a
-minimal amount of code, it can transform any existing Django application into a web API.
+با این حال، در سال‌های اخیر، رویکرد اول "API" به عنوان الگوی غالب در توسعه وب ظاهر شد. این رویکرد شامل جداسازی رسمی قسمت پشتی از قسمت جلویی است. این بدان معناست که جنگو به جای یک چارچوب وب سایت، به یک پایگاه داده و API قدرتمند تبدیل می شود. امروزه جنگو بیشتر به عنوان یک API پشتیبان به جای یک راه حل کامل وب سایت یکپارچه در شرکت های بزرگ استفاده می شود!
 
-### Why this book
+یک سوال واضح در این مرحله این است: "چرا زحمت بکشیم؟" جنگو سنتی به تنهایی کار می کند و تبدیل شدن یک سایت جنگو به یک وب API کار اضافی به نظر می رسد. به‌علاوه، به‌عنوان یک توسعه‌دهنده، باید یک front-end اختصاصی به زبان برنامه‌نویسی دیگری هم بنویسید. این رویکرد تقسیم خدمات به اجزای مختلف، به هر حال، به طور گسترده به عنوان معماری سرویس گرا شناخته می شود.
 
-I wrote this book because there is a distinct lack of good resources available for developers
-new to Django REST Framework. The assumption seems to be that everyone already knows all
-about APIs, HTTP, REST, and the like. My own journey in learning how to build web APIs was
-frustrating… and I already knew Django well enough to write a book on it!
+با این حال، به نظر می رسد که مزایای متعددی برای جداسازی قسمت جلویی از قسمت پشتی وجود دارد. اولا، مسلماً «مقاوم‌تر در آینده» است زیرا یک API بک‌اند را می‌توان توسط هر فرانت‌اند جاوا اسکریپت استفاده کرد. با توجه به رشد سریع تغییر در کتابخانه های فرانت اند – React5 تنها در سال 2013 و Vue6 در سال 2014 منتشر شد! 
+این بسیار ارزشمند است وقتی که فریم‌ورک‌های فرانت‌اند فعلی در سال‌های آینده با فریم‌ورک‌های جدیدتر جایگزین شوند، اما API بک‌اند می‌تواند ثابت بماند و نیازی به بازنویسی عمده ندارند.
 
-This book is the guide I wish existed when starting out with Django REST Framework.
-Chapter 1 begins with a brief introduction to web APIs and the HTTP protocol. In Chapter 2 we
-review the differences between traditional Django and Django REST Framework by building out
-a Library book website and then adding an API to it. Then in Chapters 3-4 we build a Todo API
-and connect it to a React front-end. The same process can be used to connect any dedicated
-front-end (web, iOS, Android, desktop, or other) to a web API back-end.
+دوم، یک API می تواند از چندین فرانت اند نوشته شده در زبان ها و فریم ورک های مختلف پشتیبانی کند. در نظر بگیرید که جاوا اسکریپت برای فرانت‌اندهای وب استفاده می‌شود، در حالی که برنامه‌های اندروید به زبان برنامه‌نویسی جاوا و برنامه‌های iOS به زبان برنامه‌نویسی Swift نیاز دارند. با رویکرد سنتی یکپارچه، یک وب سایت جنگو نمی تواند از این بخش های مختلف پشتیبانی کند. اما با یک API داخلی، هر سه می توانند با یک پایگاه داده اصلی ارتباط برقرار کنند!
 
-In Chapters 5-9 we build out a production-ready Blog API which includes full CRUD functionality.
-We also cover in-depth permissions, user authentication, viewsets, routers, documentation, and
-more.
+سوم، یک رویکرد API-first می‌تواند هم به صورت داخلی و هم خارجی استفاده شود. زمانی که در سال 2010 در Quizlet7 کار می‌کردم، منابع لازم برای توسعه برنامه‌های iOS یا اندروید را نداشتیم. اما ما یک API خارجی در دسترس داشتیم که بیش از 30 توسعه‌دهنده از آن برای ایجاد برنامه‌های فلش کارت خود با پشتیبانی از پایگاه داده Quizlet استفاده می کردند. چندین مورد از این برنامه ها بیش از یک میلیون بار دانلود شدند و توسعه دهندگان را غنی تر کرد و همزمان دسترسی به Quizlet را افزایش داد. Quizlet اکنون یکی از 20 وب سایت برتر در ایالات متحده در طول سال تحصیلی است.
 
-Complete source code for all chapters can be found online on Github10 .
+نقطه ضعف اصلی رویکرد API-first این است که نسبت به یک برنامه سنتی جنگو به پیکربندی بیشتری نیاز دارد. با این حال، همانطور که در این کتاب خواهیم دید، کتابخانه فوق العاده فریم ورک جنگو REST بسیاری از این پیچیدگی‌ها را حذف می‌کند. 
 
-### Conclusion
 
-Django and Django REST Framework is a powerful and accessible way to build web APIs. By the
-end of this book you will be able to build your own web APIs from scratch properly using modern
-best practices. And you’ll be able to extend any existing Django website into a web API with a
-minimal amount of code.
+</p>
+
+## فریم ورک جنگو REST
+
+<p style="text-align:justify"> 
+
+صدها و صدها برنامه شخص ثالث در دسترس هستند که عملکردهای بیشتری را به جنگو اضافه می کنند. شما می توانید یک لیست کامل و قابل جستجو را در Django Packages8 و همچنین یک لیست انتخاب شده را در awesome-Django repo9 مشاهده کنید. با این حال، در میان تمام برنامه های شخص ثالث، Django REST Framework مسلماً  برنامه ای که قاتل جنگو است. کامل، پر از ویژگی ها، قابل سفارشی سازی، آزمایش پذیر و مستندات کاملی دارد. همچنین به طور هدفمند بسیاری از قراردادهای سنتی جنگو را تقلید می کند که یادگیری آن را بسیار سریعتر می کند. و به زبان برنامه نویسی پایتون نوشته شده است، زبانی فوق العاده، محبوب و قابل دسترس برای همگان.
+
+اگر از قبل جنگو را می‌شناسید، یادگیری جنگو REST Framework قدم منطقی بعدی است. با حداقل مقدار کد، می‌تواند هر برنامه جنگو موجود را به یک وب API تبدیل کند.
+
+</p>
+
+## چرا این کتاب
+
+<p style="text-align:justify"> 
+
+من این کتاب را نوشتم زیرا  منابع کم و خوبی در دسترس برای توسعه دهندگان تازه وارد جنگو REST Framework وجود دارد. به نظر می‌رسد فرض بر این است که همه از قبل همه چیز را در مورد API ها، HTTP، REST و موارد مشابه می دانند. سفر خود من هم در یادگیری نحوه ساخت API های وب خسته کننده بود... و قبلاً جنگو را به‌خوبی می‌شناختم که بتوانم کتابی در مورد آن بنویسم!
+
+این کتاب راهنمای من است که آرزو می‌کردم هنگام شروع کار با Django REST Framework وجود داشته باشد. فصل 1 با معرفی مختصری از وب API و پروتکل HTTP آغاز می شود. در فصل 2، با ایجاد یک وب سایت کتابخانه ای و سپس افزودن یک API به آن، تفاوت های بین جنگو سنتی و چارچوب REST جنگو را بررسی می کنیم. سپس در فصل های 3-4 یک Todo API می سازیم و آن را به یک React front-end متصل می کنیم. از همین فرآیند می‌توان برای اتصال هر فرانت‌اند اختصاصی (وب، iOS، اندروید، دسکتاپ یا موارد دیگر) به یک بک‌اند API وب استفاده کرد.
+
+در فصل‌های 5-9 ما یک API وبلاگ تولید محتوا می‌سازیم که شامل عملکرد کامل CRUD است. همچنین مجوزهای عمیق، احراز هویت کاربر، مجموعه‌های نمایشی، روترها، اسناد و موارد دیگر را پوشش می‌دهیم.
+
+همه کدها برای همه فصل‌ها را می‌توانید به صورت آنلاین در Github در فصل 10 ام پیدا کنید.
+
+</p>
+
+
+## نتیجه گیری
+
+<p style="text-align:justify; text-indent: 19px;"> 
+
+درواقع Django and Django REST Framework یک راه قدرتمند و در دسترس برای ساخت API های وب است. در پایان این کتاب، شما می‌توانید API های وب خود را از ابتدا به درستی با استفاده از بهترین شیوه‌های مدرن بسازید. و می‌ توانید هر وب سایت جنگو موجود را با کمترین مقدار کد به یک API وب گسترش دهید.
+
+</p>
 
 </div>
