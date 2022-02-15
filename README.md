@@ -170,7 +170,7 @@
 |       12/1        |  Sahar Mokarrami |      Todo-React-Front-end-4 |
 |       12/1        | Shamim Sanisales |                  Blog-Api-5 |
 |       Jan 19 2022       |   Pouya Pargam   |               Permissions-6 |
-|         ?         |       ELI        |       User-Authentication-7 |
+|        1/31       |       ELI        |       User-Authentication-7 |
 |        11/6       | Amirreza Pasandi |      Viewsets-and-Routers-8 |
 |         ?         |   Reza Mobaraki  | Schemas-and-Documentation-9 |
 |         ?         | Majid Aghamohamad|                  Conclusion |
