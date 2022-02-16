@@ -59,5 +59,97 @@ Command Line
   
 </div>
 
+### مدل
+مدل پایگاه داده ما دارای پنج فیلد است: نویسنده، عنوان، بدنه، create_at و updated_at. ما می‌توانیم از مدل کاربر داخلی جنگو به‌عنوان کاربر اصلی استفاده کنیم، مشروط بر اینکه آن را در خط دوم کد خود ایمپورت کنیم.
+
+<div dir="ltr">
+
+Code
+```python
+# posts/models.py
+from django.db import models
+from django.contrib.auth.models import User
+  
+  
+class Post(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+  
+    def __str__(self):
+        return self.title
+```  
+  
+</div>  
+
+توجه داشته باشید که ما همچنین در حال تعریف این هستیم که نمایش str مدل باید چگونه باشد که بهترین روش جنگو برای نمایش تیتر پست ها در صفحه ادمین جنگو است.
+
+اکنون پایگاه داده خود را با ایجاد یک فایل migrate جدید و سپس اجرای migrate برای همگام سازی پایگاه داده با تغییرات مدل خود، به روزرسانی کنید.
+
+<div dir="ltr">
+  
+Command Line
+```shell
+(blogapi) $ python manage.py makemigrations posts
+Migrations for 'posts':
+  posts/migrations/0001_initial.py
+    - Create model Post
+(blogapi) $ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, posts, sessions
+Running migrations:
+  Applying posts.0001_initial... OK
+```
+
+</div>
+
+اکنون میخواهیم داده های خود را در برنامه داخلی ادمین جنگو مشاهده کنیم. برای این منظور ویو را به شکل زیر به فایل posts/admin.py اضافه میکنیم.
+
+<div dir="ltr">
+
+Code
+```python
+# posts/admin.py
+from django.contrib import admin
+from .models import Post
+  
+admin.site.register(Post)
+```
+  
+</div>
+
+در ادامه برای ایجاد یک ابر کاربر برای دسترسی به پنل ادمین دستور زیر را تایپ کرده و ورودی های مورد نظر را به آن می دهیم.
+
+<div dir="ltr">
+  
+Command Line
+```shell
+(blogapi) $ python manage.py createsuperuser
+```
+
+</div>
+
+حال وب سرور لوکال را با دستور زیر اجرا می کنیم.
+
+<div dir="ltr">
+  
+Command Line
+```shell
+(blogapi) $ python manage.py runserver
+```
+
+</div>
+
+سپس به آدرس http://127.0.0.1:8000/admin/  رفته و با اطلاعات ابرکاربر خود به داشبورد ادمین وارد می شویم. روی دکمه "+ افزودن" در کنار پست ها کلیک کنید و یک پست وبلاگ جدید ایجاد کنید. در کنار "نویسنده" یک منوی کشویی وجود خواهد داشت که دارای حساب کاربری ابرکاربر شما است (نام کاربر من wsv است). مطمئن شوید که یک نویسنده انتخاب شده باشد.سپس عنوان و محتوای متن را اضافه کنید سپس روی دکمه "ذخیره" کلیک کنید.
+
+![Admin add blog post](images/1.png)
+
+در ادامه شما به صفحه ای هدایت می شوید که همه پست های موجود در وبلاگ را نمایش می دهد.
+
+![Admin blog posts](images/2.png)
+
+### تست ها
 
 </div>
