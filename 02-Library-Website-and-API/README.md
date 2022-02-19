@@ -1,5 +1,8 @@
 <div style='text-align: justify;' dir="rtl">
-Django REST Framework در کنار Django web Framework برای ایجاد رابط های برنامه های کاربردی وب(web APIs) ها کار می کند. ما نمی توانیم تنها با استفاده از Django REST Framework برای ساخت یک رابط برنامه کاربردی وب استفاده کنیم بلکه همواره باید آن را بعد از نصب و پیکربندی Django به پروژه اضافه کنیم.
+	
+# کتابخانه سایت و API
+
+جنگو رست Django REST Framework در کنار Django web Framework برای ایجاد رابط های برنامه های کاربردی وب(web APIs) ها کار می کند. ما نمی توانیم تنها با استفاده از Django REST Framework برای ساخت یک رابط برنامه کاربردی وب استفاده کنیم بلکه همواره باید آن را بعد از نصب و پیکربندی Django به پروژه اضافه کنیم.
 در این فصل، ما شباهت ها و تفاوت های بین جنگو مرسوم(Traditional Django یا Django web Framework) و Django REST Framework می پردازیم. مهمترین تفاوت این است که جنگو وبسایت هایی محتوی صفحات وب را ایجاد می کند درحالیکه Django REST Framework به ایجاد رابط برنامه های کاربردی می پردازد که مجموعه ای از نقاط پایانی(endpoint) را که شامل متد های HTTP در دسترس که پاسخی در قالب JSON باز میگردانند، می باشند. برای نشان دادن این مفاهیم، ما یک وبسایت کتابخانه با جنگوی مرسوم می سازیم و سپس آن را با کمک Django REST Framework به یک web API تبدیل می کنیم.
 
 مطمئن شوید که Python 3 و [Pipenv](https://pypi.org/project/pipenv/) بر روی کامپیوتر شما نصب شده باشد. اگر به راهنمایی نیاز دارید، دستورالعمل کامل در [اینجا](https://djangoforbeginners.com/initial-setup/) می باشد.
@@ -21,7 +24,7 @@ $ mkdir code && cd code
 
 ```powershell
 $ mkdir library && cd library
-$ pipenv install django==2.2.6
+$ pipenv install django~=3.1.0
 $ pipenv shell
 (library) $
 ```
@@ -33,7 +36,7 @@ $ pipenv shell
 </div>
 
 ```powershell
-(library) $ django-admin startproject library_project .
+(library) $ django-admin startproject config .
 ```
 <div style='text-align: justify;' dir="rtl">
 	
@@ -45,12 +48,15 @@ $ pipenv shell
 .
 ├── Pipfile
 ├── Pipfile.lock
-├── library_project
-│ ├── __init__.py
-│ ├── settings.py
-│ ├── urls.py
-│ └── wsgi.py
+├── config
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
 └── manage.py
+
+1 directory, 8 files
 ```
 
 <div style='text-align: justify;' dir="rtl">
@@ -97,19 +103,19 @@ $ pipenv shell
 ├── Pipfile
 ├── Pipfile.lock
 ├── books
-│ ├── __init__.py
-│ ├── admin.py
-│ ├── apps.py
-| ├── migrations
-│ │ └── __init__.py
-│ ├── models.py
-│ ├── tests.py
-│ └── views.py
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+|   ├── migrations
+│   │ └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
 ├── library_project
-│ ├── __init__.py
-│ ├── settings.py
-│ ├── urls.py
-│ └── wsgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
 └── manage.py
 ```
 
@@ -131,7 +137,7 @@ $ pipenv shell
 فایل settings.py را با ویرایشگر متن باز کنید. اولین قدم اضافه کردن برنامه های جدید به تنظیمات INSTALLED_APPS می باشد. ما همیشه برنامه های جدید را به آخر این لیست اضافه می کنیم چون جنگو آن ها را به ترتیب می خواند و ما می خواهیم که برنامه های هسته داخلی جنگو مانند admin و auth قبل از برنامه های ما بارگیری شوند.
 
 ```python
-# library_project/settings.py
+# config/settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -141,7 +147,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Local
-    'books.apps.BooksConfig', # new
+    'books', # new
 ]
 ```
 
@@ -176,15 +182,22 @@ class Book(models.Model):
 
 این یک مدل ساده جنگو است که در خط بالا آن ما models را از Django وارد می کنیم و سپس یک کلاس book ایجاد کرده ایم که آن را توسعه می دهد. درون این کلاس چهار فیلد وجود دارد: author، subtitle، title و isbn. ما همچنین یک متد __str____.py__ ساخته ایم تا عنوان کتاب در قسمت مدیریت نمایش داده شود.
 
-توجه داشته باشید که ISBN یک شناسه 13 حرفی یکتا میباشد که به هر کتاب منتشر شده ای اختصاص داده می شود.
+توجه داشته باشید که [ISBN](https://www.isbn-international.org/content/what-isbn) یک شناسه 13 حرفی یکتا میباشد که به هر کتاب منتشر شده ای اختصاص داده می شود.
 
 چون ما یک مدل پایگاه داده جدید ساخته ایم نیاز به ساخت یک فایل مهاجرت(migration) داریم تا تغییر ایجاد شده در پایگاه داده هم اعمال شود. مشخص کردن نام برنامه اختیاری است اما اینجا توصیه می شود. می توانیم تنها تایپ کنیم python manage.py makemigrations اما اگر چندین برنامه که تغییرات پایگاه داده ای داشته اند، وجود داشته باشد، همه آنها به فایل migrations اضافه میشوند که خطایابی و رفع اشکال را در آینده تبدیل به یک چالش میکند. فایل های migrations خود را تا جای ممکن مجزا نگه دارید.
 
 سپس دستور migrate را برای بروزرسانی پایگاه داده اجرا کنید.
 
-```powershell
+```shell
 (library) $ python manage.py makemigrations books
+Migrations for 'books':
+  books/migrations/0001_initial.py
+    - Create model Book
 (library) $ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, books, contenttypes, sessions
+Running migrations:
+  Applying books.0001_initial... OK
 ```
 
 
@@ -257,14 +270,13 @@ admin.site.register(Book)
 
 
 ## نما ها(views)
-فایل views.py نحوه نمایش محتوای مدل های پایگاه داده را کنترل می کند. از آنجاییکه ما میخواهیم تمام کتابها را لیست کنیم می توانیم از کلاس عمومی داخلی ListView استفاده کنیم.
+فایل views.py نحوه نمایش محتوای مدل های پایگاه داده را کنترل می کند. از آنجاییکه ما میخواهیم تمام کتابها را لیست کنیم می توانیم از کلاس عمومی داخلی [ListView](https://docs.djangoproject.com/en/3.1/ref/class-based-views/generic-display/#django.views.generic.list.ListView) استفاده کنیم.
 
 فایل books/views.py را بروزرسانی کنید.
 
 ```python
 # books/views.py
 from django.views.generic import ListView
-
 from .models import Book
 
 
@@ -308,7 +320,6 @@ urlpatterns = [
 ```python
 # books/urls.py
 from django.urls import path
-
 from .views import BookListView
 
 urlpatterns = [
@@ -341,12 +352,12 @@ urlpatterns = [
 <!-- books/templates/books/book_list.html -->
 <h1>All books</h1>
 {% for book in object_list %}
-	<ul>
-		<li>Title: {{ book.title }}</li>
-		<li>Subtitle: {{ book.subtitle }}</li>
-		<li>Author: {{ book.author }}</li>
-		<li>ISBN: {{ book.isbn }}</li>
-	</ul>
+    <ul>
+        <li>Title: {{ book.title }}</li>
+	<li>Subtitle: {{ book.subtitle }}</li>
+	<li>Author: {{ book.author }}</li>
+	<li>ISBN: {{ book.isbn }}</li>
+    </ul>
 {% endfor %}
 ```
 
@@ -392,7 +403,7 @@ urlpatterns = [
 عبارت rest_framework را به تنظیمات INSTALLED_APPS در فایل settings.py اضافه کنید. من عادت دارم که یک فاصله بین برنامه های شخص ثالث و محلی قرار دهم به این دلیل که تعداد برنامه ها در بیشتر پروژه ها به سرعت افزایش پیدا می کنند.
 
 ```python
-# library_project/settings.py
+# config/settings.py
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -400,12 +411,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # 3rd party
     'rest_framework', # new
-    
+
     # Local
-    'books.apps.BooksConfig',
+    'books',
 ]
 ```
 
@@ -421,22 +432,23 @@ INSTALLED_APPS = [
 سپس آن را به INSTALLED_APPS اضافه کنید.
 
 ```python
-# library_project/settings.py
+# config/settings.py
 INSTALLED_APPS = [
+    # Local
+    'books.apps.BooksConfig',
+    'api.apps.ApiConfig', # new
+    
+    # 3rd party
+    'rest_framework',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    # 3rd party
-    'rest_framework',
-    
-    # Local
-    'books.apps.BooksConfig',
-    'api.apps.ApiConfig', # new
 ]
+
 ```
 
 برنامه api مدل پایگاه داده ای مختص به خود ندارد بنابراین نیازی به ایجاد یک فایل مهاجرت و بروزرسانی پایگاه داده طبق روال معمول نیست.
@@ -463,7 +475,7 @@ urlpatterns = [
 
 سپس یک فایل urls.py درون برنامه api می سازیم.
 
-```powershell
+```shell
 (library) $ touch api/urls.py
 ```
 
@@ -472,18 +484,13 @@ urlpatterns = [
 ```python
 # api/urls.py
 from django.urls import path
-
 from .views import BookAPIView
 
 urlpatterns = [
 	path('', BookAPIView.as_view()),
 ]
 ```
-
 همه چیز آماده است.
-
-
-
 
 
 ## نما ها
@@ -495,9 +502,9 @@ urlpatterns = [
 ```python
 # api/views.py
 from rest_framework import generics
-
 from books.models import Book
 from .serializers import BookSerializer
+
 
 class BookAPIView(generics.ListAPIView):
     queryset = Book.objects.all()
@@ -510,15 +517,12 @@ class BookAPIView(generics.ListAPIView):
 دو قدمی که در نمای ما نیاز است، مشخص کردن queryset که تمام کتاب های در دسترس می باشد و سپس serializer_class که BookSrializer می باشد، است.
 
 
-
-
-
 ## سریالایزرها(Serializers)
 یک سریالایزر داده را به شکلی که استفاده از آنها در اینترنت راحت باشد، معمولا JSON، و در یک نقطه پایان رابط برنامه تعاملی به نمایش درمی آید، درمی آورد. در فصل های آینده سریالایزر ها و JSON را جزئی تر پوشش خواهیم داد. برای الآن من میخواهم نشان دهم که ساخت یک سریالایزر با استفاده از رست فریمورک جنگو برای تبدیل مدل های جنگو به JSON چقدر آسان است.
 
 یک فایل serializer.py درون برنامه api درست کنید.
 
-```powershell
+```shell
 (library) $ touch api/serializers.py
 ```
 
@@ -527,7 +531,6 @@ class BookAPIView(generics.ListAPIView):
 ```python
 # api/serializers.py
 from rest_framework import serializers
-
 from books.models import Book
 
 
@@ -546,7 +549,7 @@ class BookSerializer(serializers.ModelSerializer):
 ## کِرل(cURL)
 ما میخواهیم ببینیم نقطه پایانی رابط برنامه کاربردی ما به چه شکلی است. می دانیم که باید در مسیر http://127.0.0.1:8000/api یک JSON برگرداند. بیایید مطمئن شویم که سرور محلی جنگو در حال اجرا است:
 
-```powershell
+```shell
 (library) $ python manage.py runserver
 ```
 

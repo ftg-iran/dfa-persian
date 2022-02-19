@@ -34,23 +34,23 @@
 </details>
   
 <details>
-  <summary>فصل دوم : API کتابخانه و سایت</summary>
+  <summary>فصل دوم : API کتابخانه و سایت &check;</summary>
   <br>
   
-  - جنگو
-  - اولین برنامه
-  - مدل ها
-  - ادمین
-  - ویو ها
-  - URLs
-  - Webpage
-  - Django rest framework
-  - URLs
-  - Viees
-  - Serializers
-  - cURL
-  - Browsable API
-  - نتیجه گیری
+  - جنگو &check;
+  - اولین برنامه &check;
+  - مدل ها &check;
+  - ادمین &check;
+  - ویو ها &check;
+  - URLs &check;
+  - Webpage &check;
+  - Django rest framework &check;
+  - URLs &check;
+  - Viees &check;
+  - Serializers &check;
+  - cURL &check;
+  - Browsable API &check;
+  - نتیجه گیری &check;
   
 </details>
   
