@@ -88,8 +88,8 @@
   <summary>فصل پنجم : API بلاگ</summary>
   <br>
   
-  - Init setup
-  - Models
+  - Init setup &check;
+  - Models &check;
   - Tests
   - Django rest framwork
   - URLs
@@ -165,7 +165,7 @@
 |:-----------------:|:----------------:|:---------------------------:|
 |       تمام        |  Mostafa Karimi  |                introduction |
 |       12/1        |Khalil Farashiani |                  Web-APIs-1 |
-|       11/15       |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
+|       تمام       |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
 |         ?         |    Amirhossein   |                  Todo-API-3 |
 |       تمام        |  Sahar Mokarrami |      Todo-React-Front-end-4 |
 |       12/1        | Shamim Sanisales |                  Blog-Api-5 |
