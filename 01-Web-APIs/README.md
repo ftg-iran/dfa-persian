@@ -2,115 +2,88 @@
 
 # Web APIs
 
-Before we start building our own web APIs it’s important to review how the web really works.
-After all, a “web API” literally sits on top of the existing architecture of the world wide web and
-relies on a host of technologies including HTTP, TCP/IP, and more.
+قبل از اینکه شروع به ساختن وب api خودمان کنیم مهم است که مرور کنیم صفحات وب واقعا چگونه کار می کنند.
 
-In this chapter we will review the basic terminology of web APIs: endpoints, resources, HTTP
-verbs, HTTP status codes, and REST. Even if you already feel comfortable with these terms, I
-encourage you to read the chapter in full.
+گذشته از همه اینها یک "وب api" به معنای واقعی کلمه در بالای معماری حال حاضر شبکه جهانی وب قرار می گیرد و از مجموعه ای از فناوری ها از جمله HTTP، TCP/IP و غیره استفاده می کند.
 
-### World Wide Web
+در این فصل اصطلاحات اساسی وب API را بررسی خواهیم کرد: <span dir="ltr">endpoints, resources, HTTP
+verbs</span>, کدهای وضعیت HTTP و REST. حتی اگر با این موارد از قبل آشنایی دارید توصیه می کنم که این فصل را به طور کامل بخوانید.
 
-The Internet is a system of interconnected computer networks that has existed since at least the
-1960s11 . However, the internet’s early usage was restricted to a small number of isolated networks,
-largely government, military, or scientific in nature, that exchanged information electronically.
-By the 1980s, many research institutes and universities were using the internet to share data.
-In Europe, the biggest internet node was located at CERN (European Organization for Nuclear
-Research) in Geneva, Switzerland, which operates the largest particle physics laboratory in the
-world. These experiments generate enormous quantities of data that need to be shared remotely
-with scientists all around the world.
 
-Compared with today, though, overall internet usage in the 1980s was miniscule. Most people
-did not have access to it or even understood why it mattered. A small number of internet
-nodes powered all the traffic and the computers using it were primarily within the same, small
-networks.
+### شبکه جهانی وب
 
-This all changed in 1989 when a research scientist at CERN, Tim Berners-Lee, invented HTTP
-and ushered in the modern World Wide Web. His great insight was that the existing hypertext12 system, where text displayed on a computer screen contained links (hyperlinks) to other
-documents, could be moved onto the internet.
+اینترنت سیستمی از شبکه های کامپیوتری به هم پیوسته است که حداقل از دهه 1960 وجود داشته است. به هر حال استفاده اولیه از اینترنت محدود به تعداد کمی از شبکه‌های مجزا، عمدتاً دولتی، نظامی یا علمی بود که اطلاعات را به صورت الکترونیکی رد و بدل می‌کردند.
 
-His invention, Hypertext Transfer Protocol (HTTP)13 , was the first standard, universal way to
-share documents over the internet. It ushered in the concept of web pages: discrete documents
-with a URL, links, and resources such as images, audio, or video.
+در دهه <a href="https://en.wikipedia.org/wiki/Internet">1980</a>، بسیاری از مؤسسات تحقیقاتی و دانشگاه ها از اینترنت برای به اشتراک گذاری داده ها استفاده می کردند.
 
-Today, when most people think of “the internet,” they think of the World Wide Web, which is now
-the primary way that billions of people and computers communicate online.
+در اروپا، بزرگترین گره(Node) اینترنتی در CERN (سازمان اروپایی تحقیقات هسته ای) در ژنو سوئیس که بزرگترین آزمایشگاه فیزیک ذرات جهان را اداره میکند قرار داشت. این آزمایش‌ها مقادیر عظیمی از داده‌ها را تولید می‌کنند که باید از راه دور با دانشمندان در سراسر جهان به اشتراک گذاشته می شدند.
+
+در مقایسه با امروز، استفاده کلی از اینترنت در دهه 1980 بسیار ناچیز بود.اکثر مردم به آن دسترسی نداشتند یا حتی دلیل اهمیت آن را درک نمی کردند. تعداد کمی از گره‌های اینترنتی تمام ترافیک را تأمین می‌کردند و رایانه‌هایی که از آن استفاده می‌کردند، عمدتاً در همان شبکه‌های کوچک بودند.
+
+همه اینها در سال 1989 زمانی که یک دانشمند محقق در سرن، (Tim Berners-Lee) HTTP را اختراع کرد، تغییر کرد و شبکه جهانی وب مدرن را آغاز کرد. نگرش او این بود که سیستم <a href="https://en.wikipedia.org/wiki/Hypertext">hypertext</a> موجود، که در آن متن نمایش داده شده بر روی صفحه کامپیوتر حاوی پیوند (هایپرلینک) به اسناد دیگر است، می تواند به اینترنت منتقل شود.
+
+اختراع او، <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">پروتکل انتقال هایپرتکست</a> (HTTP)، اولین راه استاندارد و جهانی برای به اشتراک گذاری اسناد از طریق اینترنت بود. این پروتکل این موارد را در قالب صفحات وب ارائه می دهد: اسناد گسسته با URL پیوندها و منابعی مثل عکس ها صوت و ویدیو.
+
+امروزه، زمانی که بیشتر مردم به «اینترنت» فکر می‌کنند، در واقع به شبکه جهانی وب فکر می‌کنند، که در حال حاضر راه اصلی برقراری ارتباط آنلاین میلیاردها نفر و رایانه است.
+
 
 ### URLs
 
-A URL (Uniform Resource Locator) is the address of a resource on the internet. For example, the
-Google homepage lives at https://www.google.com.
+یک url (تعیین کننده محل منابع) آدرس یک منبع بر روی شبکه اینترنت می باشد. برای مثال صفحه اصلی گوگل در https://www.google.com می باشد.
 
-When you want to go to the Google homepage, you type the full URL address into a web browser.
-Your browser then sends a request out over the internet and is magically connected (we’ll cover
-what actually happens shortly) to a server that responds with the data needed to render the
-Google homepage in your browser.
+وقتی که می خواهید به صفحه اصلی گوگل بروید شما url کامل آن را در مرورگر تایپ می کنید. 
+مرورگر شما از طریق اینترنت یک درخواست می فرستد و یک سرور  به درخواست شما برای نمایش دیتاهای موردنیاز صفحه اصلی Google در مرورگر شما پاسخ می دهد(به زودی آنچه واقعا اتفاق می افتد را پوشش خواهیم داد).
 
-This request and response pattern is the basis of all web communication. A client (typically a
-web browser but also a native app or really any internet-connected device) requests information
-and a server responds with a response.
+این الگوی درخواست و پاسخ اساس همه ارتباطات وب است. یک کلاینت (معمولاً یک مرورگر اما می تواند یک برنامه یا هر دستگاه متصل به اینترنت باشد) اطلاعاتی را درخواست می کند و سرور پاسخ می دهد.
 
-Since web communication occurs via HTTP these are known more formally as HTTP requests
-and HTTP responses.
+از آنجایی که ارتباطات وب از طریق HTTP انجام می شود، اینها بیشتر به عنوان درخواست های HTTP و پاسخ های HTTP شناخته می شوند.
 
-Within a given URL are also several discrete components. For example, consider the Google
-homepage located at https://www.google.com. The first part, https, refers to the scheme used.
-It tells the web browser how to access resources at the location. For a website this is typically
-http or https, but it could also be ftp for files, smtp for email, and so on. The next section,
-www.google.com, is the hostname or the actual name of the site. Every URL contains a scheme
-and a host.
+در یک URL داده شده نیز چندین مؤلفه مجزا وجود دارد. برای مثال صفحه اصلی گوگل را که در https://www.google.com واقع شده است در نظر بگیرید. قسمت اول یا همان https به نوع درخواست استفاده شده اشاره دارد.
 
-Many webpages also contain an optional path, too. If you go to the homepage for Python at https://www.python.org and click on the link for the “About” page you’ll be redirected to
-https://www.python.org/about/. The /about/ piece is the path.
+این بخش به مرورگر وب می گوید که چگونه به منابع موجود در أدرس دسترسی داشته باشد.
 
-In summary, every URL like https://python.org/about/ has three potential parts:
+برای یک وب‌سایت، این معمولاً http یا https است، اما همچنین می‌تواند برای فایل‌ها ftp، برای ایمیل smtp و غیره باشد. 
+بخش بعدی، www.google.com، نام میزبان(host) یا نام واقعی سایت است. هر URL حاوی یک نوع درخواست و یک میزبان(هاست) است.
 
-- a scheme - https
-- a hostname - www.python.org
-- and an (optional) path - /about/
+بسیاری از صفحات وب همچنین شامل یک مسیر اختیاری هستند. اگر به صفحه اصلی پایتون در https://www.python.org بروید و روی پیوند صفحه «about» کلیک کنید، به https://www.python.org/about/ هدایت خواهید شد. /about/ یک بخش از آدرس صفحه است.
 
-### Internet Protocol Suite
+به طور خلاصه، هر URL مانند https://python.org/about/ دارای سه بخش نهانی است:
 
-Once we know the actual URL of a resource, a whole collection of other technologies must work
-properly (together) to connect the client with the server and load an actual webpage. This is
-broadly referred to as the internet protocol suite14 and there are entire books written on just
-this topic. For our purposes, however, we can stick to the broad basics.
+- یک شمای کلی(نوع درخواست) - https
+- نام میزبان - www.python.org
+- و یک مسیر (اختیاری) - /about/
 
-Several things happen when a user types https://www.google.com into their web browser and
-hits Enter. First the browser needs to find the desired server, somewhere, on the vast internet.
-It uses a domain name service (DNS) to translate the domain name “google.com” into an IP
-address15 , which is a unique sequence of numbers representing every connected device on the
-internet. Domain names are used because it is easier for humans to remember a domain name
-like “google.com” than an IP address like “172.217.164.68”.
 
-After the browser has the IP address for a given domain, it needs a way to set up a consistent
-connection with the desired server. This happens via the Transmission Control Protocol (TCP)
-which provides reliable, ordered, and error-checked delivery of bytes between two application.
+### مجموعه پروتکل اینترنت
 
-To establish a TCP connection between two computers, a three-way “handshake” occurs between the client and server:
+هنگامی که URL یک منبع را می دانیم، مجموعه کاملی از فناوری های دیگر باید به درستی (با هم) کار کنند تا کلاینت را به سرور متصل کرده و یک صفحه وب واقعی را بارگیری کند. این به طور گسترده به عنوان <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">مجموعه پروتکل اینترنت</a> نامیده می شود و کتاب های کاملی وجود دارد که فقط برای این موضوع نوشته شده است. با این حال، برای اهداف خود، می‌توانیم به اصول کلی پایبند باشیم.
 
-- The client sends a SYN asking to establish a connection
-- The server responds with a SYN-ACK acknowledging the request and passing a connection
-parameter
-- The client sends an ACK back to the server confirming the connection
+هنگامی که کاربر https://www.google.com را در مرورگر وب خود تایپ می کند و دکمه اینتر را می زند، چندین اتفاق می افتد.ابتدا مرورگر باید سرور مورد نظر را در جایی در اینترنت پیدا کند.
+از یک سرویس نام دامنه (DNS) برای ترجمه نام دامنه "google.com" به آدرس IP استفاده می کند، که یک دنباله منحصر به فرد از اعداد است که هر دستگاه متصل را نشان می دهد.
+اینترنت از نام های دامنه استفاده می کند زیرا به خاطر سپردن نام دامنه برای انسان آسان تر است
+مانند «google.com» تا یک <a href="https://en.wikipedia.org/wiki/IP_address">آدرس IP</a> مانند «172.217.164.68».
 
-Once the TCP connection is established, the two computers can start communicating via HTTP.
+پس از اینکه مرورگر آدرس IP یک دامنه معین را داشت، به راهی برای ایجاد یک ارتباط ثابت با سرور مورد نظر نیاز دارد.این از طریق پروتکل کنترل انتقال (TCP) اتفاق می افتد.
+که مطمئن، مرتب شده و عاری از خطا انتقال بایت ها را بین دو برنامه ارائه می دهد.
+
+برای ایجاد یک اتصال TCP بین دو کامپیوتر، یک "handshake" سه مسیره بین کلاینت و سرور رخ می دهد:
+
+- کلاینت یک SYN(یک نوع پیام) می فرستد و درخواست برقراری اتصال می کند
+- سرور با تایید درخواست و ارسال یک پارامتر اتصال با یک SYN-ACK پاسخ می دهد
+- کلاینت یک ACK(نشان‌دهنده‌ی دریافت پیام SYN) را برای تایید اتصال به سرور ارسال می کند
+
+هنگامی که اتصال TCP برقرار شد، دو کامپیوتر می توانند از طریق HTTP ارتباط برقرار کنند.
+
 
 ### HTTP Verbs
 
-Every webpage contains both an address (the URL) as well as a list of approved actions known as
-HTTP verbs. So far we’ve mainly talked about getting a web page, but it’s also possible to create,
-edit, and delete content.
+هر صفحه وب شامل یک آدرس (URL) و همچنین لیستی از اقدامات مورد تایید به نام HTTP verbs است. تاکنون عمدتاً در مورد دریافت یک صفحه وب صحبت کرده ایم، اما امکان ایجاد، ویرایش و حذف محتوا نیز وجود دارد.
 
-Consider the Facebook website. After logging in, you can read your timeline, create a new
-post, or edit/delete an existing one. These four actions Create-Read-Update-Delete are known
-colloquially as CRUD functionality and represent the overwhelming majority of actions taken
-online.
+وبسایت فیسبوک را درنظر بگیرید.
 
-The HTTP protocol contains a number of request methods16 that can be used while requesting
-information from a server. The four most common map to CRUD functionality. They are POST,
-GET, PUT, and DELETE.
+بعد از لاگین شما می توانید پست های تایملاینتان را بخوانید یک پست جدید ایجاد کنید یا پست های موجودتان را ویرایش یا حذف کنید. این چهار عمل (خواندن - ساختن - ویرایش کردن - حذف کردن) به صورت عامیانه به عنوان اعمال CRUD شناخته می شوند و اکثر کارهایی که به صورت آنلاین انجام می شود را نمایش می دهد.
+
+پروتکل HTTP حاوی تعدادی <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_method">متود درخواست</a> است که می توان از آنها در هنگام درخواست اطلاعات از یک سرور استفاده کرد. چهار عمل رایج برای عملکرد CRUD. چهار عمل POST، GET، PUT و DELETE هستند.
 
 <div dir="ltr">
 
@@ -125,16 +98,13 @@ Delete  <-------------------->  DELETE
 
 </div>
 
-To create content you use POST, to read content GET, to update it PUT, and to delete it you use
-DELETE.
+برای ایجاد محتوا از POST، برای خواندن محتوا از GET، برای به روز رسانی آن PUT و برای حذف آن از DELETE استفاده می کنند.
 
 ### Endpoints
 
-A website consists of web pages with HTML, CSS, images, JavaScript, and more. But a web API
-has endpoints instead which are URLs with a list of available actions (HTTP verbs) that expose data (typically in JSON17 , which is the most common data format these days and the default for
-Django REST Framework).
+یک وب سایت از صفحات وب با HTML، CSS، تصاویر، جاوا اسکریپت و موارد دیگر تشکیل شده است. اما یک وب API به جای آن اندپوینت دارد که urlهایی  با فهرستی از اعمال موجود (HTTP VERBS) هستند که داده‌ها را نشان می‌دهند (معمولاً در <a href="https://json.org/">JSON</a> که رایج‌ترین قالب داده این روزها و پیش‌فرض برای django-rest-framework است).
 
-For example, we could create the following API endpoints for a new website called mysite.
+برای مثال، می‌توانیم اندپوینت API زیر را برای یک وب‌سایت جدید به نام mysite در نظر بگیریم:
 
 <div dir="ltr">
 
@@ -145,35 +115,24 @@ https://www.mysite.com/api/users/<id> # GET returns a single user
 
 </div>
 
-In the first endpoint, /api/users, an available GET request returns a list of all available users. This type of endpoint which returns multiple data resources is known as a collection.
+در اولین اندپوینت /api/users، یک درخواست GET  لیستی از تمام کاربران موجود را برمی گرداند. این نوع اندپوینت که چندین دیتا را برمی گرداند به عنوان یک مجموعه (کالکشن) شناخته می شود.
 
-The second endpoint /api/users/<id> represents a single user. A GET request returns informa-
-tion about just that one user.
+اندپوینت دوم /api/users/id یک کاربر واحد را نشان می دهد. یک درخواست GET اطلاعات مربوط به یک کاربر را برمی گرداند.
 
-If we added POST to the first endpoint we could create a new user, while adding DELETE to the
-second endpoint would allow us to delete a single user.
+اگر متود POST را به اندپوینت اول اضافه کنیم، می‌توانیم یک کاربر جدید ایجاد کنیم، در حالی که افزودن متود DELETE به اندپوینت دوم به ما امکان حذف یک کاربر را می‌دهد.
 
-We will become much more familiar with API endpoints over the course of this book but
-ultimately creating an API involves making a series of endpoints: URLs with associated HTTP
-verbs.
+در طول این کتاب با اندپوینت های API بیشتر آشنا خواهیم شد، اما در نهایت ایجاد یک API مستلزم ساخت یک سری اندپوینت است: URL هایی با HTTP verbs مرتبط.
 
-A webpage consists of HTML, CSS, images, and more. But an endpoint is just a way to access data
-via the available HTTP verbs.
+یک صفحه وب از HTML، CSS، تصاویر و موارد دیگر تشکیل شده است. اما اندپوینت تنها راهی برای دسترسی به داده ها از طریق  HTTP verbs موجود است.
 
 ### HTTP
 
-We’ve already talked a lot about HTTP in this chapter, but here we will describe what it actually
-is and how it works.
-HTTP is a request-response protocol between two computers that have an existing TCP connec-
-tion. The computer making the requests is known as the client while the computer responding
-is known as the server. Typically a client is a web browser but it could also be an iOS app or really
-any internet-connected device. A server is a fancy name for any computer optimized to work over the internet. All we really need to transform a basic laptop into a server is some special
-software and a persistent internet connection.
+قبلاً در این فصل در مورد HTTP صحبت کرده‌ایم، اما در اینجا توضیح خواهیم داد که در واقع HTTP چیست و چگونه کار می‌کند.
 
-Every HTTP message consists of a status line, headers, and optional body data. For example, here
-is a sample HTTP message that a browser might send to request the Google homepage located
-at https://www.google.com.
+پروتکل HTTP یک پروتکل درخواست-پاسخ بین دو کامپیوتر است که در آن یک اتصال TCP وجود دارد. رایانه ای که درخواست ها را می فرستد به عنوان کلاینت شناخته می شود در حالی که رایانه پاسخ دهنده به عنوان سرور شناخته می شود. به طور معمول یک کلاینت یک مرورگر وب است اما می تواند یک برنامه iOS یا هر دستگاه متصل به اینترنت باشد. سرور نامی مناسب برای هر رایانه ای است که برای کار از طریق اینترنت بهینه شده است. تنها چیزی که برای تبدیل یک لپ‌تاپ به سرور نیاز داریم یک نرم‌افزار مخصوص و اتصال دائمی به اینترنت است.
 
+هر پیام HTTP از یک خط وضعیت(status)، سرصفحه درخواست(header) و داده های بدنه(body) که اختیاری می باشد تشکیل شده است. به عنوان مثال، در اینجا یک نمونه پیام HTTP است که ممکن است یک مرورگر برای درخواست به صفحه اصلی Google https://www.google.com ارسال کند.
+ 
 <div dir="ltr">
 
 ```
@@ -184,17 +143,15 @@ Accept_Language: en-US
 
 </div>
 
-The top line is known as the request line and it specifies the HTTP method to use (GET), the path
-(/), and the specific version of HTTP to use (HTTP/1.1).
+خط اول به عنوان خط درخواست شناخته می شود و متود پروتکل HTTP که استفاده شده را مشخص می کند (GET) (/) نشان دهنده مسیر و (HTTP/1.1) ورژن HTTP که در حال استفاده است را مشخص می کند.
 
-The two subsequent lines are HTTP headers: Host is the domain name and Accept_Language is
-the language to use, in this case American English. There are many HTTP headers18 available.
+دو خطی که در ادامه آمده سربرگ(header) HTTP می باشد: هاست همان نام دامنه و accept_Language هم همان زبان مورد استفاده است که در این مورد انگلیسی می باشد. به طور کل سربرگ های (<a href="https://en.wikipedia.org/wiki/List_of_HTTP_header_fields">header</a>) HTTP دردسترس زیادی وجود دارد.
 
-HTTP messages also have an optional third section, known as the body. However we only see a
-body message with HTTP responses containing data.
+پیام‌های HTTP همچنین دارای بخش سوم اختیاری هستند که به عنوان بدنه شناخته می‌شود. با این حال ما فقط یک پیام بدنه با پاسخ های HTTP حاوی داده می بینیم.
 
-For simplicity, let’s assume that the Google homepage only contained the HTML “Hello, World!”
-This is what the HTTP response message from a Google server might look like.
+برای سادگی، اجازه دهید فرض کنیم که صفحه اصلی گوگل فقط حاوی یک صفحه html به صورت "Hello, World!" است.
+
+پاسخ پیام HTTP از یک سرور Google ممکن است به این صورت باشد.
 
 <div dir="ltr">
 
@@ -211,13 +168,9 @@ Hello, world!
 
 </div>
 
-The top line is the response line and it specifies that we are using HTTP/1.1. The status code 200
-OK indicates the request by the client was successful (more on status codes shortly).
+خط اول خط پاسخ است و مشخص می کند که ما از HTTP/1.1 استفاده می کنیم. کد وضعیت 200 OK نشان‌دهنده موفقیت‌آمیز بودن درخواست مشتری است (به زودی در مورد کدهای وضعیت بیشتر توضیح خواهیم داد).
 
-The next eight lines are HTTP headers. And finally after a line break there is our actual body
-content of “Hello, world!”.
-
-Every HTTP message, whether a request or response, therefore has the following format:
+بنابراین هر پیام HTTP درخواست یا پاسخ (request, response)، فرمت زیر را دارد:
 
 <div dir="ltr">
 
@@ -230,84 +183,60 @@ Headers...
 
 </div>
 
-Most web pages contain multiple resources that require multiple HTTP request/response cycles.
-If a webpage had HTML, one CSS file, and an image, three separate trips back-and-forth between
-the client and server would be required before the complete web page could be rendered in the
-browser.
+اکثر صفحات وب حاوی منابع متعددی هستند که به چندین چرخه درخواست/پاسخ HTTP نیاز دارند.
+اگر یک صفحه وب دارای HTML، یک فایل CSS و یک تصویر باشد، قبل از اینکه صفحه وب کامل در مرورگر نمایش داده شود، سه بار درخواست و پاسخ جداگانه بین کلاینت و سرور لازم است.
 
 ### Status Codes
 
-Once your web browser has executed an HTTP Request on a URL there is no guarantee things will
-actually work! Thus there is a quite lengthy list of HTTP Status Codes19 available to accompany
-each HTTP response.
+هنگامی که مرورگر وب شما یک درخواست HTTP را در یک URL فرستاد، هیچ تضمینی وجود ندارد که همه چیز واقعاً کار کند! بنابراین یک لیست طولانی از <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">کدهای وضعیت HTTP</a> همراه هر پاسخ HTTP وجود دارد.
 
-You can tell the general type of status code based on the following system:
+می توانید نوع کلی کد وضعیت را بر اساس سیستم زیر تشخیص دهید:
 
-- 2xx Success - the action requested by the client was received, understood, and accepted
-- 3xx Redirection - the requested URL has moved
-- 4xx Client Error - there was an error, typically a bad URL request by the client
-- 5xx Server Error - the server failed to resolve a request
+- کدهای 2xx  موفقیت - درخواست توسط کلاینت دریافت، درک و پذیرفته شد
 
-There is no need to memorize all the available status codes. With practice you will become
-familiar with the most common ones such as 200 (OK), 201 (Created), 301 (Moved Permanently),
-404 (Not Found), and 500 (Server Error).
+- کدهای 3xx ریدایرکت - درخواست url منتقل شده است
 
-The important thing to remember is that, generally speaking, there are only four potential
-outcomes to any given HTTP request: it worked (2xx), it was redirected somehow (3xx), the client
-made an error (4xx), or the server made an error (5xx).
+- کدهای 4xx ارور کلاینت - خطایی وجود دارد، معمولاً نوع درخواست URL به صورت نادرست توسط کلاینت فرستاده شده است.
 
-These status codes are automatically placed in the request/response line at the top of every
-HTTP message.
+- کدهای 5xx ارور سرور- سرور نمیتواند درخواست کلاینت را به درستی پاسخ دهد.
 
-### Statelessness
+نیازی به حفظ تمام کدهای وضعیت موجود نیست. با تمرین با رایج ترین موارد مانند 200 (OK)، 201 (ایجاد شده)، 301 (به طور دائم منتقل شده)، 404 (یافت نشد) و 500 (خطای سرور) آشنا خواهید شد.
 
-A final important point to make about HTTP is that it is a stateless protocol. This means
-each request/response pair is completely independent of the previous one. There is no stored
-memory of past interactions, which is known as state20 in computer science.
+نکته مهمی که باید به خاطر بسپارید این است که، به طور کلی، تنها چهار نتیجه کلی برای هر درخواست HTTP وجود دارد: انجام شد (2xx)، به نحوی هدایت شد (3xx)، خطای کلاینت (4xx)، یا سرور یک خطا ایجاد کرده است (5xx).
 
-Statelessness brings a lot of benefits to HTTP. Since all electronic communication systems have
-signal loss over time, if we did not have a stateless protocol, things would constantly break if
-one request/response cycle didn’t go through. As a result HTTP is known as a very resilient
-distributed protocol.
+این کدهای وضعیت به طور خودکار در خط درخواست/پاسخ در بالای هر پیام HTTP قرار می گیرند.
 
-The downside however is that managing state is really, really important in web applications. State
-is how a website remembers that you’ve logged in and how an e-commerce site manages your
-shopping cart. It’s fundamental to how we use modern websites, yet it’s not supported on HTTP
-itself.
 
-Historically state was maintained on the server but it has moved more and more to the client,
-the web browser, in modern front-end frameworks like React, Angular, and Vue. We’ll learn more
-about state when we cover user authentication but remember that HTTP is stateless. This makes
-it very good for reliably sending information between two computers, but bad at remembering
-anything outside of each individual request/response pair.
+### Statelessness(عدم وابستگی)
+
+آخرین نکته مهم در مورد HTTP این است که یک پروتکل بدون وضعیت است. این بدان معناست که هر درخواست/پاسخ کاملاً مستقل از قبلی است. هیچ حافظه ذخیره شده ای از فعل و انفعالات گذشته وجود ندارد که در علوم کامپیوتر به عنوان وضعیت)(<a href="https://en.wikipedia.org/wiki/State_(computer_science)">state</a>) شناخته می شود.
+
+این ویژگی عدم وابستگی مزایای زیادی برای HTTP به همراه دارد. از آنجایی که همه سیستم‌های ارتباطی الکترونیکی در طول زمان علامت های خود را از دست می‌دهند، اگر پروتکل بدون وضعیت نداشته باشیم،بهتر بگویم اگر یک چرخه درخواست/پاسخ طی نشود، همه چیز دائماً خراب می‌شود. در نتیجه HTTP به عنوان یک پروتکل توزیع شده بسیار انعطاف پذیر شناخته می شود.
+
+اما نکته منفی این است که مدیریت وضعیت(state) واقعاً در برنامه های وب بسیار مهم است.این موضوع وضعیت(state) این است که چگونه یک وب سایت به یاد می آورد که شما وارد سیستم شده اید و چگونه یک سایت فروشگاه اینترنتی سبد خرید شما را مدیریت می کند. این برای نحوه استفاده ما از وب سایت های مدرن است، اما در خود HTTP پشتیبانی نمی شود.
+
+وضعیت ها قبلا روی سرور حفظ می‌شد، اما بیشتر و بیشتر به سمت کلاینت، مرورگر وب، در فریمورک های فرانت اند مدرن مانند React، Angular و Vue منتقل شده است. هنگامی که احراز هویت کاربر را پوشش می‌دهیم، درباره این موضوع بیشتر می‌آموزیم، اما به یاد داشته باشید که HTTP بدون وضعیت است. این باعث می شود برای ارسال مطمئن اطلاعات بین دو رایانه یک نکته مثبت باشد، اما در به خاطر سپردن هر چیزی خارج از هر درخواست/پاسخ فردی، یک ویژگی منفی باشد.
+
 
 ### REST
 
-REpresentational State Transfer (REST)21 is an architecture first proposed in 2000 by Roy Fielding
+موضوع <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">Representational State Transfer (REST)</a> ​​یک معماری است که اولین بار در سال 2000 توسط روی فیلدینگ در پایان نامه خود پیشنهاد شد. این رویکردی است که بالای معماری دنیای وب یعنی بالای موضوع پروتکل HTTP قرار می گیرد.
 
-in his dissertation thesis. It is an approach to building APIs on top of the web, which means on
-top of the HTTP protocol.
+کل کتاب‌ دارای مجموعه پروتکل اینترنت می باشد که در مورد آنچه که API را واقعاً REST می‌کند یا نه نوشته شده است. اما سه ویژگی اصلی وجود دارد که ما در اینجا برای اهداف خود روی آنها تمرکز خواهیم کرد. هر RESTful API:
 
-Entire books have been written on what makes an API actually RESTful or not. But there are three
-main traits that we will focus on here for our purposes. Every RESTful API:
+- مانند HTTP بدون وضعیت(stateless) است
 
-- is stateless, like HTTP
-- supports common HTTP verbs (GET, POST, PUT, DELETE, etc.)
-- returns data in either the JSON or XML format
+- از CRUD (GET, POST, PUT, DELETE, etc.) پشتیبانی می کند
 
-Any RESTful API must, at a minimum, have these three principles. The standard is important
-because it provides a consistent way to both design and consume web APIs.
+- داده ها را در قالب JSON یا XML برمی گرداند
 
-### Conclusion
+هر API RESTful حداقل باید این سه اصل را داشته باشد. این استاندارد مهم است زیرا یک اصول ثابت برای طراحی و استفاده از APIهای وب ارائه می دهد.
 
-While there is a lot of technology underlying the modern world wide web, we as developers
-don’t have to implement it all from scratch. The beautiful combination of Django and Django
-REST Framework handles, properly, most of the complexity involved with web APIs. However it
-is important to have at least a broad understanding of how all the pieces fit together.
 
-Ultimately a web API is a collection of endpoints that expose certain parts of an underlying
-database. As developers we control the URLs for each endpoint, what underlying data is available,
-and what actions are possible via HTTP verbs. By using HTTP headers we can set various levels
-of authentication and permission too as we will see later in the book.
+### Conclusion(نتیجه‌گیری)
+
+در حالی که فناوری های زیادی در زیربنای اینترنت مدرن وجود دارد، ما به عنوان توسعه دهندگان مجبور نیستیم همه آن را از ابتدا پیاده سازی کنیم. ترکیب زیبای Django و Django REST Framework به درستی اکثر پیچیدگی های مربوط به API های وب را کنترل می کند. با این حال، داشتن حداقل درک کلی از کار کردن این معماری ها با هم مهم است.
+
+در نهایت یک وب API مجموعه ای از اندپوسنت هاست که بخش های خاصی از یک دیتابیس را نمایش می دهد.ما به‌عنوان توسعه‌دهنده، URL‌ها را برای هر اندپوینت کنترل می‌کنیم، که چه داده‌هایی در دسترس است و چه اقداماتی از طریق HTTP verbs امکان‌پذیر است. همانطور که در ادامه کتاب خواهیم دید، با استفاده از هدرهای HTTP، می‌توانیم سطوح مختلف احراز هویت و دسترسی را نیز تنظیم کنیم.
 
 </div>
