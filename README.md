@@ -17,19 +17,19 @@
 </details>
   
 <details>
-  <summary>فصل اول : API های وب</summary>
+  <summary>فصل اول : API های وب &check;</summary>
   <br>
   
-  - WWW
-  - URLs
-  - Internet protocol suite
-  - HTTP verbs
-  - Endpoints
-  - HTTP
-  - Status codes
-  - Statelessness
-  - Rest
-  - نتیجه گیری
+  - WWW &check;
+  - URLs &check;
+  - Internet protocol suite &check;
+  - HTTP verbs &check;
+  - Endpoints &check;
+  - HTTP &check;
+  - Status codes &check;
+  - Statelessness &check;
+  - Rest &check;
+  - نتیجه گیری &check;
   
 </details>
   
@@ -164,7 +164,7 @@
 | تاریخ اتمام ترجمه |       مترجم      |             فصل             |
 |:-----------------:|:----------------:|:---------------------------:|
 |       تمام        |  Mostafa Karimi  |                introduction |
-|       12/1        |Khalil Farashiani |                  Web-APIs-1 |
+|       تمام        |Khalil Farashiani |                  Web-APIs-1 |
 |       تمام       |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
 |         ?         |    Amirhossein   |                  Todo-API-3 |
 |       تمام        |  Sahar Mokarrami |      Todo-React-Front-end-4 |
