@@ -487,7 +487,7 @@ from django.urls import path
 from .views import BookAPIView
 
 urlpatterns = [
-	path('', BookAPIView.as_view()),
+    path('', BookAPIView.as_view()),
 ]
 ```
 همه چیز آماده است.
@@ -536,8 +536,8 @@ from books.models import Book
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
-    model = Book
-    fields = ('title', 'subtitle', 'author', 'isbn')
+    	model = Book
+    	fields = ('title', 'subtitle', 'author', 'isbn')
 ```
 
 در خطوط بالا ما کلاس serializer رست فریمورک جنگو و مدل Book را از فایل مدل برنامه books وارد می کنیم. ما ModelSerializer رست فریمورک جنگو را در کلاس BookSerializer که مدل پایگاه داده Book و فیلد های پایگاه داده ای که می خواهیم نمایش بدهیم(author، subtitle، title و isbn) را مشخص می کند، توسعه می دهیم.
