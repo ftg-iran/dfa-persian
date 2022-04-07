@@ -166,9 +166,9 @@
 |       تمام        |  Mostafa Karimi  |                introduction |
 |       تمام        |Khalil Farashiani |                  Web-APIs-1 |
 |       تمام       |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
-|         ?         |    Amirhossein   |                  Todo-API-3 |
+|         2/15         |    Amirhossein   |                  Todo-API-3 |
 |       تمام        |  Sahar Mokarrami |      Todo-React-Front-end-4 |
-|       12/1        | Shamim Sanisales |                  Blog-Api-5 |
+|       تمام        | Shamim Sanisales |                  Blog-Api-5 |
 |       تمام       |   Pouya Pargam   |               Permissions-6 |
 |        1/31       |       ELI        |       User-Authentication-7 |
 |        11/6       | Amirreza Pasandi |      Viewsets-and-Routers-8 |
