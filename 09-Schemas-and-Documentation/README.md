@@ -1,25 +1,28 @@
-<div dir="rlt">
+<div dir="rtl" >
   
-# Schemas and Documentation
-  
+# الگو ها (schemas) و مستندات 
 
-Now that we have our API complete we need a way to document its functionality quickly and
-accurately to others. After all, in most companies and teams, the developer who is using the API
-is not the same developer who initially built it. Fortunately, there are automated tools to handle
-this for us.
-  
-A [schema](https://www.django-rest-framework.org/api-guide/schemas/#schema) 
-is a machine-readable document that outlines all available API endpoints, URLs, and
-the HTTP verbs (GET, POST, PUT, DELETE, etc.) they support. Documentation is something added
-to a schema that makes it easier for humans to read and consume. In this chapter we will add a
-schema to our Blog project and then add two different documentation approaches. By the end
-we will we have implemented an automated way to document any current and future changes
-to our API.
-  
-  
-  
-As a reminder, here is the complete list of our current API endpoints:
+اکنون که API خود را کامل کرده ایم، به راهی نیاز داریم تا عملکرد آن را به سرعت و با دقت برای دیگران مستند کنیم. 
+به هر حال، در اکثر شرکت ها و تیم ها، توسعه دهنده ای که از API استفاده می کند،
+همان توسعه دهنده ای نیست که در ابتدا آن را ساخته است.
+خوشبختانه، ابزارهای خودکاری برای مدیریت این موضوع برای ما وجود دارد.
 
+
+[schema](https://www.django-rest-framework.org/api-guide/schemas/#schema) 
+یک سند قابل خواندن توسط ماشین هست که چارچوب کلی یک
+API endpoint 
+های موجود
+URLs و
+HTTP methods (GET, POST, PUT, DELETE, etc.)
+هایی که پشتیبانی میکنند را مشخص میکند.
+مستندات چیزی است که به یک schema اضافه شده که خواندن و استفاده آن را برای انسان آسان‌تر می‌کند.
+در این فصل ما یک schema به پروژه وبلاگ خود اضافه می کنیم و سپس به دو روش مختلف مستند سازی آن را انجام میدهیم.
+در پایان، ما یک روش خودکار را برای ثبت هرگونه تغییر  (چه در حال چه در آینده ) در API خود پیاده سازی کرده ایم.
+
+
+
+
+به عنوان یادآوری ، در اینجا لیست کاملی از endpoint های API های فعلی را آمده است :
 <div dir="ltr">
   
 Diagram
@@ -38,18 +41,32 @@ Diagram
 ```
   
 </div>
-  
-  
+
+
 ### Schemas
   
   
-Before [version 3.9](https://www.django-rest-framework.org/community/3.9-announcement/), 
-Django REST Framework relied on [Core API](http://www.coreapi.org/) for schemas but it has now
-switched firmly over to the [OpenAPI](https://www.openapis.org/) schema (formerly known as Swagger).
+قبل از 
+[نسخه 3.9](https://www.django-rest-framework.org/community/3.9-announcement/)
+پایتون
+Django REST Framework
+برای schema های خود به
+[Core API](http://www.coreapi.org/) 
+وابسته بود اما حالا کاملا به schema
+[OpenAPI](https://www.openapis.org/)
+(که قبلا Swagger نامیده میشد)
+تغیر کرده است.
   
-The first step is to install both [PyYAML](https://pyyaml.org/) and [uritemplate](https://github.com/python-hyper/uritemplate). PyYAML will transform our schema
-into the YAML-basd OpenAPI format, while uritemplate adds parameters to the URL paths.
-  
+در قدم اول باید
+[PyYAML](https://pyyaml.org/) 
+و
+[uritemplate](https://github.com/python-hyper/uritemplate)
+نصب کنیم.
+
+PyYAML
+schema 
+های ما را به فرمت OpenAPI مبتنی بر YAML تبدیل می کند،
+در حالی که uritemplate پارامترهایی را به مسیرهای URL اضافه می کند.
   
 <div dir="ltr">
   
@@ -60,16 +77,21 @@ Command Line
   
 </div>
   
-  
-Next, we are presented with a choice: generate a static schema or a dynamic schema. If your API
-does not change often, the static schema can be generated periodically and served from static
-files for strong performance. However, if your API does change quite often, you might consider
-the dynamic option. We’ll implement both here.
-  
-First, is the static schema approach which uses the generateschema management command. We
-can output the result to a file called openapi-schema.yml.
-  
-  
+
+در مرحله بعد، یک انتخاب به ما ارائه می شود: ایجاد یک schema ایستا یا یک schema پویا.
+اگر API شما
+اغلب تغییر نمی کند، طرحواره ایستا می تواند به صورت دوره ای تولید شود و از فایل های استاتیک برای عملکرد قوی استفاده شود.
+با این حال، اگر API شما اغلب تغییر می کند، ممکن است گزینه پویا را در نظر بگیرید.
+ما هر دو را در اینجا اجرا خواهیم کرد.
+
+در مرحله اول،
+سراغ schema ایستا میرویم که از دستور مدیریتی
+generateschema
+برای تولید schema استفاده میکند.
+ما می توانیم نتیجه را در فایلی به نام
+openapi-schema.yml
+قرار دهیم.
+
 <div dir="ltr">
   
 Command Line
@@ -78,16 +100,18 @@ Command Line
 ```
   
 </div>
-  
-  
-If you open that file it’s quite long and not very human-friendly. But to a computer it’s perfectly
-formatted.
-  
-For the dynamic approach, updating `config/urls.py` by importing `get_schema_view` at the top
-and then creating a dedicated path at openapi. The title, description, and version can be
-customized as needed.
-  
-  
+
+اگر آن فایل را باز کنید، بسیار طولانی است و خیلی کاربر پسند نیست. اما برای کامپیوتر کاملا فرمت شده است.
+ 
+برای رویکرد پویا،
+`config/urls.py` 
+را با وارد کردن
+`get_schema_view`
+به روزرسانی کنید و سپس یک مسیر اختصاصی در openapi ایجاد کنید.
+عنوان، توضیحات و نسخه را می توان در صورت نیاز سفارشی کرد.
+
+عنوان، توضیحات و نسخه را می توان در صورت نیاز سفارشی کرد.
+
 <div dir="ltr">
   
 Code
@@ -116,45 +140,55 @@ urlpatterns = [
   
 </div>
   
-  
-If you start the local server again with python manage.py runserver and navigate to our new
-schema URL endpoint at http://127.0.0.1:8000/openapi the automatically generated schema
-of our entire API is available.
-  
-  
+اگر پروژه شما در بستر سرور محلی قرار دارد با دستور
+<div dir="ltr">
+
+```shell
+(blogapi) $ python manage.py runserver 
+```
+
+</div>
+مجددا آن را اجرا کنید، مشاهده میکنید زمانی که به آدرس
+http://127.0.0.1:8000/openapi
+مراجعه کردید schema به صورت خودکار ساخته شده و دردسترس شما قرار میگیرد.
+
+
 ![API Schema](images/1.jpg)
   
-Personally, I prefer the dynamic approach in projects.
-  
-  
-### Documentation  
-  
-  
-Django REST Framework also comes with a built-in API [documentation](https://www.django-rest-framework.org/topics/documenting-your-api/) 
-feature that translates
-schema into a much friendlier format for fellow developers.
-  
+من شخصاً رویکرد پویا را در پروژه ها ترجیح می دهم.
 
-Currently, there are three popular approaches here: using [SwaggerUI](https://swagger.io/tools/swagger-ui/) , [ReDoc](https://github.com/Rebilly/ReDoc), 
-or the third party [drf-yasg](https://drf-yasg.readthedocs.io/en/stable/) package. Since drf-yasg is quite popular and comes with a lot of built-in
-features, we’ll use it here.
-  
-  
-Step one is to install the latest version of drf-yasg.
-  
-  
+
+
+### مستندات  
+
+
+Django REST Framework 
+همچنین دارای ویژگی
+[مستندسازی](https://www.django-rest-framework.org/topics/documenting-your-api/)
+API
+داخلی است که schema را به فرمت خواناتر برای توسعه‌دهندگان دیگر تبدیل می‌کند.
+
+
+در حال حاضر، سه رویکرد محبوب در اینجا وجود دارد:
+استفاده از
+[SwaggerUI](https://swagger.io/tools/swagger-ui/)،
+[ReDoc](https://github.com/Rebilly/ReDoc) و
+یا بسته شخص ثالث
+[drf-yasg](https://drf-yasg.readthedocs.io/en/stable/)
+ از آنجایی که drf-yasg بسیار محبوب است و دارای بسیاری از ویژگی های داخلی است، ما در اینجا از آن استفاده خواهیم کرد.
+
+مرحله اول نصب آخرین نسخه drf-yasg است.
 <div dir="ltr">
-  
-Command Line
+
 ```shell
 (blogapi) $ pipenv install drf-yasg==1.17.1
 ```
-  
+
 </div>
   
-  
-Step two, add it to our INSTALLED_APPS configuration in `config/settings.py`. 
-  
+مرحله دوم، آن را به پیکربندی `INSTALLED_APPS` خود در `config/settings.py` اضافه کنید.
+
+
   
 <div dir="ltr">
   
@@ -180,15 +214,23 @@ INSTALLED_APPS = [
   
 </div>
   
-  
-Step three, update our project-level `urls.py` file. At the top of the file we can replace DRF’s
-`get_schema_view` with the one from `drf_yasg` as well as importing openapi. We’ll also add DRF’s
-permission for additional options.
-  
-The `schema_view` variable is updated and includes additional fields such as `terms_of_service`,
-contact, and license. Then under our urlpatterns we add paths for both Swagger and ReDoc.
-  
-  
+
+مرحله سوم، فایل `urls.py` در سطح پروژه را به‌روزرسانی کنید.
+در بالای فایل می‌توانیم
+DRF’s `get_schema_view` 
+را با `drf_yasg` جایگزین کنیم
+و همچنین openapi را وارد کنیم.
+همچنین مجوز DRF را برای گزینه‌های دیگر اضافه می‌کنیم.
+
+
+متغیر`schema_view`
+به‌روزرسانی می‌شود
+و شامل فیلدهای اضافی مانند
+`terms_of_service` 
+، contact
+و license است.
+سپس تحت الگوهای url خود مسیرهایی را برای Swagger و ReDoc اضافه می کنیم.
+ 
 <div dir="ltr">
   
 Code
@@ -228,37 +270,36 @@ urlpatterns = [
 ```
   
 </div>
-  
-  
-Make sure the local server is running. The Swagger endpoint is now available at:
-  
+
+مطمئن شوید که سرور شما در حال اجرا است. آدرس Swagger اکنون در آدرس زیر در دسترس است:
+
 http://127.0.0.1:8000/swagger/
   
 ![Swagger view](images/2.jpg)
   
-  
-Then confirm that the ReDoc view is also working at http://127.0.0.1:8000/redoc/.
+
+سپس تأیید کنید که نمای
+ReDoc نیز در
+http://127.0.0.1:8000/redoc/
+کار می کند.
   
   
 ![ReDoc view](images/3.jpg)
   
-  
-The [drf-yasg docs](https://drf-yasg.readthedocs.io/en/stable/readme.html) are quite comprehensive and spell out many more customizations that can
-be made, depending upon the needs of your API.
-  
-  
-  
-### Conclusion
-  
-  
-Adding documentation is a vital part of any API. It is typically the first thing a fellow developer
-looks at, either within a team or on an open-source projects. Thanks to the automated tools
-covered in this chapter, ensuring your API has accurate, up-to-date documentation only requires
-a small amount of configuration.
-  
-  
-  
-  
-  
-  
+اسناد drf-yasg کاملاً جامع هستند و بسته به نیاز API های شما سفارشی سازی میشوند .
+
+### نتیجه 
+
+افزودن مستندات بخش مهمی از هر API است.
+این معمولاً اولین چیزی است که یک توسعه دهنده همکار به آن نگاه می کند،
+چه در یک تیم و چه در پروژه های منبع باز.
+با تشکر از ابزارهای خودکار پوشش داده شده در این فصل،
+اطمینان از اینکه API شما دارای اسناد دقیق و به روز است، فقط به مقدار کمی پیکربندی نیاز دارد.
+
+
 </div>
+
+
+
+  
+  
