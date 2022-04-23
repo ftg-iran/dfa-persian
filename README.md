@@ -172,7 +172,7 @@
 |       تمام       |   Pouya Pargam   |               Permissions-6 |
 |        1/31       |       ELI        |       User-Authentication-7 |
 |        11/6       | Amirreza Pasandi |      Viewsets-and-Routers-8 |
-|         1/31         |   Reza Mobaraki  | Schemas-and-Documentation-9 |
+|         تمام         |   Reza Mobaraki  | Schemas-and-Documentation-9 |
 |         تمام         | khalil farashiani|                  Conclusion |
   
 </div>
