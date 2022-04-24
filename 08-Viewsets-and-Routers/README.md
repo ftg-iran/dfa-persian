@@ -225,17 +225,14 @@ class UserViewSet(viewsets.ModelViewSet): # new
 
 
 
-### Routers
-[Routers](https://www.django-rest-framework.org/api-guide/routers/) work directly with viewsets to automatically generate URL patterns for us. Our current
-posts/urls.py file has four URL patterns: two for blog posts and two for users. We can instead
-adopt a single route for each viewset. So two routes instead of four URL patterns. That sounds
-better, right?
+### روترها
+[روترها](https://www.django-rest-framework.org/api-guide/routers/) مستقیما با ویوست ها کار می کنند که به صورت اتوماتیک url ها را برای ما تولید کنند. فایل posts/urls.py حال حاضر ما چهار الگوی url دارد: دو تا از urlها برای بلاگ پست ها و دوتای دیگر به یوزرها اختصاص دارد. در عوض ما می توانیم برای هر viewset یک مسیر(route) داشته باشیم. بنابراین به جای چهار مسیر(route) ما دو مسیر(route) داریم. به نظر بهتر میاد. درسته؟
 
-Django REST Framework has two default routers: [SimpleRouter](https://www.django-rest-framework.org/api-guide/routers/#simplerouter) and [DefaultRouter](https://www.django-rest-framework.org/api-guide/routers/#defaultrouter). We will
-use SimpleRouter but it’s also possible to create custom routers for more advanced functionality.
-Here is what the updated code looks like:
+جنگو رست فریمورک دو روتر دیفالت و پیشفرض دارد: [SimpleRouter](https://www.django-rest-framework.org/api-guide/routers/#simplerouter) و [DefaultRouter](https://www.django-rest-framework.org/api-guide/routers/#defaultrouter). ما در این کتاب از روتر ساده(SimpleRouter) استفاده خواهیم کرد همچنین امکان ساخت روترهای شخصی سازی شده برای عملکرد پیشرفته تر وجود دارد.
+چیزی که قراره کد قدیمی آپدیت بشود چیزی شبیه به این هست:    
 
 <div dir="ltr">
+
     
 
 ```python
@@ -253,51 +250,35 @@ urlpatterns = router.urls
     
 </div>
     
+در خط بالا SimpleRouter همراه با ویوها ایمپورت شده است . روتر بر روی حالت SimpleRouter ست شده است و ما هر کدام از viewsetها برای یوزر و پست ها را ثبت(register) می کنیم. در نهایت ما URL های خود را برای استفاده از روترهای جدید تنظیم می کنیم. پیش میرویم و چهار اندپوینت خود را با دستور python manage.py runserver بررسی میکنیم.
 
-On the top line SimpleRouter is imported, along with our views. The router is set to SimpleRouter
-and we “register” each viewset for Users and Posts. Finally, we set our URLs to use the new
-router. Go ahead and check out our four endpoints now by starting the local server with `python
-manage.py runserver`.
 
 ![Image 3](images/3.png)
 
+توجه داشته باشید که لیست کاربران یکسان است، اما view جزئیات کمی متفاوت است. این مورد به عنوان "User Instance"  به جای "User Detail" شناخته می شود و یک آپشن اضافه "delete" وجود دارد که در [ModelViewSet](https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset) تعبیه شده است.
 
-Note that the User List is the same, however the detail view is a little different. It is now called
-“User Instance” instead of “User Detail” and there is an additional “delete” option which is built-in
-to [ModelViewSet](https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset).
 
 ![Image 4](images/4.png)
+امکان شخص سازی viewsetها وجود دارد اما یک  بده و بستان (tradeoff) مهم در ازای نوشتن کد کمتر با viewset می باشد که تنظیمات پیش فرض ممکن است نیازمند یک سری پیکربندی اضافی برای رفع آنچیزی که میخواهید باشد. 
 
-It is possible to customize viewsets but an important tradeoff in exchange for writing a bit less
-code with viewsets is the default settings may require some additional configuration to match
-exactly what you want.
-
-Moving along to the Post List at http://127.0.0.1:8000/api/v1/ we can see it is the same:  
+با رفتن به اندپویت لیست پست ها به آدرس http://127.0.0.1:8000/api/v1/ می توانیم ببینیم که با حالت قبل (بدون viewset) یکسان است. 
 
 ![Image 5](images/5.png)
 
-And, importantly, our permissions still work. When logged-in with our testuser2 account, the
-Post Instance at http://127.0.0.1:8000/api/v1/1/ is read-only.
-
+و مورد مهم این که همچنان دسترسی ها و مجوزها کار میکند. وقتی که به عنوان کاربر testuser2 لاگین کنید آبجکت پست در آدرس http://127.0.0.1:8000/api/v1/1/ همچنان در حالت read-only می باشد.
 
 ![Image 6](images/6.png)
 
-However, if we log in with our superuser account, which is the author of the solitary blog post,
-then we have full read-write-edit-delete privileges.
-
+به هر حال اگر به عنوان کاربر superuser ما لاگین کنیم که تنها نویسنده بلاگ پست نیز هست ما تمام دسترسی ها از جمله خواندن نوشتن ویرایش کردن و حذف پست را داریم.  
 
 ![Image 7](images/7.png)
 
 
-### Conclusion
-Viewsets and routers are a powerful abstraction that reduce the amount of code we as developers
-must write. However this conciseness comes at the cost of an initial learning curve. It will feel
-strange the first few times you use viewsets and routers instead of views and URL patterns.
+### نتیجه گیری
+<span dir="ltr">Viewset</span> ها و روترها یک انتزاع قدرتمند هستند که مقدار کدهایی را که ما به عنوان توسعه دهندگان باید بنویسیم را کاهش می دهند به هر حال این مختصر بودن به قیمت یادگیری اولیه یک سری موارد تمام می شود اولین باری که از viewset ها و روترها به جای نماها و الگوهای URL استفاده می کنید، احساس عجیبی خواهد داشت.
 
-Ultimately the decision of when to add viewsets and routers to your project is quite subjective.
-A good rule of thumb is to start with views and URLs. As your API grows in complexity if you find
-yourself repeating the same endpoint patterns over and over again, then look to viewsets and
-routers. Until then, keep things simple.
+در نهایت تصمیم گیری در مورد اینکه چه زمانی مجموعه ها و روترها را به پروژه خود اضافه کنید کاملاً درونی است. یک قانون خوب این است که با نماها و URL ها شروع کنید. با افزایش پیچیدگی API شما، اگر متوجه شدید که اندپوینت یکسانی را بارها و بارها تکرار می‌کنید، به Viewset‌ها و روترها نگاه کنید. تا در آن زمان، همه چیز را ساده نگه دارید.
+
     
 
 </div>
