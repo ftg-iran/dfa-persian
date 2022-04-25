@@ -171,7 +171,7 @@
 |       تمام        | Shamim Sanisales |                  Blog-Api-5 |
 |       تمام       |   Pouya Pargam   |               Permissions-6 |
 |        1/31       |       ELI        |       User-Authentication-7 |
-|        11/6       | Amirreza Pasandi |      Viewsets-and-Routers-8 |
+|        تمام       | Amirreza Pasandi & Khalil Farashiani |      Viewsets-and-Routers-8 |
 |         تمام         |   Reza Mobaraki  | Schemas-and-Documentation-9 |
 |         تمام         | khalil farashiani|                  Conclusion |
   
