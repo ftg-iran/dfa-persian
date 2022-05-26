@@ -2,10 +2,11 @@
 
 # Todo API
 
-Over the course of the next two chapters we will build a Todo API back-end and then connect it with a React front-end. We have already made our first API and reviewed how HTTP and REST work in the abstract but it’s still likely you don’t “quite” see how it all fits together yet. By the end of these two chapters you will.
+در طول دو فصل بعدی، یک Todo API back-end می سازیم و سپس آن را با یک React front-end متصل می کنیم. ما قبلاً اولین API خود را ساخته‌ایم و نحوه عملکرد HTTP و REST را به صورت انتزاعی بررسی کرده‌ایم، اما هنوز به احتمال زیاد شما هنوز «کاملاً» نمی‌بینید که چگونه همه با هم هماهنگ می‌شوند.
 
-Since we are making a dedicated back-end and front-end we will divide our code into a similar structure. Within our existing code directory, we will create a todo directory containing our back-end Django Python code and our front-end React JavaScript code.
-The eventual layout will look like this.
+از آنجایی که ما در حال ساخت یک back-end و front-end اختصاصی هستیم، کد خود را به یک ساختار مشابه تقسیم می کنیم. در دایرکتوری کد موجود خود، یک دایرکتوری todo حاوی کد جنگو پایتون پشتیبان و کد React JavaScript جلویی ایجاد خواهیم کرد.
+طرح نهایی به این صورت خواهد بود.
+
 
 <div dir="ltr">
 
@@ -19,15 +20,15 @@ todo
 
 </div>
 
-This chapter focuses on the back-end and Chapter 4 on the front-end.
+این فصل بر روی back-end و فصل ۴ روی بخش front-end تمرکز دارد.
 
-### Initial Set Up
 
-The first step for any Django API is always to install Django and then later add Django REST
-Framework on top of it. First create a dedicated todo directory within our code directory on the
-Desktop.
+### تنظیمات اولیه
 
-Open a new command line console and enter the following commands:
+اولین قدم برای هر API جنگو این است که جنگو را نصب کنید و بعداً جنگو REST Framework را در بالای آن اضافه کنید. ابتدا یک دایرکتوری اختصاصی todo در دایرکتوری کد ما در دسکتاپ ایجاد کنید.
+
+
+یک کنسول خط فرمان جدید باز کنید و دستورات زیر را در آن تایپ کنید:
 
 <div dir="ltr">
 
@@ -39,12 +40,9 @@ $ mkdir todo && cd todo
 
 </div>
 
-Note: Make sure you have deactivated the virtual environment from the previous chapter. You
-can do this by typing exit. Are there no more parentheses in front of your command line? Good.
-Then you are not in an existing virtual environment.
+توجه: مطمئن شوید که محیط مجازی را از فصل قبل غیرفعال کرده اید. می توانید این کار را با تایپ exit انجام دهید. آیا دیگر هیچ پرانتزی جلوی خط فرمان شما نیست؟ خوب سپس شما در یک محیط مجازی موجود نیستید.
 
-Within this todo folder will be our backend and frontend directories. Let’s create the backend
-folder, install Django, and activate a new virtual environment.
+در این پوشه todo، دایرکتوری های back-end و front-end ما قرار خواهند گرفت. بیایید پوشه Backend را ایجاد کنیم، جنگو را نصب کنیم و یک محیط مجازی جدید را فعال کنیم.
 
 <div dir="ltr">
 
@@ -56,8 +54,7 @@ folder, install Django, and activate a new virtual environment.
 
 </div>
 
-In Django we always need to add new apps to our INSTALLED_APPS setting so do that now. Open
-up config/settings.py in your text editor. At the bottom of the file add todos.
+در جنگو ما همیشه نیاز داریم که برنامه‌های جدیدی را به تنظیمات INSTALLED_APPS خود اضافه کنیم، پس این کار را اکنون انجام دهید. config/settings.py را در ویرایشگر متن خود باز کنید. در انتهای فایل موارد زیر را اضافه کنید.
 
 <div dir="ltr">
 
@@ -78,17 +75,17 @@ INSTALLED_APPS = [
 
 </div>
 
-If you run python manage.py runserver on the command line now and navigate in your web
-browser to http://127.0.0.1:8000/ you can see our project is successfully installed.
+اگر اکنون سرور python manager.py را در خط فرمان اجرا کنید و در مرورگر وب خود به آدرس http://127.0.0.1:8000/ بروید، می توانید ببینید که پروژه ما با موفقیت نصب شده است.
 
 ![Image 1](images/1.jpg)
 
-We’re ready to go!
+برای رفتن به بخش بعد آماده ایم!
 
-### Models
+### مدلها
 
 Next up is defining our Todo database model within the todos app. We will keep things basic and
 have only two fields: title and body.
+سپس باید مدل پایگاه داده ای Todo خود را در برنامه todo ایجاد کنیم. قرار است همه چیز را ساده نگه داریم و فقط دو فیلد داشته باشیم: موضوع و بدنه متن موضوع
 
 <div dir="ltr">
 
@@ -106,12 +103,9 @@ class Todo(models.Model):
 
 </div>
 
-We import models at the top and then subclass it to create our own Todo model. We also add a
-`__str__` method to provide a human-readable name for each future model instance.
+ما مدل‌ها را در بالا وارد می‌کنیم و سپس آن‌ها را برای ایجاد مدل Todo خودمان طبقه‌بندی می‌کنیم. ما همچنین یک متد «__str__» اضافه می کنیم تا برای هر نمونه مدل آینده یک نام قابل خواندن توسط انسان ارائه کنیم.
 
-Since we have updated our model it’s time for Django’s two-step dance of making a new migration
-file and then syncing the database with the changes each time. On the command line type
-Control+c to stop our local server. Then run these two commands:
+از آنجایی که مدل خود را به‌روزرسانی کرده‌ایم، زمان رقص دو مرحله‌ای جنگو برای ساخت یک فایل مهاجرت جدید و سپس همگام‌سازی پایگاه داده با تغییرات هر بار فرا رسیده است. در خط فرمان Ctrl+c را تایپ کنید تا سرور محلی ما متوقف شود. سپس این دو دستور را اجرا کنید:
 
 <div dir="ltr">
 
@@ -129,15 +123,10 @@ Running migrations:
 
 </div>
 
-It is optional to add the specific app we want to create a migration file for–we could instead type
-just python manage.py makemigrations–however it is a good best practice to adopt. Migration
-files are a fantastic way to debug applications and you should strive to create a migration file for each small change. If we had updated the models in two different apps and then run python
-manage.py makemigrations the resulting single migration file would contain data on both apps.
-That just makes debugging harder. Try to keep your migrations as small as possible.
+اضافه کردن برنامه خاصی که می‌خواهیم برای آن یک فایل مهاجرت ایجاد کنیم اختیاری است – به جای آن می‌توانیم فقط python manager.py makemigrations را تایپ کنیم – با این حال بهترین روش برای اتخاذ آن است. فایل‌های مهاجرت راهی فوق‌العاده برای اشکال‌زدایی برنامه‌ها هستند و شما باید برای هر تغییر کوچک یک فایل مهاجرت ایجاد کنید. اگر مدل ها را در دو برنامه مختلف به روز کرده بودیم و سپس پایتون را اجرا می کردیم
+manager.py makemigrations فایل مهاجرتی منفرد حاصل حاوی داده‌های مربوط به هر دو برنامه است. این فقط اشکال زدایی را سخت تر می کند. سعی کنید مهاجرت های خود را تا حد امکان کوچک نگه دارید.
 
-Now we can use the built-in Django admin app to interact with our database. If we went into
-the admin straight away our Todos app would not appear. We need to explicitly add it via the
-todos/admin.py file as follows.
+اکنون می توانیم از برنامه داخلی Django admin برای تعامل با پایگاه داده خود استفاده کنیم. اگر بلافاصله وارد ادمین می‌شدیم، برنامه Todo ما ظاهر نمی‌شد. ما باید به صراحت آن را از طریق فایل todos/admin.py به صورت زیر اضافه کنیم.
 
 <div dir="ltr">
 
@@ -151,7 +140,7 @@ admin.site.register(Todo)
 
 </div>
 
-That’s it! Now we can create a superuser account to log in to the admin.
+درست! اکنون می توانیم یک حساب کاربری فوق العاده برای ورود به ادمین ایجاد کنیم.
 
 <div dir="ltr">
 
@@ -161,7 +150,7 @@ That’s it! Now we can create a superuser account to log in to the admin.
 
 </div>
 
-And then start up the local server again:
+و سپس سرور محلی را دوباره راه اندازی کنید: 
 
 <div dir="ltr">
 
@@ -171,19 +160,15 @@ And then start up the local server again:
 
 </div>
 
-If you navigate to http://127.0.0.1:8000/admin/ you can now log in. Click on “+ Add” next to
-Todos and create 3 new todo items, making sure to add a title and body for both. Here’s what
-mine looks like:
+اگر به آدرس http://127.0.0.1:8000/admin/ بروید، اکنون می توانید وارد شوید. روی "Add +" در کنار Todos کلیک کنید و 3 مورد جدید برای انجام کار ایجاد کنید، مطمئن شوید که یک عنوان و متن برای هر دو اضافه کنید. مال من به این صورت است:
 
 ![Image 2](images/2.jpg)
 
-We’re actually done with the traditional Django part of our Todo API at this point. Since we are
-not bothering to build out webpages for this project, there is no need for website URLs, views,
-or templates. All we need is a model and Django REST Framework will take care of the rest.
+در واقع در این مرحله کار با بخش سنتی جنگو از Todo API ما تمام شده است. از آنجایی که ما زحمت ایجاد صفحات وب برای این پروژه را نداریم، نیازی به نشانی‌های وب، نماها، یا قالب‌ها نیست. تنها چیزی که ما نیاز داریم یک مدل است و Django REST Framework بقیه را بر عهده خواهد گرفت.
 
 ### Django REST Framework
 
-Stop the local server Control+c and install Django REST Framework via pipenv.
+با زدن Control+c سرور لوکال خود را قطع کنید و Django REST Framework را از طریق pipenv نصب کنید.
 
 <div dir="ltr">
 
@@ -193,9 +178,7 @@ Stop the local server Control+c and install Django REST Framework via pipenv.
 
 </div>
 
-Then add rest_framework to our INSTALLED_APPS setting just like any other third-party application. We also want to start configuring Django REST Framework specific settings which all exist
-under REST_FRAMEWORK. For starters, let’s explicitly set permissions to AllowAny35. This line goes
-at the bottom of the file.
+سپس rest_framework را مانند هر برنامه شخص ثالث دیگری به تنظیمات INSTALLED_APPS خود اضافه کنید. ما همچنین می‌خواهیم تنظیمات خاص چارچوب REST جنگو را که همه در REST_FRAMEWORK وجود دارند، پیکربندی کنیم. برای شروع، اجازه دهید به صراحت مجوزها را روی AllowAny35 تنظیم کنیم. این خط در پایین فایل قرار می گیرد.
 
 <div dir="ltr">
 
@@ -225,34 +208,21 @@ REST_FRAMEWORK = {
 
 </div>
 
-Django REST Framework has a lengthy list of implicitly set default settings. You can see the
-complete list here36
-. AllowAny is one of them which means that when we set it explicitly, as
-we did above, the effect is exactly the same as if we had no DEFAULT_PERMISSION_CLASSES config
-set.
+Django REST Framework فهرست طولانی‌ای از تنظیمات پیش‌فرض به طور ضمنی دارد. لیست کامل را می‌توانید در اینجا ببینید. 36. AllowAny یکی از آنهاست، به این معنی که وقتی ما آن را به صراحت تنظیم می‌کنیم، همانطور که در بالا انجام دادیم، اثر دقیقاً مشابه است که اگر هیچ مجموعه پیکربندی DEFAULT_PERMISSION_CLASSES نداشته باشیم.
 
-Learning the default settings is something that takes time. We will become familiar with a number
-of them over the course of the book. The main takeaway to remember is that the implicit
-default settings are designed so that developers can jump in and start working quickly in a local
-development environment. The default settings are not appropriate for production though. So
-typically we will make a number of changes to them over the course of a project.
+یادگیری تنظیمات پیش فرض چیزی است که زمان می برد. در طول کتاب با تعدادی از آنها آشنا می شویم. نکته اصلی که باید به خاطر بسپارید این است که تنظیمات پیش‌فرض ضمنی به گونه‌ای طراحی شده‌اند که توسعه‌دهندگان بتوانند به سرعت در یک محیط توسعه محلی شروع به کار کنند. هر چند تنظیمات پیش فرض برای تولید مناسب نیست. بنابراین معمولاً ما در طول یک پروژه تغییراتی در آنها ایجاد می کنیم.
 
-Ok, so Django REST Framework is installed. What next?
+خوب، پس Django REST Framework نصب شده است. بعدش چی؟
 
-Unlike the Library project in the previous chapter where we built both a webpage and an API, here
-we are just building an API. Therefore we do not need to create any template files or traditional
-Django views.
+بر خلاف پروژه کتابخانه در فصل قبل که هم یک صفحه وب و هم یک API ساختیم، در اینجا فقط یک API ایجاد می کنیم. بنابراین ما نیازی به ایجاد هیچ فایل قالب یا نمای سنتی جنگو نداریم.
 
-Instead we will update three files that are Django REST Framework specific to transform our
-database model into a web API: urls.py, views.py, and serializers.py.
+در عوض، ما سه فایل را که برای تبدیل مدل پایگاه داده ما به یک وب API اختصاص دارند، به‌روزرسانی می‌کنیم: urls.py، views.py، و serializers.py.
 
 ### URLs
 
-I like to start with the URLs first since they are the entry-point for our API endpoints. Just as in
-a traditional Django project, the urls.py file lets us configure the routing.
+من دوست دارم ابتدا با URL ها شروع کنم زیرا آنها نقطه ورودی برای نقاط پایانی API ما هستند. درست مانند پروژه جنگو سنتی، فایل urls.py به ما امکان می دهد مسیریابی را پیکربندی کنیم.
 
-Start at the Django project-level file which is config/urls.py. We import include on the second
-line and add a route for our todos app at api/.
+از فایل سطح پروژه جنگو که config/urls.py است شروع کنید. ما شامل را در خط دوم وارد می کنیم و یک مسیر برای برنامه todos خود در api/ اضافه می کنیم.
 
 <div dir="ltr">
 
@@ -269,7 +239,7 @@ urlpatterns = [
 
 </div>
 
-Next create our app-level todos/urls.py file.
+سپس فایل todos/urls.py را در سطح برنامه ایجاد کنید.
 
 <div dir="ltr">
 
@@ -279,7 +249,7 @@ Next create our app-level todos/urls.py file.
 
 </div>
 
-And update it with the code below.
+و با کد زیر آن را آپدیت کنید.
 
 <div dir="ltr">
 
@@ -296,23 +266,15 @@ urlpatterns = [
 
 </div>
 
-Note that we are referencing two views—ListTodo and DetailTodo—that we have yet to create.
-But the routing is now complete. There will be a list of all todos at the empty string '', in other
-words at api/. And each individual todo will be available at its primary key, which is a value
-Django sets automatically in every database table. The first entry is 1, the second is 2, and so on.
-Therefore our first todo will eventually be located at the API endpoint api/1/.
+توجه داشته باشید که ما به دو نما - ListTodo و DetailTodo - اشاره می کنیم که هنوز باید ایجاد کنیم. اما مسیریابی اکنون کامل شده است. لیستی از همه کارها در رشته خالی ''، به عبارت دیگر در api/ وجود خواهد داشت. و هر کار جداگانه در کلید اصلی خود در دسترس خواهد بود، که مقداری است که جنگو به طور خودکار در هر جدول پایگاه داده تنظیم می کند. ورودی اول 1، دومی 2 و غیره است. بنابراین اولین کار ما در نهایت در نقطه پایانی API api/1/ قرار خواهد گرفت.
 
-### Serializers
+### سریال ساز ها
 
-Let’s review where we are so far. We started with a traditional Django project and app where
-we made a database model and added data. Then we installed Django REST Framework and
-configured our URLs. Now we need to transform our data, from the models, into JSON that will
-be outputted at the URLs. Therefore we need a serializer.
+بیایید مرور کنیم که تا به حال کجا هستیم. ما با یک پروژه و برنامه سنتی جنگو شروع کردیم که در آن یک مدل پایگاه داده ساختیم و داده ها را اضافه کردیم. سپس Django REST Framework را نصب کردیم و URL های خود را پیکربندی کردیم. اکنون باید داده های خود را از مدل ها به JSON تبدیل کنیم که در URL ها خروجی می شود. بنابراین ما به یک سریال ساز نیاز داریم.
 
-Django REST Framework ships with a powerful built-in serializers class that we can quickly
-extend with a small amount of code. That’s what we’ll do here.
+Django REST Framework با یک کلاس سریال ساز داخلی قدرتمند عرضه می شود که می توانیم به سرعت با مقدار کمی کد آن را گسترش دهیم. این کاری است که ما در اینجا انجام خواهیم داد.
 
-First create a new serializers.py file in the todos app.
+ابتدا یک فایل serializers.py جدید در برنامه todos ایجاد کنید.
 
 <div dir="ltr">
 
@@ -322,7 +284,7 @@ First create a new serializers.py file in the todos app.
 
 </div>
 
-Then update it with the following code.
+سپس با کد زیر آن را آپدیت کنید.
 
 <div dir="ltr">
 
@@ -339,27 +301,21 @@ class TodoSerializer(serializers.ModelSerializer):
 
 </div>
 
-At the top we have imported serializers from Django REST Framework as well as our models.py
-file. Next we create a class TodoSerializer. The format here is very similar to how we create
-model classes or forms in Django itself. We’re specifying which model to use and the specific
-fields on it we want to expose. Remember that id is created automatically by Django so we didn’t
-have to define it in our Todo model but we will use it in our detail view.
+در بالا، ما سریال‌سازها را از Django REST Framework و همچنین فایل models.py خود وارد کرده‌ایم. سپس یک کلاس TodoSerializer ایجاد می کنیم. قالب در اینجا بسیار شبیه به نحوه ایجاد ما است
+کلاس ها یا فرم ها را در خود جنگو مدل کنید. ما مشخص می‌کنیم که از کدام مدل استفاده کنیم و فیلدهای خاص روی آن را که می‌خواهیم در معرض نمایش بگذاریم. به یاد داشته باشید که id به طور خودکار توسط جنگو ایجاد می شود بنابراین ما این کار را نکردیم
+باید آن را در مدل Todo خود تعریف کنیم، اما ما از آن در نمای جزئیات خود استفاده خواهیم کرد.
 
-And that’s it. Django REST Framework will now magically transform our data into JSON exposing
-the fields for id, title, and body from our Todo model.
+و همین است. Django REST Framework اکنون داده‌های ما را به شکل جادویی به JSON تبدیل می‌کند و فیلدهای شناسه، عنوان و بدنه مدل Todo ما را نشان می‌دهد.
 
-The last thing we need to do is configure our views.py file
+آخرین کاری که باید انجام دهیم این است که فایل views.py خود را پیکربندی کنیم
 
 ### Views
 
-In traditional Django views are used to customize what data to send to the templates. In Django
-REST Framework views do the same thing but for our serialized data.
+در جنگو سنتی از نماها برای سفارشی کردن داده هایی که به قالب ها ارسال شود استفاده می شود. در Django REST Framework view ها همین کار را انجام می دهند اما برای داده های سریالی ما.
 
-The syntax of Django REST Framework views is intentionally quite similar to regular Django views
-and just like regular Django, Django REST Framework ships with generic views for common use
-cases. That’s what we’ll use here.
+سینتکس نماهای چارچوب جنگو REST عمداً کاملاً شبیه نماهای جنگو معمولی است و درست مانند جنگو معمولی، جنگو REST Framework با نماهای عمومی برای موارد استفاده رایج ارائه می شود. این چیزی است که ما در اینجا استفاده خواهیم کرد.
 
-Update the todos/views.py file to look as follows:
+فایل todos/views.py را به‌صورت زیر به‌روزرسانی کنید:
 
 <div dir="ltr">
 
@@ -380,42 +336,27 @@ class DetailTodo(generics.RetrieveAPIView):
 
 </div>
 
-At the top we import Django REST Framework’s generics views and both our models.py and
-serializers.py files.
+در بالا، نماهای ژنریک چارچوب Django REST و هر دو فایل models.py و serializers.py خود را وارد می کنیم.
 
-Recall from our todos/urls.py file that we have two routes and therefore two distinct views.
-We will use ListAPIView37 to display all todos and RetrieveAPIView38 to display a single model
-instance.
+از فایل todos/urls.py به یاد بیاورید که ما دو مسیر و در نتیجه دو نمای مجزا داریم. ما از ListAPIView37 برای نمایش همه کارها و از RetrieveAPIView38 برای نمایش یک نمونه مدل استفاده خواهیم کرد.
 
-Astute readers will notice that there is a bit of redundancy in the code here. We essentially repeat
-the queryset and serializer_class for each view, even though the generic view extended is
-different. Later on in the book we will learn about viewsets and routers which address this issue
-and allow us to create the same API views and URLs with much less code.
+خوانندگان زیرک متوجه خواهند شد که در اینجا مقداری افزونگی در کد وجود دارد. ما اساسا queryset و serializer_class را برای هر نما تکرار می کنیم، حتی اگر نمای عمومی توسعه یافته متفاوت باشد. بعداً در این کتاب با مجموعه‌های نمایش و روترهایی آشنا می‌شویم که به این مشکل رسیدگی می‌کنند و به ما امکان می‌دهند همان نماهای API و URL‌ها را با کد بسیار کمتر ایجاد کنیم.
 
-But for now we’re done! Our API is ready to consume. As you can see, the only real difference
-between Django REST Framework and Django is that with Django REST Framework we need
-to add a serializers.py file and we do not need a templates file. Otherwise the urls.py and
-views.py files act in a similar manner.
+اما در حال حاضر کار ما تمام شده است! API ما آماده مصرف است. همانطور که می بینید، تنها تفاوت واقعی Django REST Framework و Django این است که با Django REST Framework باید یک فایل serializers.py اضافه کنیم و نیازی به فایل قالب نداریم. در غیر این صورت فایل‌های urls.py و views.py به روشی مشابه عمل می‌کنند.
 
-### Consuming the API
+### مصرف API
 
-Traditionally consuming an API was a challenge. There simply weren’t good visualizations for all
-the information contained in the body and header of a given HTTP response or request.
+مصرف سنتی API یک چالش بود. به سادگی تجسم خوبی برای تمام اطلاعات موجود در بدنه و هدر یک پاسخ یا درخواست HTTP مشخص وجود نداشت.
 
-Instead most developers used a command line HTTP client like cURL39, which we saw in the
-previous chapter, or HTTPie40.
+در عوض، بیشتر توسعه دهندگان از یک سرویس گیرنده HTTP خط فرمان مانند cURL39 استفاده کردند که در فصل قبل یا HTTPie40 دیدیم.
 
-In 2012, the third-party software product Postman41 was launched and it is now used by millions
-of developers worldwide who want a visual, feature-rich way to interact with APIs.
+در سال 2012، محصول نرم‌افزار شخص ثالث Postman41 راه‌اندازی شد و اکنون توسط میلیون‌ها توسعه‌دهنده در سراسر جهان که می‌خواهند روشی بصری و غنی برای تعامل با APIها داشته باشند، از آن استفاده می‌کنند.
 
-But one of the most amazing things about Django REST Framework is that it ships with a powerful
-browsable API that we can use right away. If you find yourself needing more customization
-around consuming an API, then tools like Postman are available. But often the built-in browsable
-API is more than enough.
+اما یکی از شگفت انگیزترین چیزها در مورد Django REST Framework این است که با یک API قابل مرور قدرتمند عرضه می شود که می توانیم بلافاصله از آن استفاده کنیم. اگر متوجه شدید که در مورد مصرف API به شخصی سازی بیشتری نیاز دارید، ابزارهایی مانند Postman در دسترس هستند. اما اغلب API داخلی بیش از اندازه کافی است.
 
-### Browsable API
+### API قابل مرور
 
-Let’s use the browsable API now to interact with our data. Make sure the local server is running.
+بیایید اکنون از API قابل مرور برای تعامل با داده های خود استفاده کنیم. مطمئن شوید که سرور محلی در حال اجرا است.
 
 <div dir="ltr">
 
@@ -425,56 +366,42 @@ Let’s use the browsable API now to interact with our data. Make sure the local
 
 </div>
 
-Then navigate to http://127.0.0.1:8000/api/ to see our working API list views endpoint.
+سپس به http://127.0.0.1:8000/api/ بروید تا نقطه پایانی بازدیدهای لیست API ما را ببینید.
 
 ![Image 3](images/3.jpg)
 
-This page shows the three todos we created earlier in the database model. The API endpoint is
-known as a collection because it shows multiple items.
+این صفحه سه کاری را که قبلاً در مدل پایگاه داده ایجاد کردیم را نشان می دهد. نقطه پایانی API به عنوان یک مجموعه شناخته می شود زیرا چندین مورد را نشان می دهد.
 
-There is a lot that we can do with our browsable API. For starters, let’s see the raw JSON view—
-what will actually be transmitted over the internet. Click on the “GET” button in the upper right
-corner and select JSON.
+کارهای زیادی می توانیم با API قابل مرور خود انجام دهیم. برای شروع، بیایید نمای خام JSON را ببینیم - آنچه در واقع از طریق اینترنت منتقل می شود. بر روی دکمه "GET" در گوشه سمت راست بالا کلیک کنید و JSON را انتخاب کنید.
 
 ![Image 4](images/4.jpg)
 
-If you go back to our list view page at http://127.0.0.1:8000/api/ we can see there is additional
-information. Recall that the HTTP verb GET is used to read data while POST is used to update or create data.
+اگر به صفحه نمایش لیست ما در http://127.0.0.1:8000/api/ برگردید، می بینیم که اطلاعات بیشتری وجود دارد. به یاد داشته باشید که فعل HTTP GET برای خواندن داده ها استفاده می شود در حالی که POST برای به روز رسانی یا ایجاد داده ها استفاده می شود.
 
-Under “List Todo” it says GET /api/ which tells us that we performed a GET on this endpoint.
-Below that it says HTTP 200 OK which is our status code, everything is working. Crucially below
-that it shows ALLOW: GET, HEAD, OPTIONS. Note that it does not include POST since this is a
-read-only endpoint, we can only perform GET’s.
+در زیر "List Todo" می‌گوید GET /api/ که به ما می‌گوید که ما یک GET در این نقطه پایانی انجام داده‌ایم. زیر آن می گوید HTTP 200 OK که کد وضعیت ماست، همه چیز کار می کند. بسیار مهم در زیر آن نشان می دهد ALLOW: GET، HEAD، OPTIONS. توجه داشته باشید که شامل POST نمی شود زیرا این یک نقطه پایانی فقط خواندنی است، ما فقط می توانیم GET را انجام دهیم.
 
-We also made a DetailTodo view for each individual model. This is known as an instance and is
-visible at http://127.0.0.1:8000/api/1/.
+ما همچنین یک نمای DetailTodo برای هر مدل جداگانه ایجاد کردیم. این به عنوان یک نمونه شناخته می شود و در http://127.0.0.1:8000/api/1/ قابل مشاهده است.
 
 ![Image 5](images/5.jpg)
 
-You can also navigate to the endpoints for:
+همچنین می توانید به نقاط پایانی برای موارد زیر بروید:
 
 - http://127.0.0.1:8000/api/2
 - http://127.0.0.1:8000/api/3
 
 ### CORS
 
-There’s one last step we need to do and that’s deal with Cross-Origin Resource Sharing
-(CORS)42. Whenever a client interacts with an API hosted on a different domain (mysite.com vs yoursite.com) or port (localhost:3000 vs localhost:8000) there are potential security issues.
+آخرین مرحله ای که باید انجام دهیم وجود دارد و آن به اشتراک گذاری منابع متقاطع (CORS)42 است. هر زمان که یک کلاینت با یک API میزبانی شده در دامنه دیگری (mysite.com در مقابل yoursite.com) یا پورت (localhost:3000 در مقابل localhost:8000) تعامل داشته باشد، مشکلات امنیتی احتمالی وجود دارد.
 
-Specifically, CORS requires the server to include specific HTTP headers that allow for the client
-to determine if and when cross-domain requests should be allowed.
+به طور خاص، CORS از سرور می‌خواهد که سربرگ‌های HTTP خاصی را شامل شود که به مشتری اجازه می‌دهد تعیین کند که آیا درخواست‌های بین دامنه‌ای مجاز هستند یا نه.
 
-Our Django API back-end will communicate with a dedicated front-end that is located on a
-different port for local development and on a different domain once deployed.
+Django API back-end ما با یک front-end اختصاصی ارتباط برقرار می کند که در پورت دیگری برای توسعه محلی و پس از استقرار در دامنه دیگری قرار دارد.
 
-The easiest way to handle this–-and the one recommended by Django REST Framework43–-is
-to use middleware that will automatically include the appropriate HTTP headers based on our
-settings.
+ساده‌ترین راه برای رسیدگی به این مورد - و آنچه توسط Django REST Framework43 توصیه می‌شود - استفاده از میان‌افزار است که به طور خودکار هدرهای HTTP مناسب را بر اساس تنظیمات ما شامل می‌شود.
 
-The package we will use is django-cors-headers44, which can be easily added to our existing
-project.
+بسته ای که ما استفاده خواهیم کرد django-cors-headers44 است که می تواند به راحتی به پروژه موجود ما اضافه شود.
 
-First quit our server with Control+c and then install django-cors-headers with Pipenv.
+ابتدا با Control+c از سرور خود خارج شوید و سپس هدرهای django-cors را با Pipenv نصب کنید.
 
 <div dir="ltr">
 
@@ -484,11 +411,11 @@ First quit our server with Control+c and then install django-cors-headers with P
 
 </div>
 
-Next update our config/settings.py file in three places:
+بعدی فایل config/settings.py ما را در سه مکان به روز کنید:
 
-- add corsheaders to the INSTALLED_APPS
-- add CorsMiddleware above CommonMiddleWare in MIDDLEWARE
-- create a CORS_ORIGIN_WHITELIST
+- corsheader هارا به INSTALLED_APPS اضافه کنید
+- CorsMiddleware را بالاتر از CommonMiddleWare در MIDDLEWARE اضافه کنید
+- یک CORS_ORIGIN_WHITELIST ایجاد کنید
 
 <div dir="ltr">
 
@@ -530,17 +457,11 @@ CORS_ORIGIN_WHITELIST = (
 
 </div>
 
-It’s very important that corsheaders.middleware.CorsMiddleware appears in the proper location. That is above django.middleware.common.CommonMiddleware in the MIDDLEWARE setting
-since middlewares are loaded top-to-bottom. Also note that we’ve whitelisted two domains:
-localhost:3000 and localhost:8000. The former is the default port for React, which we will
-use for our front-end in the next chapter. The latter is the default Django port.
+بسیار مهم است که corsheaders.middleware.CorsMiddleware در مکان مناسب ظاهر شود. این بالاتر از django.middleware.common.CommonMiddleware در تنظیمات MIDDLEWARE است زیرا میان افزارها از بالا به پایین بارگذاری می شوند. همچنین توجه داشته باشید که ما دو دامنه را در لیست سفید قرار داده ایم: localhost:3000 و localhost:8000. اولی پورت پیش‌فرض React است که در فصل بعدی از آن برای front-end خود استفاده خواهیم کرد. دومی پورت پیش فرض جنگو است.
 
-### Tests
+### تست ها
 
-You should always write tests for your Django projects. A small amount of time spent upfront will
-save you an enormous amount of time and effort later on debugging errors. Let’s add two basic
-tests to confirm that the title and body content behave as expected.
-Open up the todos/tests.py file and fill it with the following:
+شما همیشه باید برای پروژه های جنگو خود تست بنویسید. مقدار کمی از زمان صرف شده از قبل باعث صرفه جویی در زمان و تلاش زیادی برای خطاهای اشکال زدایی می شود. بیایید دو تست اساسی اضافه کنیم تا تأیید کنیم که عنوان و محتوای متن همانطور که انتظار می رود رفتار می کنند. فایل todos/tests.py را باز کنید و آن را با موارد زیر پر کنید:
 
 <div dir="ltr">
 
@@ -567,8 +488,7 @@ class TodoModelTest(TestCase):
 
 </div>
 
-This uses Django’s built-in TestCase45 class. First we set up our data in setUpTestData and then
-write two new tests. Then run the tests with the python manage.py test command.
+این از کلاس TestCase45 داخلی جنگو استفاده می کند. ابتدا داده های خود را در setUpTestData تنظیم می کنیم و سپس دو تست جدید می نویسیم. سپس با دستور python manager.py تست ها را اجرا کنید.
 
 <div dir="ltr">
 
@@ -585,8 +505,7 @@ Destroying test database for alias 'default'...
 
 </div>
 
-And that’s it! Our back-end is now complete. Make sure the server is running as we’ll be using it
-in the next chapter.
+و تمام! بک‌اند ما اکنون کامل شده است. مطمئن شوید که سرور در حال اجرا است زیرا در فصل بعدی از آن استفاده خواهیم کرد.
 
 <div dir="ltr">
 
@@ -596,23 +515,13 @@ in the next chapter.
 
 </div>
 
-### Conclusion
+### نتیجه گیری
 
-With a minimal amount of code Django REST Framework has allowed us to create a Django API
-from scratch. The only pieces we needed from traditional Django was a models.py file and our
-urls.py routes. The views.py and serializers.py files were entirely Django REST Framework
-specific.
+با حداقل مقدار کد Django REST Framework به ما این امکان را می دهد که یک API جنگو را از ابتدا ایجاد کنیم. تنها قطعاتی که از جنگو سنتی نیاز داشتیم یک فایل models.py و مسیرهای urls.py ما بود. فایل‌های views.py و serializers.py کاملاً مختص چارچوب REST جنگو بودند.
 
-Unlike our example in the previous chapter, we did not build out any web pages for this project
-since our goal was just to create an API. However at any point in the future, we easily could!
-It would just require adding a new view, URL, and a template to expose our existing database
-model.
+برخلاف مثال ما در فصل قبل، ما هیچ صفحه وب برای این پروژه ایجاد نکردیم زیرا هدف ما فقط ایجاد یک API بود. با این حال در هر نقطه ای در آینده، ما به راحتی می توانیم! این فقط نیاز به افزودن یک نمای جدید، URL و یک الگو دارد تا مدل پایگاه داده موجود ما را نشان دهد.
 
-An important point in this example is that we added CORS headers and explicitly set only the
-domains localhost:3000 and localhost:8000 to have access to our API. Correctly setting CORS
-headers is an easy thing to be confused about when you first start building APIs.
-There’s much more configuration we can and will do later on but at the end of the day creating
-Django APIs is about making a model, writing some URL routes, and then adding a little bit of
-magic provided by Django REST Framework’s serializers and views In the next chapter we will build a React front-end and connect it to our Todo API backend.
+یک نکته مهم در این مثال این است که ما هدرهای CORS را اضافه کردیم و به صراحت فقط دامنه های localhost:3000 و localhost:8000 را برای دسترسی به API خود تنظیم کردیم. تنظیم صحیح هدرهای CORS موضوعی آسان است که هنگام شروع ساختن APIها در مورد آن سردرگم می شود.
+پیکربندی‌های بسیار بیشتری وجود دارد که می‌توانیم انجام دهیم و بعداً انجام خواهیم داد، اما در پایان روز ایجاد API های جنگو در مورد ساخت یک مدل، نوشتن برخی از مسیرهای URL، و سپس افزودن کمی جادوی ارائه شده توسط سریال‌سازها و نماهای جنگو REST Framework است. فصل بعدی یک React front-end می‌سازیم و آن را به باطن Todo API خود متصل می‌کنیم.
 
 </div>
