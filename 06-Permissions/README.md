@@ -1,81 +1,47 @@
-<div dir="rtl">
+<div dir="ltr">
+  
+# مجوزها    
+  
+امنیت بخش مهمی از هر وب‌سایت است اما با API ها دو چندان می‌شود.در حال حاضر API ما اجازه دسترسی کامل به هر شخصی را می‌دهد. هیچ محدودیتی وجود ندارد و هر کاربری هر کاری می‌تواند انجام دهد که بسیار خطرناک است.به عنوان مثال، یک کاربر ناشناس می‌تواند پستی را ایجاد کند، بخواند، تغییر دهد یا حذف کند. حتی آن پستی که خودش ایجاد نکرده‌است.مشخصاً ما چنین چیزی را نمی‌خواهیم.
 
-# Permissions
 
+البته `Django REST Framework` با تنظیمات ساده‌ي مجوزها همراه می‌باشد که ما می‌توانیم از آنها برای ایمن کردن API استفاده کنیم.
+این تنظیمات را می‌توان در سطح پروژه، در سطح نما یا در سطح هر مدل اعمال کرد.
   
-Security is an important part of any website but it is doubly important with web APIs. Currently
-our Blog API allows anyone full access. There are no restrictions; any user can do anything which
-is extremely dangerous. For example, an anonymous user can create, read, update, or delete any
-blog post. Even one they did not create! Clearly we do not want this.
+در این فصل ابتدا یک کاربر جدید اضافه می‌کنیم و تنظیمات چندین مجوز را آزمایش می‌کنیم. سپس مجوز شخصی‌سازی شده‌ی خودمان را طوری ایجاد می‌کنیم که تنها نویسنده آن پست بتواند آن‌را بروزرسانی یا حذف کند.
   
-`Django REST Framework` ships with several out-of-the-box permissions settings that we can use
-to secure our API. These can be applied at a project-level, a view-level, or at any individual model
-level.
-  
-In this chapter we will add a new user and experiment with multiple permissions settings. Then
-we’ll create our own custom permission so that only the author of a blog post has the ability to
-update or delete it.
-  
-
-### Create a new user
-
-  
-Let’s start by creating a second user. That way we can switch between the two user accounts to
-test our permissions settings.
-  
-  
-Navigate to the admin at `http://127.0.0.1:8000/admin/`. Then click on “+ Add” next to Users.
-Enter a username and password for a new user and click on the “Save” button. I’ve chosen the
-username testuser here.
-  
-
-![Admin Add User Page](images/1.jpg)
+ ### ایجاد کاربر جدید
+ بیایید با ایجاد کاربر دوم شروع کنیم. با این کار می‌توانیم بین اکانت‌های این دو کاربر جابجا شویم تا تنظیمات مجوزها را آزمایش کنیم.
  
+به پنل ادمین در `http://127.0.0.1:8000/admin/` بروید.سپس روی “+ Add” کنار Users کلیک کنید. نام‌کاربری و پسورد را برای کاربر جدید وارد کنید و سپس بر روی دکمه‌ی 'Save' کلیک کنید. من در اینجا نام‌کاربری را testuser انتخاب کرده‌ام.
   
-The next screen is the Admin User Change page. I’ve called my user testuser and here I could
-add additional information included on the default User model such as first name, last name,
-email address, etc. But none of that is necessary for our purposes: we just need a username and
-password for testing.
-  
+![Admin Add User Page](images/1.jpg)
+
+تصویر بعدی صفحه‌ی ادمین برای تغییر کاربرها می‌باشد. من کاربر خود را testuser  انتخاب کرده‌ام و در اینجا می‌توانم اطلاعات بیشتری را نظیر نام، نام‌خانوادگی، آدرس ایمیل، آدرس و ...به مدل کاربر اضافه کنم. اما هیچکدام از آنها برای مقصود ما مهم نیستند: ما فقط به نام‌کاربری و پسورد برای آزمایش نیاز داریم. 
   
 ![Admin User Change](images/2.jpg)
 
+به پایین این صفحه رفته و روی دکمه‌ی 'Save' کلیک کنید. که به صفحه اصلی کاربران در .
+http://127.0.0.1:8000/admin/auth/user/
+هدایت می‌کند.
   
-Scroll down to the bottom of this page and click the “Save” button. It will redirect back to the
-main Users page at http://127.0.0.1:8000/admin/auth/user/.
+ ![Admin All Users](images/3.jpg)
   
+ همانطور که می‌بینید دو کاربر ما حضور دارند.
   
-![Admin All Users](images/3.jpg)
+ ### اضافه کردن قابلیت ورود به API قابل مرور
+ 
+ هر بار که بخواهیم بین دو کاربر جابجا شویم باید به پنل ادمین جنگو رفته و از آن حساب خارج شده و به دیگری لاگین کنیم. سپس به API موردنظر برویم.
+ 
+این اتفاق معمولی هست که`Django REST Framework`  تنظیمی یک خطی برای اضافه  کردن قابلیت وارد و خارج شدن کاربر به صورت مستقیم به API قابل جستجو دارد. که ما آن‌ را پیاده‌سازی می‌کنیم.
+ 
+در مسیر پروژه داخل فایل `urls.py`، یک مسیر که شامل `rest_framework.urls` می‌باشد را به URLها اضافه کنید. تا حدودی گیج کننده‌است، مسیرواقعی مشخص شده می‌تواند هر چیزی که ما می‌خواهیم باشد. چیزی که مهم است `rest_framework.urls` یک جایی قرار دارد. ما از مسیر   api-auth بخاطر این که که با مستندات مطابقت دارد استفاده می‌کنیم، اما ما هر چیزی را می‌توانستیم استفاده کنیم و همه آنها نیز شبیه به هم عمل می‌کردند.  
+   
+ 
+کد
   
-  
-We can see our two users are listed.
-  
-
-### Add log in to the browsable API
-  
-  
-Going forward whenever we want to switch between user accounts we’ll need to jump into the
-Django admin, log out of one account and log in to another. Each and every time. Then switch
-back to our API endpoint.
-
-  
-This is such a common occurrence that `Django REST Framework` has a one-line setting to add
-log in and log out directly to the browsable API itself. We will implement that now.
-  
-  
-  
-Within the project-level `urls.py` file, add a new URL route that includes `rest_framework.urls`.
-Somewhat confusingly, the actual route specified can be anything we want; what matters is that
-`rest_framework.urls` is included somewhere. We will use the route api-auth since that matches official documentation, 
-but we could just as easily use anything-we-want and everything would work just the same.
-
-  
-<div dir="ltr">
-  
-Code
-  
-```python
-# config/urls.py
+ ```
+  # config/urls.py
 from django.contrib import admin
 from django.urls import include, path
 
@@ -85,62 +51,37 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')), # new
 ]
 ```
-  
-  
-</div>
-  
-  
-Now navigate to our browsable API at http://127.0.0.1:8000/api/v1/. There is a subtle change:
-next to the username in the upper right corner is a little downward-facing arrow.
-  
+حال به مسیر API قابل مرور در http://127.0.0.1:8000/api/v1/، بروید.  یک تغییر کوچک بوجود آمده‌است: که یک فلش رو به پایین در کنار نام‌کاربری در گوشه بالا سمت راست ظاهر شده‌است.روی آن کلیک کنید. 
   
 ![API Log In](images/4.jpg)
   
-Since we are logged in with our superuser account at this point—wsv for me—that name appears.
-Click on the link and a dropdown menu with “Log out” appears. Click on it.
-  
-  
-The upper righthand link now changes to “Log in.” So go click on that. We are redirected to
-`Django REST Framework’s` log in page. Use our testuser account here. It will finally redirect us
-back to the main API page where testuser is present in the upper righthand corner.
-  
+ از آنجایی که ما به عنوان کاربر اصلی وارد شده‌ایم در اینجا برای من WSV نمایان شده‌است. بر روی لینک کلیک کنید و یک منو کشویی برای خارج شدن(Logout)ظاهر می‌شود. روی آن کلیک کنید.   
+
+لینک بالا در سمت راست حالا به لاگین(login) تغییر پیدا کرده‌است. روی آن کلیک کنید. به صفحه لاگین `Django Rest Framework` هدایت می‌شویم. در اینجا از اکانت آزمایشی استفاده می‌کنیم. در نهایت به صفحه اصلی API جایی که کاربر آزمایشی در سمت راست و بالا نمایان می‌باشد، هدایت می‌شویم.
   
 ![API Log In Testuser](images/5.jpg)
   
-As a final step, log out of our `testuser` account.
-  
-  
+به عنوان قدم آخر از حساب آزمایشی خود خارج شوید.
+
   
 ![API Log In Link](images/6.jpg)
+
+باید لینک لاگین را دوباره در سمت راست بالا  ببینید.  
+ 
+### مجوز برای همه
   
-You should see the “Log in” link in the upper righthand corner again.
+در حال حاضر، هر کاربر ناشناس احراز هویت نشده می‌تواند به لیست پست‌ها دسترسی داشته باشد. ما این را می‌دانیم زیرا اگرچه لاگین نکرده‌ایم، اما می‌توانیم تنها پستمان را مشاهده کنیم. حتی بدتر، هر کسی می‌تواند دسترسی کامل برای ایجاد پست، بروزرسانی و یا حذف آنها داشته باشد.
   
-  
-### AllowAny
-  
-Currently, any anonymous non-authorized user can access our PostList endpoint. We know this
-because even though we are not logged-in, we can see our single blog post. Even worse, anyone
-has full access to create, edit, update, or delete a post!
-  
-  
-And on the detail page at http://127.0.0.1:8000/api/v1/1/ the information is also visible and
-any random user can update or delete an existing blog post. Not good.
-  
+ صفحه جزئیات در آدرس /http://127.0.0.1:8000/api/v1/1 اطلاعات قابل مشاهده می‌باشد و هر کاربر تصادفی می‌تواند پستی را در صورت وجود بروزرسانی یا حذف کند. که خوب نیست.
   
 ![API Detail Logged Out](images/7.jpg)
   
-  
-The reason we can still see the Post List endpoint and also the Detail List endpoint 
-is that we previously set the project-level 
-permissions on our project to AllowAny in our `config/settings.py`
-file. As a brief reminder, it looked like this:
-  
-  
-  
+دلیلی که ما هنوز می‌توانیم پست‌ها و جزئیات آنها را مشاهده کنیم این است که ما تنظیمات مجوزها را در فایل `config/settings.py` روی AllowAny قرار داده‌ایم.
+به عنوان یک یادآوری کوچک، به شکل زیر می‌باشد:  
 <div dir="ltr">
   
-Code
-  
+کد
+
 ```python
 # config/settings.py
 REST_FRAMEWORK = {
@@ -149,28 +90,17 @@ REST_FRAMEWORK = {
     ]
 }
 ```
-  
 </div>
-  
-  
-  
-### View-Level Permissions
-  
-What we want now is to restrict API access to authenticated users. There are multiple places we
-could do this—project-level, view-level, or object-level—but since we only have two views at the
-moment let’s start there and add permissions to each of them.
 
+### مجوز در سطح نما
   
-In your `posts/views.py` file, import permissions at the top from `Django REST Framework` and
-then add a `permission_classes` field to each view.
+آنچه اکنون می‌خواهیم این است که دسترسی کاربران را به API محدود کنیم. چندین روش برای این منظور وجود دارد :در سطح پروژه، در سطح نما(view) یا در سطح شیء اما از آنجایی که ما فقط دو نما داریم پس بیایید از آنجا شروع کنیم و برای هر کدام مجوز تعیین کنیم.
+  
+در فایل `posts/views.py`،ماژول permissions را وارد کنید و سپس به هر فیلد `permisson_classes` را اضافه کنید.
+  
+کد
 
-  
-  
-<div dir="ltr">
-  
-Code
-  
-```python
+```
 # posts/views.py
 from rest_framework import generics, permissions # new
 from .models import Post
@@ -186,72 +116,39 @@ class PostList(generics.ListCreateAPIView):
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,) # new
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
-
+    serializer_class = PostSerializer  
 ```
-  
-</div>
-  
-  
-  
-That’s all we need. Refresh the browsable API at http://127.0.0.1:8000/api/v1/. Look what
-happened!
-  
-  
-  
+این تمام چیزی بود که نیاز داشتیم. صفحه را در http://127.0.0.1:8000/api/v1/ رفرش کنید. ببینید چه اتفاقی افتاد!
+
 ![API Post List Logged Out](images/8.jpg)
   
+ما دیگر نمی‌توانیم لیست پست‌ها را ببینیم. در عوض با پیام HTTP 403 که کد وضعیت ممنوع می‌باشد زیرا ما لاگین نشده‌ایم. و از آنجایی که مجوز نداریم هیچ فرمی در API برای ویرایش داده‌ها وجود ندارد.
+  
+اگر به مسیر جزئیات پست درhttp://127.0.0.1:8000/api/v1/ بروید پیامی مشابه را خواهید دید و همچنین  فرمی برای ویرایش وجود ندارد.
+  
+![API Detail Logged Out](images/9.jpg)  
+  
+بنابراین از این لحظه تنها کاربران لاگین شده می‌توانند صفحه API را ببینند. اگر با حساب testuser‌ یا superuser خود وارد شوید این صفحات در دسترس هستند.
+  
+اما به این فکر کنید که اگر API از نظر پیچیدگی گسترده‌تر شود. در واقع ما نماها و صفحات بیشتری را در آینده خواهیم داشت. که اضافه کردن `permission_classes`اختصاصی برای هر نما اگر بخواهیم از تنظیمات مجوز مشابه در تمام API استفاده کنیم کاری تکراری  به نظر می‌آید.
+  
+آیا بهتر نیست که مجوزها را یکبار برای همیشه، برای سطح پروژه   انجام دهیم، تا اینکه به ازای هر نما اینکار را انجام دهیم؟
+  
+### مجوز در سطح پروژه
  
-We no longer see our Post List page. Instead we are greeted with an unfriendly HTTP 403
-Forbidden status code since we are not logged in. And there are no forms in the browsable API
-to edit the data since we don’t have permission.
+در این مرحله باید سر خود را به نشانه موافقت تکان دهید. این یک روش ساده‌تر و امن‌تر برای تنظیم سیاست محدودیت‌‌های دسترسی در سطح پروژه و در حد نیاز اعمال آن در سطح نما می‌باشد. این کاری است که انجام می‌دهیم.
   
+خوشبختانه `Django REST Framework` با تعدادی از تنظیمات مجوزها  در سطح پروژه همراه می‌باشد که می‌توانیم استفاده کنیم، شامل:
   
+- [AllowAny](http://www.django-rest-framework.org/api-guide/permissions/#allowany)  - هر کاربری، احراز هویت شده باشد یا نه، اجازه دسترسی کامل را دارد  
+- [IsAuthenticated](http://www.django-rest-framework.org/api-guide/permissions/#isauthenticated) - کاربران ثبت‌نام شده و احراز هویت شده فقط اجازه دسترسی دارند
+- [IsAdminUser](http://www.django-rest-framework.org/api-guide/permissions/#isadminuser) - تنها ادمین یا کاربران سوپر اجازه دسترسی خواهند داشت
+- [IsAuthenticatedOrReadOnly](http://www.django-rest-framework.org/api-guide/permissions/#isauthenticatedorreadonly) - تمام کاربران می‌توانند هر صفحه‌ای را ببینند، اما تنها کاربران احراز هویت شده اجازه نوشتن، ویرایش، یا حذف را خواهند داشت
   
-If you use the URL for Post Detail http://127.0.0.1:8000/api/v1/1/ you will see a similar
-message and also no available forms for edits.
+پیاده‌سازی هر کدام از این چهار مورد مستلزم به بروزرسانی  `DEFAULT_PERMISSION_CLASSES` و رفرش صفحه‌ی مرورگر می‌باشد. همین!
   
-  
-![API Detail Logged Out](images/9.jpg)
-  
-  
-Therefore at this point only logged-in users can view our API. If you log back in with either your
-superuser or testuser account the API endpoints will be accessible.
-
-  
-  
-But think about what happens as the API grows in complexity. It’s likely we will have many more views and endpoints in the future. 
-Adding a dedicated `permission_classes` to each view seems repetitive if we want to set the same permissions setting across our entire API
-  
-  
-Wouldn’t it be better to change our permissions once, ideally at the project-level, rather than
-doing it for each and every view?
-  
-  
-### Project-Level Permissions
-
- 
-You should be nodding your head yes at this point. It is a much simpler and safer approach to
-set a strict permissions policy at the project-level and loosen it as needed at the view level. This
-is what we will do.
-
- 
-Fortunately `Django REST Framework` ships with a number of built-in project-level permissions
-settings we can use, including:
-  
-- [AllowAny](http://www.django-rest-framework.org/api-guide/permissions/#allowany) - any user, authenticated or not, has full access
-- [IsAuthenticated](http://www.django-rest-framework.org/api-guide/permissions/#isauthenticated) - only authenticated, registered users have access
-- [IsAdminUser](http://www.django-rest-framework.org/api-guide/permissions/#isadminuser) - only admins/superusers have access
-- [IsAuthenticatedOrReadOnly](http://www.django-rest-framework.org/api-guide/permissions/#isauthenticatedorreadonly) - 
-  unauthorized users can view any page, but only authenticated users have write, edit, or delete privileges   
-  
-Implementing any of these four settings requires updating the `DEFAULT_PERMISSION_CLASSES`
-setting and refreshing our web browser. That’s it!
-
-  
-Let’s switch to IsAuthenticated so only authenticated, or logged in, users can view the API.
-Update the config/settings.py file as follows:
-  
+بیایید تنظیمات را روی IsAuthenticated  قرار دهیم تا تنها کاربران احراز هویت و لاگین شده بتوانند صفحه API را ببینند.
+فایل config/settings.py را به صورت زیر آپدیت کنید. 
   
 <div dir="ltr">
   
@@ -266,12 +163,9 @@ REST_FRAMEWORK = {
 }
 ```
   
-</div>
+</div>  
 
-
-Now go back into the posts/views.py file and delete the permissions changes we just made.
-  
-  
+حال به فایل posts/views.py بروید و تغییرات مجوزهایی که همین الان انجام دادیم را حذف کنید.  
   
 <div dir="ltr">
   
@@ -294,49 +188,29 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 ```
   
-</div>
+</div>  
   
+اگر صفحات لیست پست‌ها و جزئیات  APIرا  رفرش کنید، هنوز کد وضعیت ۴۰۳ را خواهید دید.    
+حال همه‌ي کاربران برای دسترسی به API نیاز به احراز هویت دارند، اما همیشه می‌توانیم تغییراتی اضافی در سطح نما در صورت نیاز ایجاد کنیم.
   
-If you refresh the Post List and Detail List API pages you will still see the same 403 status code.
-We have now required all users to authenticate before they can access the API, but we can always
-make additional view-level changes as needed, too.
+### مجوزهای سفارشی
   
+نوبت به اولین مجوز سفارشی ما می‌باشد. به عنوان خلاصه‌ای از جایی که الان هستیم: دو کاربر داریم، testuser و دیگری superuser. یک پست وبلاگ در پایگاه‌داده ما وجود دارد، که توسط کاربر superuser ساخته شده‌است.
   
+می‌خواهیم تنها نویسنده آن پست مشخص اجازه دسترسی به ویرایش و یا حذف آن را داشته باشد، در غیر اینصورت پست وبلاگ باید از نوع فقط  خواندنی باشد. بنابراین حساب superuser باید دسترسی کامل به عملیات CRUD برای هر پست داشته باشد، اما کاربر معمولی یا همان testuser نباید این مجوزها را داشته‌باشد.   
   
-### Custom permissions
+سرور محلی را با دکمه‌های ترکیبی Control+c متوقف کرده و یک فایل جدید در مسیر اپلیکیشن posts به نام permissions.py ایجاد کنید.  
   
+خط فرمان 
   
-Time for our first custom permission. As a brief recap of where we are now: we have two users,
-testuser and the superuser account. There is one blog post in our database, which was created
-by the superuser.
-  
-We want only the author of a specific blog post to be able to edit or delete it; otherwise the
-blog post should be read-only. So the superuser account should have full CRUD access to the
-individual blog instance, but the regular user testuser should not.
-  
-  
-Stop the local server with Control+c and create a new permissions.py file in our posts app.
-  
+``` (blogapi) $ touch posts/permissions.py ```
 
-<div dir="ltr">
-
-Command Line  
+به صورت پیش‌فرض `Django REST Framework` متکی بر کلاس BasePermission می‌باشد که تمام دیگر کلاس‌های مربوط به مجوزها از آن ارث‌بری می‌کنند. این به این معنی است که تنظیمات مجوزهای از پیش ساخته شده‌ای مثل `AllowAny` و `IsAuthenticated` و سایر تنظیمات آنرا گسترش می‌ٔدهند. سورس کد اصلی آن 
+[در گیت‌هاب در دسترس است ](https://github.com/encode/django-rest-framework). 
   
-```shell
-(blogapi) $ touch posts/permissions.py
-```  
-  
-</div>
-  
-  
-Internally, `Django REST Framework` relies on a BasePermission class from which all other permission classes inherit. 
-That means the built-in permissions settings like `AllowAny`, `IsAuthenticated`,
-and others extend it. Here is the actual source code which is [available on Github](https://github.com/encode/django-rest-framework):
-  
-
 <div dir="ltr">
   
-Code
+کد
   
 ```python
 class BasePermission(object):
@@ -359,15 +233,13 @@ class BasePermission(object):
   
 </div>
   
-To create our own custom permission, we will override the `has_object_permission` method.
-Specifically we want to allow read-only for all requests but for any write requests, such as edit
-or delete, the author must be the same as the current logged-in user.
-  
-Here is what our `posts/permissions.py` file looks like.
+برای ساخت مجوز سفارشی شده خود، ما تابع `has_object_permission` را اورراید(یا باطل) می‌کنیم
+به طور مشخص می‌خواهیم مجوز فقط خواندنی را به همه درخواست‌ها بدهیم اما برای هر درخواست نوشتن، مانند ویرایش یا حذف، نویسنده باید همانی باشد که به سایت وارد شده و لاگین کرده‌است.  
+در اینجا فایل `posts/permissions.py` ما به صورت زیر می‌باشد.  
   
 <div dir="ltr">
   
-Code
+کد
   
 ```python
 # posts/permissions.py
@@ -384,27 +256,18 @@ def has_object_permission(self, request, view, obj):
     # Write permissions are only allowed to the author of a post
     return obj.author == request.user
 ```
+ 
+</div>  
+
+ابتدا کلاس `permissions` را وارد کرده‌ایم و کلاس خود را `IsAuthorOrReadOnly` که کلاس BasePermissions را گسترش می‌دهد و از آن ارث‌بری می‌کند را ساخته‌ایم. سپس تابع has_object_permission را اورراید کرده‌ایم. اگر در خواست شامل افعال HTTP شامل متدهای امن که یک تاپل شامل GET و OPTIONS و HEAD، باشد پس از نوع درخواست فقط خواندنی است و مجوز مربوط داده می‌شود.
   
-</div>
+در غیراینصورت درخواست برای نوشتن از هر نوعی می‌باشد، که به معنی بروزرسانی منابع API بنابراین ایجاد، حذف و یا ویرایش می‌باشد. در این مورد، بررسی می‌کنیم که نویسنده‌ای که در شیء(آبجکت) درخواست وجود دارد، که همان `obj.author` پست وبلاگ می‌باشد، با همان کاربری که درخواست را ارسال کرده مطابقت دارد.
   
-  
-We import `permissions` at the top and then create a custom class `IsAuthorOrReadOnly` which
-extends BasePermission. Then we override has_object_permission. If a request contains HTTP
-verbs included in SAFE_METHODS–a tuple containing GET, OPTIONS, and HEAD–then it is a read-only
-request and permission is granted.
-  
-  
-Otherwise the request is for a write of some kind, which means updating the API resource so
-either create, delete, or edit functionality. In that case, we check if the author of the object in
-question, which is our blog post `obj.author` matches the user making the request `request.user`.
-  
-  
-Back in the `views.py` file we should import `IsAuthorOrReadOnly` and then we can add permission_classes for PostDetail.
-  
+در فایل `views.py`‌باید `IsAuthorOrReadOnly` را وارد کنیم و سپس می‌توانیم برای نمای جزئیات پست(PostDetail) permission_classes را اضافه کنیم.  
   
 <div dir="ltr">
   
-Code
+کد
   
 ```python
 # posts/views.py
@@ -425,37 +288,23 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 ```
   
-</div>
-  
-  
-And we’re done. Let’s test things out. Navigate to the Post Detail page, which is located at
-http://127.0.0.1:8000/api/v1/1/. Make sure you are logged-in with your superuser account,
-who is the author of the post. The username should be visible in the upper righthand corner of the page
-  
+</div>  
+
+و کار ما به پایان رسید، حالا بیایید مجوزها را آزمایش کنیم. به  صفحه جزئیات پست که در آدرس http://127.0.0.1:8000/api/v1/1/ می‌باشد، بروید. مطمئن شوید که به عنوان کاربر superuser که نویسنده پست می‌باشد،  وارد شده‌باشید. نام‌کاربری باید در قسمت سمت راست بالای صفحه مشخص باشد
 
 ![API Detail Superuser](images/10.jpg)
-  
- 
-However, if you log out and then log in with the testuser account, the page changes.
-  
-  
-![API Detail Testuser](images/11.jpg)
-  
-  
-We **can** view this page since read-only permissions are allowed. However we **can not** make any
-PUT or DELETE requests due to our custom IsAuthorOrReadOnly permission class.
-  
- 
-Note that the generic views will only check the object-level permissions for views that retrieve
-a single model instance. If you require object-level filtering of list views–for a collection of
-instances–you’ll need to filter by [overriding the initial queryset](https://www.django-rest-framework.org/api-guide/filtering/#overriding-the-initial-queryset) .
-  
-    
-### Conclusion  
 
-Setting proper permissions is a very important part of any API. As a general strategy, it is a good
-idea to set a strict project-level permissions policy such that only authenticated users can view
-the API. Then make view-level or custom permissions more accessible as needed on specific API
-endpoints.
+اگرچه، اگر خارج شوید و با کاربر testuser وارد شوید، صفحه تغییر می‌کند.
+
+![API Detail Testuser](images/11.jpg)
+
+ما ***می‌توانیم*** این صفحه را ببینیم زیرا دسترسی‌های فقط خواندنی مجاز هستند. اگرچه به دلیل کلاس مجوز `IsAuthorOrReadOnly ` که ساختیم  ***نمی‌توانیم*** درخواست‌هایی نظیر PUT , DELETE بفرستیم.
   
-</div>
+دقت کنید که نماهای عمومی تنها مجوزهای در سطح آبجکت را برای نماهایی که تنها یک مدل نمونه را بازمی‌گردانند،بررسی می‌کنند. اگر به فیلتر سطح آبجکت برای نماهایی که لیستی از نمونه‌ها را بازمی‌گردانند نیاز دارید، نیاز به فیلتر با [اووراید کردن کوئری‌ست اولیه ](https://www.django-rest-framework.org/api-guide/filtering/#overriding-the-initial-queryset) دارید.   
+
+### نتیجه‌گیری
+
+اعمال تنظیمات مناسب بخش مهمی از هر API می‌باشد. به عنوان یک استراتژی عمومی، ایده‌ی خوبی است که از مجوزهای سختگیرانه سطح  پروژه استفاده کنید تا فقط کاربران احراز هویت شده دسترسی به API داشته باشند. سپس در صورت نیاز برای نماهای مختلف API مجوزهای در سطح نما یا مجوزهای سفارشی شده خود را ایجاد کنید.
+  
+  
+</div> 

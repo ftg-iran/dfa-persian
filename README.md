@@ -1,9 +1,11 @@
 # ترجمه آزاد و گروهی کتاب Django for APIs: Build Web APIs with Python and Django
 
+![Cover](cover.jpg)
+
 ### فهرست مطالب
 
 <div dir='rtl'>
-  
+
 <details>
   <summary>مقدمه &check;</summary>
   <br>
