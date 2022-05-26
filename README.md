@@ -55,20 +55,20 @@
 </details>
   
 <details>
-  <summary>فصل سوم : TODO API</summary>
+  <summary>فصل سوم : TODO API &check;</summary>
   <br>
 
-  - Init setup
-  - Models
-  - Django REST framework
-  - URLs
-  - Serializers
-  - Views
-  - Consuming the API
-  - Browsable APIs
-  - CORS
-  - Tests
-  - نتیجه گیری
+  - Init setup &check;
+  - Models &check;
+  - Django REST framework &check;
+  - URLs &check;
+  - Serializers &check;
+  - Views &check;
+  - Consuming the API &check;
+  - Browsable APIs &check;
+  - CORS &check;
+  - Tests &check;
+  - نتیجه گیری &check;
   
 </details>
   
@@ -116,7 +116,7 @@
   <summary>فصل هفتم : احراز هویت کاربر</summary>
   <br>
 
-  - Basic authentication
+  - Basic authentication 
   - Session authentication
   - Tocken authentication
   - Default authentication
@@ -130,32 +130,32 @@
 </details>
   
 <details>
-  <summary>فصل هشتم : نماها و مسیر ها</summary>
+  <summary>فصل هشتم : نماها و مسیر ها &check;</summary>
   <br>
 
   - نقاط پایانی کاربر &check;
   - نما ها &check;
-  - مسیر ها
-  - نتیجه گیری
+  - مسیر ها &check;
+  - نتیجه گیری &check;
   
 </details>
   
 <details>
-  <summary>فصل نهم : طرح ها و مستندات</summary>
+  <summary>فصل نهم : طرح ها و مستندات &check;</summary>
   <br>
   
-  - طرح ها
-  - مستندات
-  - نتیجه گیری
+  - طرح ها &check;
+  - مستندات &check;
+  - نتیجه گیری &check;
 
 </details>
   
 <details>
-  <summary>نتیجه گیری</summary>
+  <summary>نتیجه گیری &check;</summary>
   <br>
   
-  - مراحل بعد
-  - تشکر کردن
+  - مراحل بعد &check;
+  - تشکر کردن &check;
   
 </details>
   
@@ -166,7 +166,7 @@
 |       تمام        |  Mostafa Karimi  |                introduction |
 |       تمام        |Khalil Farashiani |                  Web-APIs-1 |
 |       تمام       |Seyyed Mahdi Sepahbodi|   Library-Website-and-API-2 |
-|         3/4         |    Mehdi Ebrahimi   |                  Todo-API-3 |
+|       تمام         |    Mehdi Ebrahimi   |                  Todo-API-3 |
 |       تمام        |  Sahar Mokarrami |      Todo-React-Front-end-4 |
 |       تمام        | Shamim Sanisales |                  Blog-Api-5 |
 |       تمام       |   Pouya Pargam   |               Permissions-6 |
