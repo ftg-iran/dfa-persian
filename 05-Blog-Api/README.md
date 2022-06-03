@@ -152,8 +152,8 @@ Command Line
 
 ### تست ها
   
-Let’s write a basic test for our Post model. We want to ensure a logged-in user can create a blog
-post with a title and body.
+در ادامه یک تست ابتدایی برای مدل پست وبلاگ می نویسیم. در این تست اطمینان حاصل می شود که کاربر وارد شده به سیستم بتواند یک پست با عنوان و بدنه ایجاد کند.
+  
   
 <div dir="ltr">
     
@@ -191,7 +191,7 @@ class BlogTests(TestCase):
 
 </div>
   
-To confirm that our tests are working quit the local server Control+c. Then run our tests.
+برای اطمینان از کارکرد صحیح تست با فشردن Control+c سرور لوکال را بسته و سپس تست ها را اجرا می کنیم.
     
 
 <div dir="ltr">
@@ -203,7 +203,7 @@ Command Line
 
 </div>
   
-You should see output like the following which confirms everything is working as expected. 
+پس از اجرا باید خروجی های مانند زیر مشاهده شود که نشان دهنده کارکرد صحیح همه قسمت های برنامه است.
    
 <div dir="ltr">
   
@@ -223,21 +223,19 @@ Destroying test database for alias 'default'...
 </div>  
     
     
-We are done now with the regular Django part of our API. All we really need is a model and some
-data in our database. Now it’s time to add Django REST Framework to take care of transforming
-our model data into an API.    
+در این زمان قسمت معمول ای پی ای جنگو به پایان رسیده است و زمان آن است که مدل و دیتاهایی را به دیتابیس اضافه کنیم. بنابراین زمان آن است که از جنگو رست فریمورک برای انتقال دیتاهای مدل به ای پی آی خود بهره ببریم.
+  
     
+### جنگو رست فریمورک 
     
-### Django REST Framework    
-    
-As we have seen before, `Django REST Framework` takes care of the heavy lifting of transforming
-our database models into a RESTful API. There are three main steps to this process:
-- `urls.py` file for the URL routes
-- `serializers.py` file to transform the data into JSON    
-- `views.py` file to apply logic to each API endpoint
+
+همانطور که قبلاً دیده‌ایم، `Django REST Framework` وظیفه تبدیل مدل‌های پایگاه داده ما به یک API RESTful را بر عهده دارد. سه مرحله اصلی برای این فرآیند وجود دارد:
+- `urls.py` فایل مشخص کننده مسیر url ها
+- `serializers.py` فایل برای تبدیل دیتا به جیسون  
+- `views.py` فایل برای پیاده سازی منطق هر کدام از اندپوینت ها
 
     
-On the command line use pipenv to install Django REST Framework.
+در کامندلاین با استفاده از pipenv جنگو رست فریمورک را به شکل زیر نصب می کنیم.
     
 <div dir="ltr">
   
@@ -248,11 +246,9 @@ Command Line
 
 </div>     
 
-Then add it to the INSTALLED_APPS section of our config/settings.py file. It’s also a good idea
-to explicitly set our permissions which by default in Django REST Framework are configured to
-AllowAny. We will update these in the next chapter.
+سپس آن را در قسمت INSTALLED_APPS در فایل config/settings.py اضافه می کنیم. همچنین بهتر است برای جنگو رست فریمورک در قسمت پرمیشن ها در ستینگ مجوز مناسب را که به صورت پیشفرض AllowAny تعریف شده است را مشخص کنیم. این قسمت در فصل بعدی آپدیت خواهد شد.    
     
-    
+  
 <div dir="ltr">
     
 Code
@@ -283,10 +279,10 @@ REST_FRAMEWORK = {
 
 </div>    
     
-Now we need to create our URLs, views, and serializers
+=اکنون ما باید url ها ، View ها و سریالایزرهای برنامه را ایجاد کنیم.
+  
     
-    
-### URLs   
+### URL ها   
 
 Let’s start with the URL routes for the actual location of the endpoints. Update the project-level
 `urls.py` file with the include import on the second line and a new api/v1/ route for our posts
@@ -464,10 +460,10 @@ that it already performs the basic list and CRUD functionality we desire. Time t
 with the Django Rest Framework’s browsable API. 
     
     
-### Browsable API   
+### ای پی آی قابل مرور   
    
-Start up the local server to interact with our API.
-    
+سرور محلی را برای برقراری ارتباط با ای پی آی خود اجرا میکنیم.
+  
     
 <div dir="ltr">
   
@@ -478,24 +474,25 @@ Command Line
 
 </div> 
     
-Then go to http://127.0.0.1:8000/api/v1/ to see the Post List endpoint.
+برای دیدن لیست پست های ایجاد شده به آدرس  http://127.0.0.1:8000/api/v1/  میرویم.
+  
 
 ![API Post List](images/3.png)
     
-The page displays a list of our blog posts—just one at the moment—in JSON format. Note that
-both GET and POST methods are allowed.
+
+این صفحه یک لیست از پست های موجود در ای پی آی را با فرمت جیسون نشان می دهد. توجه داشته باشید که هر دو متد GET و POST قابل اجرا هستند.
+  
     
-Now let’s confirm that our model instance endpoint—which relates to a single post rather than
-a list of all posts—exists.  
+
+اکنون اجازه دهید تأیید کنیم که نقطه پایانی نمونه مدل ما - که به جای یک لیست از همه پست ها به یک پست مربوط می شود - وجود دارد.
  
-Go to http://127.0.0.1:8000/api/v1/1/.
+به آدرس http://127.0.0.1:8000/api/v1/1/ میرویم.
 
 ![API Post Detail](images/4.png)   
     
    
-You can see in the header that GET, PUT, PATCH, and DELETE are supported but not POST. And in
-fact you can use the HTML form below to make changes or even use the red “DELETE” button
-to delete the instance.
+
+در هدر مشاهده میشود که متدهای GET,PUT,PATCH و DELETE ساپورت میشوند ولی نمیتوان از متد POST در اینجا استفاده کرد. در حقیقت شما میتوانید از فرم HTML موجود برای ایجاد تغییرات در فرم و از کلید DELETE برای حذف آن استفاده کنید.
     
 Let’s try things out. Update our title with the additional text (edited) at the end. Then click
 on the “PUT” button.
@@ -508,10 +505,8 @@ directly to http://127.0.0.1:8000/api/v1/ and you can see the updated text there
 ![API Post List edited](images/6.png)  
     
  
-### Conclusion
+### نتیجه گیری
     
-Our Blog API is completely functional at this point. However there is a big problem: anyone can
-update or delete an existing blog post! In other words, we do not have any permissions in place.
-In the next chapter we will learn how to apply permissions to protect our API.
+ای پی آی وبلاگ ما در این مرحله به درستی کار میکند. اگرچه یک مشکل بزرگ در این برنامه وجود دارد: هر کسی می تواند پست دلخواهی را ادیت و یا حذف کند. به بیان دیگر، مجوزی برای این کار برای کاربران وجود ندارد. در فصل بعدی با هم یاد میگیریم که چگونه مجوزهای لازم را برای تامین امنیت برنامه خود به کار ببریم.
     
 </div>
