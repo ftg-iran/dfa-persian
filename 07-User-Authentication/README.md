@@ -1,27 +1,12 @@
-<div dir="rlt">
-  
-# User Authentication
-  
-  
-In the previous chapter we updated our APIs permissions, which is also called **authorization**. In
-this chapter we will implement **authentication** which is the process by which a user can register
-for a new account, log in with it, and log out.
-Within a traditional, monolithic Django website authentication is simpler and involves a sessionbased cookie pattern which we will review below.
-But with an API things are a bit trickier.
-Remember that HTTP is a **stateless protocol** so there is no built-in way to remember if a user is
-authenticated from one request to the next. Each time a user requests a restricted resource it
-must verify itself.
-  
-The solution is to pass along a unique identifier with each HTTP request. Confusingly, there
-is no universally agreed-upon approach for the form of this identifier and it can take multiple
-forms. Django REST Framework ships with
-[four different built-in authentication options](https://www.django-rest-framework.org/api-guide/authentication/#api-reference): basic,
-session, token, and default. And there are many more third-party packages that offer additional
-features like JSON Web Tokens (JWTs).
-  
-In this chapter we will thoroughly explore how API authentication works, review the pros and
-cons of each approach, and then make an informed choice for our Blog API. By the end, we will
-have created API endpoints for sign up, log in, and log out.
+# فصل هفتم: احراز هویت کاربر
+
+در فصل قبلی ما دسترسی‌های APIهایمان را بروز رسانی کردیم، که به آن **مجوز(authorization)** می‌گویند. در این فصل، ما **احراز هویت(authentication)** را پیاده سازی  می‌کنیم که فرآیندی است که، کاربر با آن می‌تواند برای حساب کاربری جدید ثبت نام کرده، به آن وارد یا خارج شود.
+
+به طور سنتی، احراز هویت در وب سایت جنگو یکپارچه ساده است و متأثر از یک الگوی کوکی مبتنی بر جلسه(session based cookie pattern) است، که پایین تر آن را مورد بررسی قرار خواهیم داد. اما با وجود یک API، کارها کمی گول زننده‌تر می شود. به یاد داشته باشید که HTTP یک  **پروتکل بدون حفظ حالت(stateless protocol)**  است پس هیچ راه پیش ساخته‌ای برای به خاطر سپاری اینکه یک کاربر از یک درخواست به درخواست بعدی احراز هویت شده است یا خیر، وجود ندارد. هر بار که یک  کاربر درخواست یک منبع محدود شده را می‌کند، باید تایید کند که خودش است. 
+
+راه حل آن، ارسال یک نشان یکتا به همراه هر درخواست می‌باشد.  به صورت گیج کننده‌ای ،یک دیدگاه  توافق شده جهانی برای این نشان یکتا تعریف نشده است  و می تواند چندین فرم داشته باشد. فریمورک رست جنگو با [چهار نوع آپشن مختلف احراز هویت پیش ساخته](https://www.django-rest-framework.org/api-guide/authentication/#api-reference) عرضه می‌شود:  پایه(basic)، جلسه(session)، توکن(token) و پیش فرض(default). پکیج‌های واسط زیادی وجود دارند که  ویژگی‌های بیشتری مانند  جیسون وب توکن‌ها را(Json Web Token یا به اختصار JWT)  ارائه می دهند.  
+
+در این فصل به طور کامل بررسی می‌کنیم که احراز هویت API چگونه کار میکند، همچنین مزایا و معایب هر رویکرد را نیز مرور می‌کنیم و سپس یک انتخاب آگاهانه برای API *وبلاگ* خود انجام می دهیم. و در نهایت اندپوینت‌های API برای ثبت نام، ورود به حساب کاربری و  خروج از آن پیاده سازی می‌کنیم.
 
 ### Basic Authentication
 
@@ -762,11 +747,3 @@ built-in TokenAuthentication. However developers must configure additional areas
 registration and dedicated urls/views themselves. As a result, a popular, powerful, and secure
 approach is to rely on the third-party packages dj-rest-auth and django-allauth to minimize
 the amount of code we have to write from scratch.
-  
-  
-  
-  
-  
-  
-  
-</div>
