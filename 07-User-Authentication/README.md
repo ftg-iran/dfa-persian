@@ -224,19 +224,11 @@ Running migrations:
 در صورتی که ما همه کابران موجود را داریم. توکن‌ها *بعد از* اینکه کاربری برای وارد شدن به حسابش، API را صدا بزند ساخته می‌شوند، که این بخش را ما اکنون انجام ندادیم در نتیجه توکنی برای مشاهده وجود ندارد. اما به زودی این کار را انجام خواهیم داد.
                                                                                           
   
-### Endpoints                                                                                        
-                                                                                          
-                                                                                          
-We also need to create endpoints so users can log in and log out. We could create a dedicated
-users app for this purpose and then add our own urls, views, and serializers. However user
-authentication is an area where we really do not want to make a mistake. And since almost all APIs
-require this functionality, it makes sense that there are several excellent and tested third-party
-packages we can use it instead.
-                                                                                          
-Notably we will use [dj-rest-auth](https://github.com/jazzband/dj-rest-auth) in combination with [django-allauth](https://github.com/pennersr/django-allauth)
-to simplify things. Don’t feel bad about using third-party packages. They exist for a reason and even the best Django
-professionals rely on them all the time. There is no point in reinventing the wheel if you don’t
-have to!
+## نقاط پایانی(Endpoints)
+
+ما همچنین نیاز داریم نقاط پایانی‌ای ایجاد کنیم که کاربران بتوانند از طریق آن وارد یا خارج شوند. ما *می‌توانیم* یک اپ اختصاصی `users`برای این منظور ایجاد کنیم و سپس urlها، ویوها و سریالایزرهای خود را به آن اضافه کنیم. با این وجود احراز هویت کاربر بخشی است که واقعا نمی‌خواهیم اشتباهی در آن رخ دهد. و از آن جایی ک همه API ها به این قابلیت نیاز دارند، منطقی است که چندین پکیج واسط عالی و تست شده وجود دارند که می‌توانیم از آنها استفاده کنیم. 
+
+به ویژه ما از [dj-rest-auth](https://github.com/jazzband/dj-rest-auth) در ترکیب با [django-allauth](https://github.com/pennersr/django-allauth) برای ساده‌تر شدن کارها استفاده خواهیم کرد. هیچ گونه احساس بدی در مورد استفاده از پکیج‌های واسط نداشته باشید. آن‌ها به دلیلی وجود دارند و حتی حرفه‌ای‌های جنگو هم همیشه به آن‌ها تکیه می‌کنند. اگر مجبور نباشید، هیچ فایده‌ای برای اختراع مجدد چرخ از اول وجود ندارد.
                                                                                           
                                                                                           
 ### dj-rest-auth                                                                                        
