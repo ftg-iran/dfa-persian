@@ -149,16 +149,11 @@ REST_FRAMEWORK = {
 اگر دوباره به API قابل مرور در <http://127.0.0.1:8000/api/v1/> مراجعه کنید، مانند قبل کار خواهد کرد. از نظر فنی، هیچ چیز تغییر نکرده است، ما فقط تنظیمات پیش فرض را به صراحت بیان کرده‌ایم.  
                                                                                           
                                                                                           
-### Implementing token authentication                                                                                    
-                                                                                          
+## پیاده سازی احراز هویت مبتنی بر توکن
 
-Now we need to update our authentication system to use tokens. The first step is to update our
-`DEFAULT_AUTHENTICATION_CLASSES` setting to use TokenAuthentication as follows:
-                                                                                          
-  
-<div dir="ltr">
-  
-Code
+اکنون نیاز داریم تا سیستم احراز هویت خود را بروز رسانی کنیم تا بتوانیم از توکن‌ها استفاده کنیم. قدم اول به روز رسانی  `DEFAULT_AUTHENTICATION_CLASS` به مقدار `TokenAuthentication` مانند زیر می‌باشد:
+
+کد
 ```python
 # config/settings.py
 REST_FRAMEWORK = {
@@ -172,19 +167,10 @@ REST_FRAMEWORK = {
 }
 
 ```
-  
-</div> 
-                                                                                          
-  
-We keep `SessionAuthentication` since we still need it for our Browsable API, but now use tokens
-to pass authentication credentials back and forth in our HTTP headers. We also need to add the
-authtoken app which generates the tokens on the server. It comes included with Django REST
-Framework but must be added to our INSTALLED_APPS setting:
 
-                                                                                          
-<div dir="ltr">
-  
-Code
+ما `SessionAuthentication` را حذف نکرده زیرا برای APIهای قابل مرور به آن‌ها نیاز داریم، اما اکنون از توکن‌ها برای ارسال و دریافت اعتبارنامه احراز هویت در هدرهای HTTPمان استفاده می‌کنیم. همچنان ما نیاز داریم که اپ `authtoken` را برای تولید توکن‌ها روی سرور اضافه کنیم. آن اپ به همراه فریمورک رست جنگو است اما باید در بخش `INSTALLED_APPS` افزوده شود:
+
+کد
 ```python
 # config/settings.py
 INSTALLED_APPS = [
@@ -203,16 +189,10 @@ INSTALLED_APPS = [
     'posts',
 ]
 ```
-  
-</div>                                                                                          
-                                                                                          
-Since we have made changes to our `INSTALLED_APPS` we need to sync our database. Stop the
-server with `Control+c`. Then run the following command.                                                                                         
-                                                                                          
 
-<div dir="ltr">
-  
-Command Line
+از آنجایی که در INSTALLED_APPS تغییراتی ایجاد کرده‌ایم نیاز داریم پایگاه داده خود را همگام سازی کنیم. سرور را با کلید ترکیبی `Control + c` متوقف کرده و سپس کامند زیر را اجرا کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py migrate
 Operations to perform:
@@ -221,37 +201,27 @@ Running migrations:
   Applying authtoken.0001_initial... OK
   Applying authtoken.0002_auto_20160226_1747... OK
 ```
-  
-</div> 
-     
-                                                                                          
-Now start up the server again .                                                                                     
-                                                                                          
-   
-<div dir="ltr">
-  
-Command Line
+
+سپس سرور را مجدداً راه اندازی کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py runserver
 ```
-  
-</div> 
-                                                                                          
-                                                                                          
-If you navigate to the Django admin at http://127.0.0.1:8000/admin/ you’ll see there is now
-a Tokens section at the top. Make sure you’re logged in with your superuser account to have
-access.                                                                                          
-   
-![Admin Homepage with Tokens](images/1.jpg)
-  
-Click on the link for Tokens. Currently there are no tokens which might be surprising.
 
-                                                                                          
-![Admin Tokens Page](images/2.jpg)                                                                                          
-                                    
-                                                                                          
-After all we have existing users. However, the tokens are only generated after there is an API call
-for a user to log in. We have not done that yet so there are no tokens. We will shortly.
+اگر به آدرس پنل مدیریت جنگو در <http://127.0.0.1:8000/admin/> رجوع کنید شما بخش `Tokens` را در بالا مشاهده خواهید کرد. پیش از آن اطمینان حاصل کنید که با کاربر superuser وارد شده‌اید که دسترسی داشته باشید.  
+
+|![صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها](images/1.jpg)|
+|:--:|
+|صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها|
+
+بر روی لینک `Tokens` کلیک کنید.در حال حاضر هیچ توکنی وجود ندارد که ممکن است برای شما سوپرایز کننده باشد.
+
+|![صفحه مدیریت توکن‌ها](images/2.jpg)|
+|:--:|
+|صفحه مدیریت توکن‌ها|
+
+در صورتی که ما همه کابران موجود را داریم. توکن‌ها *بعد از* اینکه کاربری برای وارد شدن به حسابش، API را صدا بزند ساخته می‌شوند، که این بخش را ما اکنون انجام ندادیم در نتیجه توکنی برای مشاهده وجود ندارد. اما به زودی این کار را انجام خواهیم داد.
                                                                                           
   
 ### Endpoints                                                                                        
