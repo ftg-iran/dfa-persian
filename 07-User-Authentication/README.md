@@ -75,24 +75,21 @@ Authorization: Basic d3N2OnBhc3N3b3JkMTIz
 در نتیجه، عموماً استفاده از احراز هویت مبتنی بر جلسه برای APIهایی که چندین فرانت اند دارند توصیه نمی‌شود.
 
 
-**Cookies vs localStorage**
-  
-Cookies are used for reading **server-side** information. They are smaller (4KB) in size and automatically sent with each HTTP request.
-LocalStorage is designed for **client-side** information.
-It is much larger (5120KB) and its contents are not sent by default with each HTTP request.
-Tokens stored in both cookies and localStorage are vulnerable to XSS attacks. The current
-best practice is to store tokens in a cookie with the httpOnly and Secure cookie flags.
+## احراز هویت مبتنی بر توکن
 
-  
-Let’s look at a simple version of actual HTTP messages in this challenge/response flow. Note that
-the HTTP header WWW-Authenticate specifies the use of a Token which is used in the response
-Authorization header request.
+سومین دیدگاه عمده و روشی که احراز هویتی که ما برای API *وبلاگمان* پیاده‌سازی خواهیم کرد، استفاده از احراز هویت مبتنی بر توکن است. این روش یکی از محبوب ترین دیدگاه‌ها در سال‌های اخیر است که ناشی از رشد اپلیکیشن‌های تک صفحه‌ای است.
 
-  
-  
-<div dir="ltr">
-  
-Diagram
+احراز هویت مبتنی بر توکن **فاقد حفظ حالت(stateless)** هستند. یک بار که اعتبارنامه اولیه کاربر را به سرور ارسال میکند، یک توکن یکتا تولید شده و سپس در سمت کلاینت به عنوان کوکی یا در  [حافظه محلی](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) ذخیره می‌شود. این توکن در هدر هر درخواست HTTP ارسال شده و سرور با آن احراز هویت کاربر را تایید می‌کند. خود سرور چه توکن معتبر باشد چه نباشد، سابقه‌ای از کاربر نگهداری نمی‌کند.
+
+<br>
+<div style="background-color:#f0f0f0; padding:5%">
+<p style="font-weight:bold;">کوکی‌ها در مقابل حافظه محلی</p> کوکی‌ها برای خواندن اطلاعات از <span style="font-weight:bold;">سمت سرور</span> استفاده می‌شود و از نظر اندازه کوچک هستند (4KB) و به صورت خودکار به همراه هر درخواست HTTP  ارسال می‌شوند. حافظه محلی برای اطلاعات <span style="font-weight:bold;">سمت کلاینت</span> طراحی شده‌اند و بسیار بزرگتر هستند(5120KB) و محتوای آن‌ها به صورت پیشفرض در هر درخواست HTTP ارسال نمی‌شود. توکن‌های ذخیره شده در کوکی ها و یا حافظه‌های محلی در برابر حمله‌های XSS آسیب پذیر هستند. بهترین روش فعلی، ذخیره آن‌ها در یک کوکی به همراه فلگ‌های <code>httpOnly</code> و <code>Secure</code>  می‌باشد. 
+</div>
+<br>
+
+بیایید به یک نسخه ساده از پیام‌های HTTP واقعی در این جریان چالش/پاسخ نگاه کنیم. توجه داشته باشید که هدر `WWW-Authenticate` استفاده از `Token` را مشخص کرده است، که این توکن نیز در هدر `Authorization` درخواست پاسخ در نظر گرفته شده است. 
+
+نمودار
 ```code
 Client                                                                                                                  Server
 ------                                                                                                                  ------
@@ -113,42 +110,17 @@ Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a
                                                                                          <-------------------------------------
                                                                                                                 HTTP/1.1 200 OK
 ```
-  
-</div>  
-  
- 
-                                                                                         
-There are multiple benefits to this approach. Since tokens are stored on the client, scaling the
-servers to maintain up-to-date session objects is no longer an issue. And tokens can be shared
-amongst multiple front-ends: the same token can represent a user on the website and the same
-user on a mobile app. The same session ID can not be shared amongst different front-ends, a
-major limitation.
-                                                                                          
-A potential downside is that tokens can grow quite large. A token contains all user information,
-not just an id as with a session id/session object set up. Since the token is sent on every request,
-managing its size can become a performance issue.                                                                                         
-                                                                                         
-   
-Exactly how the token is implemented can also vary substantially. Django REST Frameworks’
-built-in [TokenAuthentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication) 
-is deliberately quite basic. As a result, it does not support setting
-tokens to expire, which is a security improvement that can be added. It also only generates one
-token per user, so a user on a website and then later a mobile app will use the same token.
-Since information about the user is stored locally, this can cause problems with maintaining and
-updating two sets of client information.
-                                                                                          
-                                                                                          
-JSON Web Tokens (JWTs) are a new, enhanced version of tokens that can be added to Django
-REST Framework via several third-party packages. JWTs have several benefits including the
-ability to generate unique client tokens and token expiration. They can either be generated on
-the server or with a third-party service like [Auth0](https://auth0.com/). And JWTs can be encrypted which makes
-them safer to send over unsecured HTTP connections.
-                                                                                          
- 
-Ultimately the safest bet for most web APIs is to use a token-based authentication scheme. JWTs
-are a nice, modern addition though they require additional configuration. As a result, in this book
-we will use the built-in `TokenAuthentication`.
-  
+
+در این دیدگاه چندین مزیت وجود دارد از آنجایی که توکن‌ها در کلاینت ذخیره می‌شوند، دیگر مقیاس سرورها به منظور به‌ روز‌ نگه داشتن شئ جلسه، یک مشکل نخواهد بود. و توکن‌ها می‌توانند بین چندین فرانت اند به اشتراک گذاشته شوند. همان توکن می‌تواند نمایانگر یک کاربر روی وب سایت و همان کاربر روی اپلیکیشن موبایل باشد. اما همان شناسه جلسه نمی‌تواند بین فرانت اند‌های مختلف به اشتراک گذاشته شود که این محدودیت عمده این روش است.
+
+یک نقطه ضعف  بالقوه در این روش این است که یک توکن ممکن است خیلی بزرگ شود. یک توکن شامل تمام اطلاعات یک کاربر است نه فقط شناسه به عنوان شناسه جلسه یا شی جلسه تنظیم شده. از آنجایی که توکن‌ها در هر درخواست ارسال می شوند مدیریت اندازه آنها می‌تواند به یک مسئله کارایی تبدیل شود.
+
+نحوه پیاده سازی دقیق توکن به طور قابل توجهی می‌تواند متفاوت باشد. [احراز هویت مبتنی بر توکن](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication) پیش ساخته فریمورک رست جنگو عمداً اساسی طراحی شده است. به این معنا که تنظیماتی برای منقضی کردن توکن پشتیبانی نمی‌شود که یک بهبود امنیتی است، که می‌تواند اضافه شود. همچنین فقط یک توکن برای هر کاربر تولید می‌کند بنابراین یک کاربر در وبسایت و در اپلیکیشن موبایل از همان یک توکن استفاده می‌کند . از آن جایی که اطلاعات مربوط به کاربر به صورت محلی ذخیره می‌شود، این خود می‌تواند سبب مشکلی برای نگهداری و به روز رسانی دو مجموعه از اطلاعات کلاینت شود.
+
+جیسون وب توکن‌ها(JWT) جدید هستند در واقع نسخه بهبود یافته توکن‌ها هستند که می‌توانند به فریمورک رست جنگو از طریق پکیج‌های واسط اضافه شوند. JWT ها چندین مزیت دارد از جمله اینکه می‌توانند  توکن‌های یکتا برای کلاینت تولید کنند که دارای تایم انقضا باشد. آنها همچنین می‌توانند روی سرور و یا با سرویس‌های واسط مانند [Auth0](https://auth0.com/) تولید شوند و JWT ها می توانند رمز گذاری شوند تا به صورت ایمن بر بستر ارتباطات ناامن HTTP ارسال شوند.
+
+در نهایت مطمئن‌ترین شرط برای اکثر APIهای وب استفاده از طرح احراز هویت مبتنی بر توکن است. JWTها یک قابلیت اضافه هستند اگرچه نیاز به پیکربندی اضافه‌تری دارند. در نتیجه، در این کتاب از `TokenAuthentication` پیش ساخته استفاده خواهیم کرد.
+
  
 ### Default Authentication
 
