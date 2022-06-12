@@ -122,22 +122,16 @@ Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a
 در نهایت مطمئن‌ترین شرط برای اکثر APIهای وب استفاده از طرح احراز هویت مبتنی بر توکن است. JWTها یک قابلیت اضافه هستند اگرچه نیاز به پیکربندی اضافه‌تری دارند. در نتیجه، در این کتاب از `TokenAuthentication` پیش ساخته استفاده خواهیم کرد.
 
  
-### Default Authentication
+## احراز هویت پیش فرض
 
-  
- 
-The first step is to configure our new authentication settings. Django REST Framework comes
-with a [number of settings](https://www.django-rest-framework.org/api-guide/settings/) that are implicitly set. For example, `DEFAULT_PERMISSION_CLASSES`
-was set to AllowAny before we updated it to `IsAuthenticated`.
-                                                                                          
-The `DEFAULT_AUTHENTICATION_CLASSES` are set by default so let’s explicitly add both SessionAuthentication
-and BasicAuthentication to our `config/settings.py` file.
-                                                                                          
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+اولین قدم این است که تنظیمات احراز هویت جدیدمان را پیکربندی کنیم. فریمورک رست جنگو با [تعدادی تنظیمات](http://www.django-rest-framework.org/api-guide/settings/) ارائه می شود که به طور ضمنی تنظیم شده اند .برای مثال قبل از تغییر `DEFAULT_PERMISSION_CLASSES` به  `IsAuthenticate`  به صورت پیش فرض بر روی `AllowAny` تنظیم شده است.
+
+<div style="dir:rtl;">
+<code>DEFAULT_AUTHENTICATION_CLASSES</code> به طور پیش‌فرض تنظیم شده‌ است، بنابراین بیایید صراحتاً <code>SessionAuthentication</code> و <code>BasicAuthentication</code> را به فایل <code>config/settings.py</code> خود اضافه کنیم.
+</div>
+<br>
+
+کد
 ```python
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -149,16 +143,10 @@ REST_FRAMEWORK = {
     ],
 }
 ```
-  
-</div>                                                                                         
-                                                                                          
-                                                                                          
-Why use **both** methods? The answer is they serve different purposes. Sessions are used to power
-the Browsable API and the ability to log in and log out of it. BasicAuthentication is used to pass
-the session ID in the HTTP headers for the API itself.
-                                                                                          
-If you revisit the browsable API at http://127.0.0.1:8000/api/v1/ it will work just as before.
-Technically, nothing has changed, we’ve just made the default settings explicit.                                                                                        
+
+چرا از هر **دو** روش استفاده کنیم؟ پاسخ این است که آن‌ها اهداف مختلفی را دنبال می‌کنند. Sessions برای تقویت API قابل مرور استفاده می‌شوند و توانایی وارد شدن و خارج شدن از آن. BasicAuthentication برای ارسال شناسه جلسه در هدرهای HTTP برای خود API استفاده می‌شود.
+
+اگر دوباره به API قابل مرور در <http://127.0.0.1:8000/api/v1/> مراجعه کنید، مانند قبل کار خواهد کرد. از نظر فنی، هیچ چیز تغییر نکرده است، ما فقط تنظیمات پیش فرض را به صراحت بیان کرده‌ایم.  
                                                                                           
                                                                                           
 ### Implementing token authentication                                                                                    
