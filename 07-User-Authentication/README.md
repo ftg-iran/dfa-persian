@@ -8,31 +8,21 @@
 
 در این فصل به طور کامل بررسی می‌کنیم که احراز هویت API چگونه کار میکند، همچنین مزایا و معایب هر رویکرد را نیز مرور می‌کنیم و سپس یک انتخاب آگاهانه برای API *وبلاگ* خود انجام می دهیم. و در نهایت اندپوینت‌های API برای ثبت نام، ورود به حساب کاربری و  خروج از آن پیاده سازی می‌کنیم.
 
-### Basic Authentication
 
-The most common form of HTTP authentication is known as [“Basic” Authentication](https://tools.ietf.org/html/rfc7617). When a
-client makes an HTTP request, it is forced to send an approved authentication credential before
-access is granted.
-  
-The complete request/response flow looks like this:
-  
+## احراز هویت پایه
 
-- 1 Client makes an HTTP request
-- 2 Server responds with an HTTP response containing a 401 (Unauthorized) status code and
-WWW-Authenticate HTTP header with details on how to authorize
-- 3 Client sends credentials back via the [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) HTTP header
-- 4 Server checks credentials and responds with either 200 OK or 403 Forbidden status code
+رایج ترین فرم احراز هویت HTTP به عنوان  [احراز هویت «پایه»](https://tools.ietf.org/html/rfc7617) شناخته می‌شود. زمانی که کلاینت درخواست HTTP ارسال می‌کند، مجبور به ارسال یک اعتبارنامه(credential) احراز هویت تایید شده قبل از اعطای دسترسی است.
 
-  
-Once approved, the client sends all future requests with the Authorization HTTP header
-credentials. We can also visualize this exchange as follows:
-  
-  
-  
-  
-<div dir="ltr">
-  
-Diagram
+پروسه کامل درخواست/ پاسخ به صورت زیر است :
+
+1. کاربر یک درخواست http ارسال می‌کند.
+2. سرور یک پاسخ که حاوی کد وضعیت `401 غیرمجاز (unauthorized)` و یک هدر  `WWW-Authenticate` HTTP با جزئیات *چگونگی* دسترسی است را برمی‌گرداند.
+3. کاربر اعتبارنامه خود را از طریق هدر [مجوز](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) HTTP ارسال می کند.
+4. سرور اعتبارنامه را چک کرده و پاسخ را به همراه یکی از کد وضعیت‌های `200 درست` یا `403 ممنوع(403 forbidden)` را به سمت کاربر ارسال می کند.
+
+یک بار که کاربر تایید شد، می‌تواند تمام درخواست‌های بعدی خود را با اعتبارنامه هدر `Authorization` HTTP  ارسال کند.  ما میتوانیم این فرایند را به صورت زیر نمایش دهیم:
+
+نمودار
 ```code
 Client                                                                                                                  Server
 ------                                                                                                                  ------
@@ -53,76 +43,10 @@ Authorization: Basic d3N2OnBhc3N3b3JkMTIz
                                                                                          <-------------------------------------
                                                                                                                 HTTP/1.1 200 OK
 ```
-  
-</div>  
-  
-Note that the authorization credentials sent are the unencrypted [base64 encoded](https://en.wikipedia.org/wiki/Base64) version of
-<username>:<password>. So in my case, this is wsv:password123 which with base64 encoding is
-d3N2OnBhc3N3b3JkMTIz.  
-                                                                                          
-  
-  
-The primary advantage of this approach is its simplicity. But there are several major downsides.
-First, on every single request the server must look up and verify the username and password,
-which is inefficient. It would be better to do the look up once and then pass a token of some
-kind that says, this user is approved. Second, user credentials are being passed in clear text—not
-encrypted at all—over the internet. This is incredibly insecure. Any internet traffic that is not
-encrypted can easily be captured and reused. Thus basic authentication should **only** be used via
-[HTTPS](https://en.wikipedia.org/wiki/HTTPS), the secure version of HTTP.
 
-  
-### Session Authentication
-  
+توجه داشته باشید که مجوزهای اعتبارنامه ارسال شده بر اساس  [base64 encode](https://en.wikipedia.org/wiki/Base64) رمز گذاری نشده، نسخه‌ای از `<username>:<password>` هستند. به عنوان مثال `wsv:password123` با base64 encoding  به صورت `d3N2OnBhc3N3b3JkMTIz` است.
 
-Monolithic websites, like traditional Django, have long used an alternative authentication scheme
-that is a combination of sessions and cookies. At a high level, the client authenticates with its
-credentials (username/password) and then receives a session ID from the server which is stored
-as a cookie. This session ID is then passed in the header of every future HTTP request.
-When the session ID is passed, the server uses it to look up a session object containing all
-available information for a given user, including credentials.
-  
-This approach is **stateful** because a record must be kept and maintained on both the server (the
-session object) and the client (the session ID).
-  
-Let’s review the basic flow:
-  
-  
-- 1 A user enters their log in credentials (typically username/password)
-- 2 The server verifies the credentials are correct and generates a session object that is then
-stored in the database
-- 3 The server sends the client a session ID—not the session object itself—which is stored as a
-cookie on the browser
-- 4 On all future requests the session ID is included as an HTTP header and, if verified by the
-database, the request proceeds
-- 5 Once a user logs out of an application, the session ID is destroyed by both the client and
-server
-- 6 If the user later logs in again, a new session ID is generated and stored as a cookie on the
-client
-
-  
-  
-The default setting in Django REST Framework is actually a combination of Basic Authentication
-and Session Authentication. Django’s traditional session-based authentication system is used
-and the session ID is passed in the HTTP header on each request via Basic Authentication.
-  
-  
-The advantage of this approach is that it is more secure since user credentials are only sent once,
-not on every request/response cycle as in Basic Authentication. It is also more efficient since
-the server does not have to verify the user’s credentials each time, it just matches the session ID
-to the session object which is a fast look up.
-  
-  
-There are several downsides however. First, a session ID is only valid within the browser where
-log in was performed; it will not work across multiple domains. This is an obvious problem when
-an API needs to support multiple front-ends such as a website and a mobile app. Second, the
-session object must be kept up-to-date which can be challenging in large sites with multiple
-servers. How do you maintain the accuracy of a session object across each server? And third, the
-cookie is sent out for every single request, even those that don’t require authentication, which
-is inefficient.
-  
-  
-As a result, it is generally not advised to use a session-based authentication scheme for any API
-that will have multiple front-ends.
+مزیت اصلی این روش سادگی آن است اما چندین نقطه ضعف عمده نیز دارد. مورد اول، برای *هر درخواست*، سرور باید نام کاربری و رمز عبور را جستجو کرده و تایید کند که این عمل ناکارآمد است. اما روش بهتر این است که احراز هویت یکبار صورت گیرد و برای درخواست های بعدی یک توکن ارسال شود که تایید کند این کاربر احراز شده است. مورد دوم، ارسال اعتبارنامه‌های کاربر به صورت رمزگذاری نشده در سراسر اینترنت،  فوق العاده ناامن است. هر ترافیک شبکه‌ای که رمزگذاری نشده باشد خیلی راحت می‌تواند دریافت شده و مجدداً استفاده شود. بدین ترتیب احراز هویت پایه  **فقط** باید به وسیله پروتکل [HTTPS](https://en.wikipedia.org/wiki/HTTPS) مورد استفاده قرار بگیرد که نسخه امن شدۀ `HTTP` است.
 
  
 ### Token Authentication
