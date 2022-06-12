@@ -231,28 +231,18 @@ Running migrations:
 به ویژه ما از [dj-rest-auth](https://github.com/jazzband/dj-rest-auth) در ترکیب با [django-allauth](https://github.com/pennersr/django-allauth) برای ساده‌تر شدن کارها استفاده خواهیم کرد. هیچ گونه احساس بدی در مورد استفاده از پکیج‌های واسط نداشته باشید. آن‌ها به دلیلی وجود دارند و حتی حرفه‌ای‌های جنگو هم همیشه به آن‌ها تکیه می‌کنند. اگر مجبور نباشید، هیچ فایده‌ای برای اختراع مجدد چرخ از اول وجود ندارد.
                                                                                           
                                                                                           
-### dj-rest-auth                                                                                        
-                                                                                          
-First we will add log in, log out, and password reset API endpoints. These come out-of-the-box
-with the popular `dj-rest-auth package`. Stop the server with `Control+c` and then install it.                                                                                       
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Command Line
+## پکیج dj-rest-auth 
+
+اول ما نقاط‌های پایانی APIهای وارد شدن، خارج شدن و بازنشانی رمز عبور را اضافه خواهیم کرد. این بلافاصله با پکیج محبوب `dj-rest-auth` می‌آید. سرور را با `Control + c` متوقف کنید و سپس آن را نصب کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ pipenv install dj-rest-auth==1.1.0
 ```
-  
-</div>                                                                                         
-                                                                                          
-    
-Add the new app to the INSTALLED_APPS config in our `config/settings.py` file.                                                                                          
 
-                                                                                          
-<div dir="ltr">
-  
-Code
+اپ جدید را به پیکربندی `INSTALLED_APPS` در فایل `config/settings.py` اضافه کنید.
+
+کد
 ```python
 # config/settings.py
 INSTALLED_APPS = [
@@ -273,19 +263,10 @@ INSTALLED_APPS = [
 ]
 
 ```
-  
-</div>                       
 
-                                                                                          
-                                                                                          
-Update our `config/urls.py` file with the `dj_rest_auth` package. We’re setting the URL routes
-to api/v1/dj-rest-auth. Make sure to note that URLs should have a dash - not an underscore
-_, which is an easy mistake to make.
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+فایل `config/urls.py` را با پکیج `dj-rest-auth` بروز رسانی کنید. ما url را به `api/v1/dj-rest-auth` مسیر دهی می‌کنیم. اطمینان حاصل کنید که URL تیره - از هم جدا شوند و نه خط فاصله _ . این یک خطای آسان است.
+
+کد
 ```python
 # config/urls.py
 from django.contrib import admin
@@ -298,53 +279,41 @@ urlpatterns = [
     path('api/v1/dj-rest-auth/', include('dj_rest_auth.urls')), # new
 ]
 ```
-  
-</div>                                                                                       
-                                                                                          
-                                                                                          
-And we’re done! If you have ever tried to implement your own user authentication endpoints, it
-is truly amazing how much time—and headache—dj-rest-auth saves for us. Now we can spin up
-the server to see what dj-rest-auth has provided.                                                                                      
-                                                                                          
 
-<div dir="ltr">
-  
-Command Line
+و تمام. اگر تا به حال تلاش کرده باشید که نقطه پایانی احراز هویت کاربر را خودتان پیاده سازی کنید متوجه خواهید شد که `dj-rest-auth` واقعا فوق العاده است که چگونه چقدر از اتلاف وقت و سردرد ما کم می‌کند. اکنون می‌توانیم سرور را مجدداً راه اندازی کنیم تا ببینیم `dj-rest-auth` چه چیزی را برای ما فراهم کرده است.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py runserver
 ```
-  
-</div>
-                                                                                          
 
-We have a working log in endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/login/.
-                                                                                          
-                                                                                          
-![API Log In Endpoint](images/3.jpg)                                                                                          
-             
-                                                                                          
-And a log out endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/logout/.                                                                                         
-              
-                                                                                          
-                                                                                          
-![API Log Out Endpoint](images/4.jpg)                                                                                      
-                                                                                          
-There are also endpoints for password reset, which is located at:
+ما یک نقطه پایانی برای وارد شدن در <http://127.0.0.1:8000/api/v1/dj-rest-auth/login/> داریم
 
-                                                                                          
-http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset                                                                               
-   
+|![نقطه پایانی API ورود کاربر](images/3.jpg)|
+|:--:|
+|نقطه پایانی API ورود کاربر|
 
-![API Password Reset](images/5.jpg)
-                                                                                          
-                                                                                          
-                                                                                          
-And for password reset confirmed:
-                                                                                          
-http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/confirm                                                                                         
-                                                                                          
-                                                                                          
-![API Password Reset Confirm](images/6.jpg)                                                                                      
+و نقطه پایانی برای خارج شدن در <http://127.0.0.1:8000/api/v1/dj-rest-auth/logout> داریم
+
+|![نقطه پایانی API خارج شدن کاربر](images/4.jpg)|
+|:--:|
+|نقطه پایانی API ورود کاربر|
+
+و همچنین نقاط پایانی بازنشانی رمز عبور نیز به صورت زیر در نظر گرفته شده است:
+
+<http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/>
+
+|![API بازنشانی رمز عبور](images/5.jpg)|
+|:--:|
+|API بازنشانی رمز عبور|
+
+و برای تایید بازنشانی رمز عبور: 
+
+<http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/confirm>
+
+|![API تایید بازنشانی رمز عبور](images/6.jpg)|
+|:--:|
+|API تایید بازنشانی رمز عبور|                                                                                      
                                                                                           
  
 ### User Registration
