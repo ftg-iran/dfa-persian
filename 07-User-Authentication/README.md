@@ -478,17 +478,8 @@ example.com
 ما نیاز داریم این توکن را در فریمورک فرانت اندمان دریافت و ذخیره کنیم. به طور سنتی این اتفاق سمت کلاینت، یا در [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) یا به عنوان یک کوکی، رخ می‌دهد و سپس همه درخواست‌های بعدی شامل این توکن در هدر درخواست به عنوان راهی برای احراز هویت کاربر  قرار داده میشود. توجه داشته باشید که نگرانی‌های امنیتی بیشتری در این مورد وجود دارد، بنابراین باید مراقب باشید که بهترین روش‌ها را در چارچوب انتخابی فرانت‌اند خود اجرا کنید.
 
   
-### Conclusion  
-  
-  
-User authentication is one of the hardest areas to grasp when first working with web APIs.
-Without the benefit of a monolithic structure, we as developers have to deeply understand and
-configure our HTTP request/response cycles appropriately. 
-  
-  
-  
-Django REST Framework comes with a lot of built-in support for this process, including
-built-in TokenAuthentication. However developers must configure additional areas like user
-registration and dedicated urls/views themselves. As a result, a popular, powerful, and secure
-approach is to rely on the third-party packages dj-rest-auth and django-allauth to minimize
-the amount of code we have to write from scratch.
+## نتیجه گیری
+
+احراز هویت کاربران زمانی که برای اولین بار با APIهای وب کار می‌کنید، یکی از سخت‌ترین بخش‌ها برای درک کردن است. بدون بهرمندی از ساختار یکپارچه، ما به عنوان توسعه دهنده باید چرخه درخواست/پاسخ HTTPمان را عمیقاً درک و پیکربندی کنیم.
+
+فریمورک رست جنگو به همراه پشتیبانی‌های زیادی برای این هدف آمده است که شامل `احراز هویت مبتنی بر توکن` به صورت پیش ساخته نیز است. هر چند توسعه دهندگان باید بخش‌های اضافی مثل ثبت نام کاربر و ویوها/urlsهای مختص آن‌ها را پیکربندی کنند. در نتیجه روش محبوب، قدرتمند و امن این است که به پکیج‌های واسط `dj-rest-auth` و `django-allauth` برای کم کردن حجم کدهایی که می‌خواهیم از صفر بنویسیم، تکیه کنیم.
