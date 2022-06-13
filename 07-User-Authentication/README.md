@@ -316,52 +316,30 @@ urlpatterns = [
 |API تایید بازنشانی رمز عبور|                                                                                      
                                                                                           
  
-### User Registration
-                                                                                         
-                                                                                          
-Next up is our user registration, or sign up, endpoint. Traditional Django does not ship with builtin views or 
-URLs for user registration and neither does Django REST Framework. Which means
-we need to write our own code from scratch; a somewhat risky approach given the seriousness–
-and security implications–of getting this wrong                                                                                          
-                                                                                          
-                                                                                          
-A popular approach is to use the third-party package [django-allauth](https://github.com/pennersr/django-allauth) which comes with user
-registration as well as a number of additional features to the Django auth system such as social authentication via Facebook, Google, Twitter, etc.
-If we add dj_rest_auth.registration from the dj-rest-auth package then we have user registration endpoints too!
+## ثبت نام کاربر
 
-                                                                                        
-Stop the local server with `Control+c` and install django-allauth.                                                                                         
-                                                                                          
- 
-<div dir="ltr">
-  
-Command Line
+مرحله بعدی طراحی و پیاده سازی نقطه پایانی  ثبت نام کاربر است. جنگو سنتی یا حتی فریمورک رست جنگو، ویوها یا URLهایی را به صورت پیش ساخته برای ثبت نام کاربر طراحی نکرده است؛ به این معنا که نیاز داریم برای ثبت نام از صفر خودمان کد بنویسیم. این روش قدری با توجه به جدی بودن اشتباه و پیامدهای امنیتی آن قدری خطرناک است.
+
+یک روش محبوب استفاده از پکیج واسط [django-allauth](https://github.com/pennersr/django-allauth) است که ویژگی ثبت نام کاربر را به همراه ویژگی‌های اضافه‌تری برای سیستم احراز هویت جنگو مانند احراز هویت از طریق فیس بوک، گوگل، توییتر و ... را دارد. اگر ما `dj-rest-auth.registration` را از پکیج `dj-rest-auth` اضافه کنیم در نتیجه نقاط پایانی  ثبت نام کاربر را نیز خواهیم داشت. 
+
+سرور محلی را با `Control + c` متوقف کرده و پکیج `django-allauth` را نصب کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ pipenv install django-allauth~=0.42.0
 ```
-  
-</div>
-                                                                                          
-                                                                                          
-Then update our `INSTALLED_APPS` setting. We must add several new configs:                                                                                        
-                                                                                          
-                                                                                          
+
+سپس بخش INSTALLED_APPS را بروز رسانی می‌کنیم. ما باید بعد از آن پیکربندی‌های جدیدی را اضافه کنیم:
+
 - django.contrib.sites
 - allauth
 - allauth.account
 - allauth.socialaccount
-- dj_rest_auth.registration                                                                                          
-                                                                                          
-   
-Make sure to also include EMAIL_BACKEND and SITE_ID. Technically it does not matter where in
-the `config/settings.py` file they are placed, but it’s common to add additional configs like that
-at the bottom.
+- dj_rest_auth.registration
 
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+اطمینان حاصل کنید که ` EMAIL_BACKEND` و ` SITE_ID` را اضافه کرده باشید. از نظر فنی مهم نیست این تنظیمات را کجای فایل `config/settings.py` قرار داده باشید اما معمولاً پیکربندی‌های اضافه را مانند قسمت زیر به انتهای  فایل اضافه می‌کنند. 
+
+کد
 ```python
 # config/settings.py
 INSTALLED_APPS = [
@@ -390,39 +368,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # new
   
 SITE_ID = 1 # new
 ```
-  
-</div>                                                                                          
-                                                                                          
-                                                                                        
-The email back-end config is needed since by default an email will be sent when a new user is
-registered, asking them to confirm their account. Rather than also set up an email server, we will
-output the emails to the console with the console.EmailBackend setting.
-                                                                                          
-                                                                                          
-`SITE_ID` is part of the built-in Django [“sites” framework](https://docs.djangoproject.com/en/3.1/ref/contrib/sites/), which is a way to host multiple
-websites from the same Django project. We obviously only have one site we are working on here
-but django-allauth uses the sites framework, so we must specify a default setting.
-                                                                                          
-                                                                                          
-Ok. We’ve added new apps so it’s time to update the database.                                                                                          
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Command Line
+
+پیکربندی email backend مورد نیاز است زیرا به صورت پیش فرض یک ایمیل  زمانی که یک کاربر جدید ثبت نام می‌کند ارسال خواهد شد، و از آن‌ها می‌خواهد که حساب کاربری خود را تایید کنند. *همچنین* بجای راه اندازی کردن یک سرور ایمیل، ایمیل‌ها را با تنظیم کردن `console.EmailBackend` درون کنسول نمایش خواهیم داد. 
+
+پیکربندی `SITE_ID` یک بخش از [فریمورک «sites»](https://docs.djangoproject.com/en/3.1/ref/contrib/sites/) جنگو است که یک راهی برای میزبانی چندین وب سایت از یک پروژه جنگو یکسان است. در اینجا ما فقط یک وب سایت داریم که روی آن کار می‌کنیم اما `django-allauth` از فریمورک سایت استفاده می‌کند، پس ما باید تنظیمات پیش فرض را مشخص کنیم. 
+
+حال که اپ‌های جدیدی را افزودیم، لازم است که پایگاه داده را بروزرسانی کنیم.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py migrate
 ```
-  
-</div>                                                                                          
-                                                                                          
-                                                                                          
-Then add a new URL route for registration.                                                                                       
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+
+سپس مسیر URL جدیدی را برای ثبت نام اضافه می‌کنیم.
+
+کد
 ```python
 # config/urls.py
 from django.contrib import admin
@@ -437,30 +397,19 @@ urlpatterns = [
     include('dj_rest_auth.registration.urls')),
 ]
 ```
-  
-</div>                                                                                         
-                                                                                          
-                                                                                          
-And we’re done. We can run the local server.                                                                                          
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Command Line
+
+و تمام است. می‌توانیم سرور محلی را اجرا کنیم.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py runserver
 ```
-  
-</div>                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
-There is now a user registration endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/registration/.
-                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
-![API Register](images/7.jpg)                                                                                         
+
+اکنون نقطه جدیدی برای ثبت نام کاربر در<http://127.0.0.1:8000/api/v1/dj-rest-auth/registration/> وجود دارد.
+
+|![API ثبت نام کاربر](images/7.jpg)|
+|:--:|
+|API ثبت نام کاربر|                                                                                       
                                                                                           
                                                                                           
 ### Tokens                                                                                        
