@@ -1,53 +1,28 @@
-<div dir="rlt">
-  
-# User Authentication
-  
-  
-In the previous chapter we updated our APIs permissions, which is also called **authorization**. In
-this chapter we will implement **authentication** which is the process by which a user can register
-for a new account, log in with it, and log out.
-Within a traditional, monolithic Django website authentication is simpler and involves a sessionbased cookie pattern which we will review below.
-But with an API things are a bit trickier.
-Remember that HTTP is a **stateless protocol** so there is no built-in way to remember if a user is
-authenticated from one request to the next. Each time a user requests a restricted resource it
-must verify itself.
-  
-The solution is to pass along a unique identifier with each HTTP request. Confusingly, there
-is no universally agreed-upon approach for the form of this identifier and it can take multiple
-forms. Django REST Framework ships with
-[four different built-in authentication options](https://www.django-rest-framework.org/api-guide/authentication/#api-reference): basic,
-session, token, and default. And there are many more third-party packages that offer additional
-features like JSON Web Tokens (JWTs).
-  
-In this chapter we will thoroughly explore how API authentication works, review the pros and
-cons of each approach, and then make an informed choice for our Blog API. By the end, we will
-have created API endpoints for sign up, log in, and log out.
+# فصل هفتم: احراز هویت کاربر
 
-### Basic Authentication
+در فصل قبلی ما دسترسی‌های APIهایمان را بروز رسانی کردیم، که به آن **مجوز(authorization)** می‌گویند. در این فصل، ما **احراز هویت(authentication)** را پیاده سازی  می‌کنیم که فرآیندی است که، کاربر با آن می‌تواند برای حساب کاربری جدید ثبت نام کرده، به آن وارد یا خارج شود.
 
-The most common form of HTTP authentication is known as [“Basic” Authentication](https://tools.ietf.org/html/rfc7617). When a
-client makes an HTTP request, it is forced to send an approved authentication credential before
-access is granted.
-  
-The complete request/response flow looks like this:
-  
+به طور سنتی، احراز هویت در وب سایت یکپارچه جنگویی، ساده است و متأثر از یک الگوی کوکی مبتنی بر جلسه(session based cookie pattern) است، که پایین تر آن را مورد بررسی قرار خواهیم داد. اما با وجود یک API، کارها کمی گول زننده‌تر می شود. به یاد داشته باشید که HTTP یک  **پروتکل بدون حفظ حالت(stateless protocol)**  است پس هیچ راه پیش ساخته‌ای برای به خاطر سپردن اینکه یک کاربر از یک درخواست به درخواست بعدی احراز هویت شده است یا خیر، وجود ندارد. هر بار که یک  کاربر درخواست یک منبع محدود شده را می‌کند، باید تایید کند که خودش است. 
 
-- 1 Client makes an HTTP request
-- 2 Server responds with an HTTP response containing a 401 (Unauthorized) status code and
-WWW-Authenticate HTTP header with details on how to authorize
-- 3 Client sends credentials back via the [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) HTTP header
-- 4 Server checks credentials and responds with either 200 OK or 403 Forbidden status code
+راه حل آن، ارسال یک نشان یکتا به همراه هر درخواست می‌باشد.  به صورت گیج کننده‌ای ،یک دیدگاه توافق شده جهانی برای این نشان یکتا تعریف نشده و می‌تواند چندین فرم داشته باشد. فریمورک رست جنگو با [چهار نوع آپشن مختلف احراز هویت پیش ساخته](https://www.django-rest-framework.org/api-guide/authentication/#api-reference) عرضه می‌شود:  پایه(basic)، جلسه(session)، توکن(token) و پیش فرض(default). پکیج‌های واسط زیادی وجود دارند که  ویژگی‌های بیشتری مانند  جیسون وب توکن‌ها را(Json Web Token یا به اختصار JWT)  ارائه می دهند.  
 
-  
-Once approved, the client sends all future requests with the Authorization HTTP header
-credentials. We can also visualize this exchange as follows:
-  
-  
-  
-  
-<div dir="ltr">
-  
-Diagram
+در این فصل به طور کامل بررسی می‌کنیم که احراز هویت API چگونه کار میکند، همچنین مزایا و معایب هر رویکرد را نیز مرور می‌کنیم و سپس یک انتخاب آگاهانه برای API *وبلاگ* خود انجام می دهیم. و در نهایت نقاط نهایی(endpoint) API برای ثبت نام، ورود به حساب کاربری و  خروج از آن پیاده سازی می‌کنیم.
+
+
+## احراز هویت پایه
+
+رایج ترین فرم احراز هویت HTTP به عنوان  [احراز هویت «پایه»](https://tools.ietf.org/html/rfc7617) شناخته می‌شود. زمانی که کلاینت درخواست HTTP ارسال می‌کند، مجبور به ارسال یک اعتبارنامه(credential) احراز هویت تایید شده قبل از اعطای دسترسی است.
+
+پروسه کامل درخواست/ پاسخ به صورت زیر است :
+
+1. کاربر یک درخواست http ارسال می‌کند.
+2. سرور یک پاسخ که حاوی کد وضعیت `401 غیرمجاز (unauthorized)` و یک هدر  `WWW-Authenticate` HTTP با جزئیات *چگونگی* دسترسی است را برمی‌گرداند.
+3. کاربر اعتبارنامه خود را از طریق هدر [Authorization(مجوز)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) HTTP ارسال می کند.
+4. سرور اعتبارنامه را چک کرده و پاسخ را به همراه یکی از کد وضعیت‌های `200 درست(200 OK)` یا `403 ممنوع(403 forbidden)` را به سمت کاربر ارسال می کند.
+
+یک بار که کاربر تایید شد، می‌تواند تمام درخواست‌های بعدی خود را با اعتبارنامه هدر `Authorization` HTTP  ارسال کند.  ما میتوانیم این فرایند را به صورت زیر نمایش دهیم:
+
+نمودار
 ```code
 Client                                                                                                                  Server
 ------                                                                                                                  ------
@@ -68,113 +43,53 @@ Authorization: Basic d3N2OnBhc3N3b3JkMTIz
                                                                                          <-------------------------------------
                                                                                                                 HTTP/1.1 200 OK
 ```
-  
-</div>  
-  
-Note that the authorization credentials sent are the unencrypted [base64 encoded](https://en.wikipedia.org/wiki/Base64) version of
-<username>:<password>. So in my case, this is wsv:password123 which with base64 encoding is
-d3N2OnBhc3N3b3JkMTIz.  
-                                                                                          
-  
-  
-The primary advantage of this approach is its simplicity. But there are several major downsides.
-First, on every single request the server must look up and verify the username and password,
-which is inefficient. It would be better to do the look up once and then pass a token of some
-kind that says, this user is approved. Second, user credentials are being passed in clear text—not
-encrypted at all—over the internet. This is incredibly insecure. Any internet traffic that is not
-encrypted can easily be captured and reused. Thus basic authentication should **only** be used via
-[HTTPS](https://en.wikipedia.org/wiki/HTTPS), the secure version of HTTP.
 
-  
-### Session Authentication
-  
+توجه داشته باشید که مجوزهای اعتبارنامه ارسال شده بر اساس  [base64 encode](https://en.wikipedia.org/wiki/Base64) رمز گذاری نشده، نسخه‌ای از `<username>:<password>` هستند. به عنوان مثال `wsv:password123` با base64 encoding  به صورت `d3N2OnBhc3N3b3JkMTIz` است.
 
-Monolithic websites, like traditional Django, have long used an alternative authentication scheme
-that is a combination of sessions and cookies. At a high level, the client authenticates with its
-credentials (username/password) and then receives a session ID from the server which is stored
-as a cookie. This session ID is then passed in the header of every future HTTP request.
-When the session ID is passed, the server uses it to look up a session object containing all
-available information for a given user, including credentials.
-  
-This approach is **stateful** because a record must be kept and maintained on both the server (the
-session object) and the client (the session ID).
-  
-Let’s review the basic flow:
-  
-  
-- 1 A user enters their log in credentials (typically username/password)
-- 2 The server verifies the credentials are correct and generates a session object that is then
-stored in the database
-- 3 The server sends the client a session ID—not the session object itself—which is stored as a
-cookie on the browser
-- 4 On all future requests the session ID is included as an HTTP header and, if verified by the
-database, the request proceeds
-- 5 Once a user logs out of an application, the session ID is destroyed by both the client and
-server
-- 6 If the user later logs in again, a new session ID is generated and stored as a cookie on the
-client
-
-  
-  
-The default setting in Django REST Framework is actually a combination of Basic Authentication
-and Session Authentication. Django’s traditional session-based authentication system is used
-and the session ID is passed in the HTTP header on each request via Basic Authentication.
-  
-  
-The advantage of this approach is that it is more secure since user credentials are only sent once,
-not on every request/response cycle as in Basic Authentication. It is also more efficient since
-the server does not have to verify the user’s credentials each time, it just matches the session ID
-to the session object which is a fast look up.
-  
-  
-There are several downsides however. First, a session ID is only valid within the browser where
-log in was performed; it will not work across multiple domains. This is an obvious problem when
-an API needs to support multiple front-ends such as a website and a mobile app. Second, the
-session object must be kept up-to-date which can be challenging in large sites with multiple
-servers. How do you maintain the accuracy of a session object across each server? And third, the
-cookie is sent out for every single request, even those that don’t require authentication, which
-is inefficient.
-  
-  
-As a result, it is generally not advised to use a session-based authentication scheme for any API
-that will have multiple front-ends.
+مزیت اصلی این روش سادگی آن است اما چندین نقطه ضعف عمده نیز دارد. مورد اول، برای *هر درخواست*، سرور باید نام کاربری و رمز عبور را جستجو کرده و تایید کند که این عمل ناکارآمد است. اما روش بهتر این است که احراز هویت یکبار صورت گیرد و برای درخواست های بعدی یک توکن ارسال شود که بگوید این کاربر تایید شده است. مورد دوم، ارسال اعتبارنامه‌های کاربر به صورت رمزگذاری نشده در سراسر اینترنت،  فوق العاده ناامن است. هر ترافیک شبکه‌ای که رمزگذاری نشده باشد خیلی راحت می‌تواند دریافت شده و مجدداً استفاده شود. بدین ترتیب احراز هویت پایه  **فقط** باید به وسیله پروتکل [HTTPS](https://en.wikipedia.org/wiki/HTTPS) مورد استفاده قرار بگیرد که نسخه امن شدۀ `HTTP` است.
 
  
-### Token Authentication
-  
-  
-The third major approach–and the one we will implement in our Blog API–is to use token
-authentication. This is the most popular approach in recent years due to the rise of single page
-applications.  
+## احراز هویت مبتنی بر جلسه
 
-  
-Token-based authentication is **stateless**: once a client sends the initial user credentials to the
-server, a unique token is generated and then stored by the 
-client as either a cookie or in [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage). 
-This token is then passed in the header of each incoming HTTP request and the server
-uses it to verify that a user is authenticated. The server itself does not keep a record of the user,
-just whether a token is valid or not.
- 
+وبسایت‌های یکپارچه مانند وبسایت‌های سنتی جنگو، مدت‌هاست که از احراز هویت مبتنی بر جلسه و کوکی به صورت ترکیبی استفاده  می‌کنند. در سطح‌های بالاتر،کلاینت با اعتبارنامه خود(نام کاربری و پسورد) احراز هویت می‌کند و بعد از طرف سرور یک *شناسه جلسه(session ID)* دریافت می‌کند که به عنوان یک کوکی ذخیره می‌گردد. سپس این شناسه جلسه در هر یک از هدرهای درخواست‌های HTTP آینده ارسال می‌شود.
+
+زمانی که  شناسه جلسه فرستاده شد، سرور از این شئ جلسه برای جستجوی تمام اطلاعات در دسترس کاربر داده شده از جمله اعتبارنامه استفاده می‌کند.
+
+این، یک روش **با حفظ حالت(stateful)** می‌باشد،  به این دلیل که این سابقه باید در هر دو طرف یعنی شئ جلسه در سمت سرور و شناسه جلسه در سمت کلاینت حفظ و نگه‌داری گردد.
+
+بیایید این روند را مرور کنیم:
+
+1. کاربر با اعتبارنامه خود(نام کاربری و رمز عبور) وارد می‌شود
+2. سرور اعتبارنامه را بررسی می‌کند که درست باشد و در این صورت یک شئ جلسه ایجاد کرده و آن را در دیتابیس ذخیره میکند
+3. سرور یک شناسه جلسه به سمت کلاینت ارسال می‌کند(خود شئ جلسه ارسال نمی‌شود بلکه ID آن ارسال می‌شود) که به عنوان کوکی در مرورگر ذخیره می‌شود
+4. در تمام درخواست‌های بعدی شناسه جلسه به عنوان هدر HTTP گنجانده شده و در صورتی که این شناسه توسط دیتابیس تایید شود، درخواست پردازش می‌شود
+5. یک بار که کاربر از حساب کاربری خود خارج شود آنگاه شناسه جلسه هم از سمت کلاینت و هم از سمت سرور حذف می شود
+6. .اگر کاربر مجدداً در حساب کاربری خود وارد شود آنگاه شناسه جلسه جدید توسط سرور ایجاد شده و به عنوان کوکی در سمت کلاینت ذخیره می‌شود
+
+تنظیمات پیش فرض فریمورک رست جنگو در واقع ترکیبی از احراز هویت پایه و مبتنی بر جلسه است. سیستم احراز هویت سنتی مبتنی بر جلسه جنگو استفاده می‌شود و شناسه جلسه در هدر HTTP هر درخواست از طریق احراز هویت پایه ارسال می‌گردد. 
+
+مزیت این روش این است که ایمن‌تر است، زیرا اعتبارنامه کاربر فقط یک بار ارسال می شود، نه مانند احراز هویت پایه در هر چرخه درخواست/پاسخ، اعتبارنامه کاربر ارسال می‌شود. از طرفی این روش کارآمدتر است زیرا سرور مجبور نیست هر بار اعتبارنامه کاربر را تأیید کند، فقط شناسه جلسه را با شئ جلسه مطابقت می‌دهد که یک جستجوی سریع است. 
+
+با این وجود چند جنبه منفی نیز وجود دارد. اولاً آیدی جلسه فقط در مرورگری که کاربر در آن لاگین شده است معتبر است و در چندین دامنه کار نخواهد کرد. اما این یک مشکل واضح است زمانی که یک API نیاز به ساپورت چندین فرانت اند مانند یک وب سایت و یک اپلیکیشن موبایل دارد. دوماً، شی جلسه باید به روز نگه داشته شود که می‌تواند چالشی در سایت‌های بزرگ که چندین سرور دارند، باشد. چگونه درستی یک شئ جلسه را در هر سرور حفظ می‌کنید؟ و سوماً ارسال کوکی در هر درخواست، حتی درخواست‌هایی که نیاز به احراز هویت ندارند ، ناکارآمد است.
+
+در نتیجه، عموماً استفاده از احراز هویت مبتنی بر جلسه برای APIهایی که چندین فرانت اند دارند توصیه نمی‌شود.
 
 
-**Cookies vs localStorage**
-  
-Cookies are used for reading **server-side** information. They are smaller (4KB) in size and automatically sent with each HTTP request.
-LocalStorage is designed for **client-side** information.
-It is much larger (5120KB) and its contents are not sent by default with each HTTP request.
-Tokens stored in both cookies and localStorage are vulnerable to XSS attacks. The current
-best practice is to store tokens in a cookie with the httpOnly and Secure cookie flags.
+## احراز هویت مبتنی بر توکن
 
-  
-Let’s look at a simple version of actual HTTP messages in this challenge/response flow. Note that
-the HTTP header WWW-Authenticate specifies the use of a Token which is used in the response
-Authorization header request.
+سومین دیدگاه عمده و روشی که احراز هویتی که ما برای API *وبلاگمان* پیاده‌سازی خواهیم کرد، استفاده از احراز هویت مبتنی بر توکن است. این روش یکی از محبوب ترین دیدگاه‌ها در سال‌های اخیر است که ناشی از رشد اپلیکیشن‌های تک صفحه‌ای است.
 
-  
-  
-<div dir="ltr">
-  
-Diagram
+احراز هویت مبتنی بر توکن **فاقد حفظ حالت(stateless)** هستند. یک بار که اعتبارنامه اولیه کاربر را به سرور ارسال میکند، یک توکن یکتا تولید شده و سپس در سمت کلاینت به عنوان کوکی یا در  [حافظه محلی](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) ذخیره می‌شود. این توکن در هدر هر درخواست HTTP ارسال شده و سرور با آن احراز هویت کاربر را تایید می‌کند. خود سرور چه توکن معتبر باشد چه نباشد، سابقه‌ای از کاربر نگهداری نمی‌کند.
+
+<br>
+<div style="background-color:#f0f0f0; padding:5%">
+<p style="font-weight:bold;">کوکی‌ها در مقابل حافظه محلی</p> کوکی‌ها برای خواندن اطلاعات از <span style="font-weight:bold;">سمت سرور</span> استفاده می‌شوند و از نظر اندازه کوچک هستند (4KB) و به صورت خودکار به همراه هر درخواست HTTP  ارسال می‌شوند. حافظه محلی برای اطلاعات <span style="font-weight:bold;">سمت کلاینت</span> طراحی شده‌اند و بسیار بزرگتر هستند(5120KB) و محتوای آن‌ها به صورت پیش فرض در هر درخواست HTTP ارسال نمی‌شود. توکن‌های ذخیره شده در کوکی ها و یا حافظه‌های محلی در برابر حمله‌های XSS آسیب پذیر هستند. بهترین روش فعلی، ذخیره آن‌ها در یک کوکی به همراه فلگ‌های <code>httpOnly</code> و <code>Secure</code>  می‌باشد. 
+</div>
+<br>
+
+بیایید به یک نسخه ساده از پیام‌های HTTP واقعی در این جریان چالش/پاسخ نگاه کنیم. توجه داشته باشید که هدر `WWW-Authenticate` استفاده از `Token` را مشخص کرده است، که این توکن نیز در هدر `Authorization` درخواست پاسخ در نظر گرفته شده است. 
+
+نمودار
 ```code
 Client                                                                                                                  Server
 ------                                                                                                                  ------
@@ -195,59 +110,28 @@ Authorization: Token 401f7ac837da42b97f613d789819ff93537bee6a
                                                                                          <-------------------------------------
                                                                                                                 HTTP/1.1 200 OK
 ```
-  
-</div>  
-  
- 
-                                                                                         
-There are multiple benefits to this approach. Since tokens are stored on the client, scaling the
-servers to maintain up-to-date session objects is no longer an issue. And tokens can be shared
-amongst multiple front-ends: the same token can represent a user on the website and the same
-user on a mobile app. The same session ID can not be shared amongst different front-ends, a
-major limitation.
-                                                                                          
-A potential downside is that tokens can grow quite large. A token contains all user information,
-not just an id as with a session id/session object set up. Since the token is sent on every request,
-managing its size can become a performance issue.                                                                                         
-                                                                                         
-   
-Exactly how the token is implemented can also vary substantially. Django REST Frameworks’
-built-in [TokenAuthentication](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication) 
-is deliberately quite basic. As a result, it does not support setting
-tokens to expire, which is a security improvement that can be added. It also only generates one
-token per user, so a user on a website and then later a mobile app will use the same token.
-Since information about the user is stored locally, this can cause problems with maintaining and
-updating two sets of client information.
-                                                                                          
-                                                                                          
-JSON Web Tokens (JWTs) are a new, enhanced version of tokens that can be added to Django
-REST Framework via several third-party packages. JWTs have several benefits including the
-ability to generate unique client tokens and token expiration. They can either be generated on
-the server or with a third-party service like [Auth0](https://auth0.com/). And JWTs can be encrypted which makes
-them safer to send over unsecured HTTP connections.
-                                                                                          
- 
-Ultimately the safest bet for most web APIs is to use a token-based authentication scheme. JWTs
-are a nice, modern addition though they require additional configuration. As a result, in this book
-we will use the built-in `TokenAuthentication`.
-  
- 
-### Default Authentication
 
-  
+در این دیدگاه چندین مزیت وجود دارد از آنجایی که توکن‌ها در کلاینت ذخیره می‌شوند، دیگر مقیاس سرورها به منظور به‌ روز‌ نگه داشتن شئ جلسه، یک مشکل نخواهد بود. و توکن‌ها می‌توانند بین چندین فرانت اند به اشتراک گذاشته شوند. همان توکن می‌تواند نمایانگر یک کاربر روی وب سایت و همان کاربر روی اپلیکیشن موبایل باشد. اما همان شناسه جلسه نمی‌تواند بین فرانت اند‌های مختلف به اشتراک گذاشته شود که این محدودیت عمده این روش است.
+
+یک نقطه ضعف  بالقوه در این روش این است که یک توکن ممکن است خیلی بزرگ شود. یک توکن شامل تمام اطلاعات یک کاربر است نه فقط شناسه به عنوان شناسه جلسه یا شی جلسه تنظیم شده. از آنجایی که توکن‌ها در هر درخواست ارسال می شوند مدیریت اندازه آنها می‌تواند به یک مسئله کارایی تبدیل شود.
+
+نحوه پیاده سازی دقیق توکن به طور قابل توجهی می‌تواند متفاوت باشد. [احراز هویت مبتنی بر توکن](http://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication) پیش ساخته فریمورک رست جنگو عمداً اساسی طراحی شده است. به این معنا که تنظیماتی برای منقضی کردن توکن پشتیبانی نمی‌شود که یک بهبود امنیتی است، که می‌تواند اضافه شود. همچنین فقط یک توکن برای هر کاربر تولید می‌کند بنابراین یک کاربر در وبسایت و در اپلیکیشن موبایل از همان یک توکن استفاده می‌کند . از آن جایی که اطلاعات مربوط به کاربر به صورت محلی ذخیره می‌شود، این خود می‌تواند سبب مشکلی برای نگهداری و به روز رسانی دو مجموعه از اطلاعات کلاینت شود.
+
+جیسون وب توکن‌ها(JWT) جدید هستند در واقع نسخه بهبود یافته توکن‌ها هستند که می‌توانند به فریمورک رست جنگو از طریق پکیج‌های واسط اضافه شوند. JWT ها چندین مزیت دارد از جمله اینکه می‌توانند  توکن‌های یکتا برای کلاینت تولید کنند که دارای تایم انقضا باشد. آنها همچنین می‌توانند روی سرور و یا با سرویس‌های واسط مانند [Auth0](https://auth0.com/) تولید شوند و JWT ها می توانند رمز گذاری شوند تا به صورت ایمن بر بستر ارتباطات ناامن HTTP ارسال شوند.
+
+در نهایت مطمئن‌ترین شرط برای اکثر APIهای وب استفاده از طرح احراز هویت مبتنی بر توکن است. JWTها یک قابلیت اضافه هستند اگرچه نیاز به پیکربندی اضافه‌تری دارند. در نتیجه، در این کتاب از `TokenAuthentication` پیش ساخته استفاده خواهیم کرد.
+
  
-The first step is to configure our new authentication settings. Django REST Framework comes
-with a [number of settings](https://www.django-rest-framework.org/api-guide/settings/) that are implicitly set. For example, `DEFAULT_PERMISSION_CLASSES`
-was set to AllowAny before we updated it to `IsAuthenticated`.
-                                                                                          
-The `DEFAULT_AUTHENTICATION_CLASSES` are set by default so let’s explicitly add both SessionAuthentication
-and BasicAuthentication to our `config/settings.py` file.
-                                                                                          
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+## احراز هویت پیش فرض
+
+اولین قدم این است که تنظیمات احراز هویت جدیدمان را پیکربندی کنیم. فریمورک رست جنگو با [تعدادی تنظیمات](http://www.django-rest-framework.org/api-guide/settings/) ارائه می شود که به طور ضمنی تنظیم شده اند .برای مثال قبل از تغییر `DEFAULT_PERMISSION_CLASSES` به  `IsAuthenticate`  که به صورت پیش فرض بر روی `AllowAny` تنظیم شده است.
+
+<div style="dir:rtl;">
+<code>DEFAULT_AUTHENTICATION_CLASSES</code> به طور پیش‌فرض تنظیم شده‌ است، بنابراین بیایید صراحتاً <code>SessionAuthentication</code> و <code>BasicAuthentication</code> را به فایل <code>config/settings.py</code> خود اضافه کنیم.
+</div>
+<br>
+
+کد
 ```python
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -259,28 +143,17 @@ REST_FRAMEWORK = {
     ],
 }
 ```
-  
-</div>                                                                                         
-                                                                                          
-                                                                                          
-Why use **both** methods? The answer is they serve different purposes. Sessions are used to power
-the Browsable API and the ability to log in and log out of it. BasicAuthentication is used to pass
-the session ID in the HTTP headers for the API itself.
-                                                                                          
-If you revisit the browsable API at http://127.0.0.1:8000/api/v1/ it will work just as before.
-Technically, nothing has changed, we’ve just made the default settings explicit.                                                                                        
-                                                                                          
-                                                                                          
-### Implementing token authentication                                                                                    
-                                                                                          
 
-Now we need to update our authentication system to use tokens. The first step is to update our
-`DEFAULT_AUTHENTICATION_CLASSES` setting to use TokenAuthentication as follows:
+چرا از هر **دو** روش استفاده کنیم؟ پاسخ این است که آن‌ها اهداف مختلفی را دنبال می‌کنند. Sessions برای تقویت API قابل مرور استفاده می‌شوند و توانایی وارد شدن و خارج شدن از آن. BasicAuthentication برای ارسال شناسه جلسه در هدرهای HTTP برای خود API استفاده می‌شود.
+
+اگر دوباره به API قابل مرور در <http://127.0.0.1:8000/api/v1/> مراجعه کنید، مانند قبل کار خواهد کرد. از نظر فنی، هیچ چیز تغییر نکرده است، ما فقط تنظیمات پیش فرض را به صراحت بیان کرده‌ایم.  
                                                                                           
-  
-<div dir="ltr">
-  
-Code
+                                                                                          
+## پیاده سازی احراز هویت مبتنی بر توکن
+
+اکنون نیاز داریم تا سیستم احراز هویت خود را بروز رسانی کنیم تا بتوانیم از توکن‌ها استفاده کنیم. قدم اول به روز رسانی  `DEFAULT_AUTHENTICATION_CLASS` به مقدار `TokenAuthentication` مانند زیر می‌باشد:
+
+کد
 ```python
 # config/settings.py
 REST_FRAMEWORK = {
@@ -294,19 +167,10 @@ REST_FRAMEWORK = {
 }
 
 ```
-  
-</div> 
-                                                                                          
-  
-We keep `SessionAuthentication` since we still need it for our Browsable API, but now use tokens
-to pass authentication credentials back and forth in our HTTP headers. We also need to add the
-authtoken app which generates the tokens on the server. It comes included with Django REST
-Framework but must be added to our INSTALLED_APPS setting:
 
-                                                                                          
-<div dir="ltr">
-  
-Code
+ما `SessionAuthentication` را حذف نکرده زیرا برای APIهای قابل مرور به آن‌ها نیاز داریم، اما اکنون از توکن‌ها برای ارسال و دریافت اعتبارنامه احراز هویت در هدرهای HTTPمان استفاده می‌کنیم. همچنان ما نیاز داریم که اپ `authtoken` را برای تولید توکن‌ها روی سرور اضافه کنیم. آن اپ به همراه فریمورک رست جنگو است اما باید در بخش `INSTALLED_APPS` افزوده شود:
+
+کد
 ```python
 # config/settings.py
 INSTALLED_APPS = [
@@ -325,16 +189,10 @@ INSTALLED_APPS = [
     'posts',
 ]
 ```
-  
-</div>                                                                                          
-                                                                                          
-Since we have made changes to our `INSTALLED_APPS` we need to sync our database. Stop the
-server with `Control+c`. Then run the following command.                                                                                         
-                                                                                          
 
-<div dir="ltr">
-  
-Command Line
+از آنجایی که در INSTALLED_APPS تغییراتی ایجاد کرده‌ایم نیاز داریم پایگاه داده خود را همگام سازی کنیم. سرور را با کلید ترکیبی `Control + c` متوقف کرده و سپس کامند زیر را اجرا کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py migrate
 Operations to perform:
@@ -343,76 +201,48 @@ Running migrations:
   Applying authtoken.0001_initial... OK
   Applying authtoken.0002_auto_20160226_1747... OK
 ```
-  
-</div> 
-     
-                                                                                          
-Now start up the server again .                                                                                     
-                                                                                          
-   
-<div dir="ltr">
-  
-Command Line
+
+سپس سرور را مجدداً راه اندازی کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py runserver
 ```
-  
-</div> 
-                                                                                          
-                                                                                          
-If you navigate to the Django admin at http://127.0.0.1:8000/admin/ you’ll see there is now
-a Tokens section at the top. Make sure you’re logged in with your superuser account to have
-access.                                                                                          
-   
-![Admin Homepage with Tokens](images/1.jpg)
-  
-Click on the link for Tokens. Currently there are no tokens which might be surprising.
 
-                                                                                          
-![Admin Tokens Page](images/2.jpg)                                                                                          
-                                    
-                                                                                          
-After all we have existing users. However, the tokens are only generated after there is an API call
-for a user to log in. We have not done that yet so there are no tokens. We will shortly.
+اگر به آدرس پنل مدیریت جنگو در <http://127.0.0.1:8000/admin/> رجوع کنید شما بخش `Tokens` را در بالا مشاهده خواهید کرد. پیش از آن اطمینان حاصل کنید که با کاربر superuser وارد شده‌اید که دسترسی داشته باشید.  
+
+|![صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها](images/1.jpg)|
+|:--:|
+|صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها|
+
+بر روی لینک `Tokens` کلیک کنید. در حال حاضر هیچ توکنی وجود ندارد که ممکن است برای شما سوپرایز کننده باشد.
+
+|![صفحه مدیریت توکن‌ها](images/2.jpg)|
+|:--:|
+|صفحه مدیریت توکن‌ها|
+
+در صورتی که ما همه کاربران موجود را داریم. توکن‌ها *بعد از* اینکه کاربری برای وارد شدن به حسابش، API را صدا بزند ساخته می‌شوند، که این بخش را ما اکنون انجام ندادیم در نتیجه توکنی برای مشاهده وجود ندارد. اما به زودی این کار را انجام خواهیم داد.
                                                                                           
   
-### Endpoints                                                                                        
+## نقاط پایانی(Endpoints)
+
+ما همچنین نیاز داریم نقاط پایانی‌ای ایجاد کنیم که کاربران بتوانند از طریق آن وارد یا خارج شوند. ما *می‌توانیم* یک اپ اختصاصی `users` برای این منظور ایجاد کنیم و سپس urlها، ویوها و سریالایزرهای خود را به آن اضافه کنیم. با این وجود احراز هویت کاربر بخشی است که واقعا نمی‌خواهیم اشتباهی در آن رخ دهد. و از آن جایی ک همه API ها به این قابلیت نیاز دارند، منطقی است که چندین پکیج واسط عالی و تست شده وجود دارند که می‌توانیم از آنها استفاده کنیم. 
+
+به ویژه ما از [dj-rest-auth](https://github.com/jazzband/dj-rest-auth) در ترکیب با [django-allauth](https://github.com/pennersr/django-allauth) برای ساده‌تر شدن کارها استفاده خواهیم کرد. هیچ گونه احساس بدی در مورد استفاده از پکیج‌های واسط نداشته باشید. آن‌ها به دلیلی وجود دارند و حتی حرفه‌ای‌های جنگو هم همیشه به آن‌ها تکیه می‌کنند. اگر مجبور نباشید، هیچ فایده‌ای برای اختراع مجدد چرخ وجود ندارد.
                                                                                           
                                                                                           
-We also need to create endpoints so users can log in and log out. We could create a dedicated
-users app for this purpose and then add our own urls, views, and serializers. However user
-authentication is an area where we really do not want to make a mistake. And since almost all APIs
-require this functionality, it makes sense that there are several excellent and tested third-party
-packages we can use it instead.
-                                                                                          
-Notably we will use [dj-rest-auth](https://github.com/jazzband/dj-rest-auth) in combination with [django-allauth](https://github.com/pennersr/django-allauth)
-to simplify things. Don’t feel bad about using third-party packages. They exist for a reason and even the best Django
-professionals rely on them all the time. There is no point in reinventing the wheel if you don’t
-have to!
-                                                                                          
-                                                                                          
-### dj-rest-auth                                                                                        
-                                                                                          
-First we will add log in, log out, and password reset API endpoints. These come out-of-the-box
-with the popular `dj-rest-auth package`. Stop the server with `Control+c` and then install it.                                                                                       
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Command Line
+## پکیج dj-rest-auth 
+
+اول ما نقاط‌های پایانی APIهای وارد شدن، خارج شدن و بازنشانی رمز عبور را اضافه خواهیم کرد. این بلافاصله با پکیج محبوب `dj-rest-auth` می‌آید. سرور را با `Control + c` متوقف کنید و سپس آن را نصب کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ pipenv install dj-rest-auth==1.1.0
 ```
-  
-</div>                                                                                         
-                                                                                          
-    
-Add the new app to the INSTALLED_APPS config in our `config/settings.py` file.                                                                                          
 
-                                                                                          
-<div dir="ltr">
-  
-Code
+اپ جدید را به پیکربندی `INSTALLED_APPS` در فایل `config/settings.py` اضافه کنید.
+
+کد
 ```python
 # config/settings.py
 INSTALLED_APPS = [
@@ -433,19 +263,10 @@ INSTALLED_APPS = [
 ]
 
 ```
-  
-</div>                       
 
-                                                                                          
-                                                                                          
-Update our `config/urls.py` file with the `dj_rest_auth` package. We’re setting the URL routes
-to api/v1/dj-rest-auth. Make sure to note that URLs should have a dash - not an underscore
-_, which is an easy mistake to make.
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+فایل `config/urls.py` را با پکیج `dj-rest-auth` بروز رسانی کنید. ما url را با `api/v1/dj-rest-auth` مسیر دهی می‌کنیم. اطمینان حاصل کنید که URL با خط تیره - از هم جدا شوند و نه خط فاصله _ . این یک خطای آسان است.
+
+کد
 ```python
 # config/urls.py
 from django.contrib import admin
@@ -458,101 +279,67 @@ urlpatterns = [
     path('api/v1/dj-rest-auth/', include('dj_rest_auth.urls')), # new
 ]
 ```
-  
-</div>                                                                                       
-                                                                                          
-                                                                                          
-And we’re done! If you have ever tried to implement your own user authentication endpoints, it
-is truly amazing how much time—and headache—dj-rest-auth saves for us. Now we can spin up
-the server to see what dj-rest-auth has provided.                                                                                      
-                                                                                          
 
-<div dir="ltr">
-  
-Command Line
+و تمام. اگر تا به حال تلاش کرده باشید که نقطه پایانی احراز هویت کاربر را خودتان پیاده سازی کنید متوجه خواهید شد که `dj-rest-auth` واقعا فوق العاده است که چگونه چقدر از اتلاف وقت و سردرد ما کم می‌کند. اکنون می‌توانیم سرور را مجدداً راه اندازی کنیم تا ببینیم `dj-rest-auth` چه چیزی را برای ما فراهم کرده است.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py runserver
 ```
-  
-</div>
-                                                                                          
 
-We have a working log in endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/login/.
-                                                                                          
-                                                                                          
-![API Log In Endpoint](images/3.jpg)                                                                                          
-             
-                                                                                          
-And a log out endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/logout/.                                                                                         
-              
-                                                                                          
-                                                                                          
-![API Log Out Endpoint](images/4.jpg)                                                                                      
-                                                                                          
-There are also endpoints for password reset, which is located at:
+ما یک نقطه پایانی برای وارد شدن در <http://127.0.0.1:8000/api/v1/dj-rest-auth/login/> داریم
 
-                                                                                          
-http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset                                                                               
-   
+|![نقطه پایانی API ورود کاربر](images/3.jpg)|
+|:--:|
+|نقطه پایانی API ورود کاربر|
 
-![API Password Reset](images/5.jpg)
-                                                                                          
-                                                                                          
-                                                                                          
-And for password reset confirmed:
-                                                                                          
-http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/confirm                                                                                         
-                                                                                          
-                                                                                          
-![API Password Reset Confirm](images/6.jpg)                                                                                      
+و نقطه پایانی برای خارج شدن در <http://127.0.0.1:8000/api/v1/dj-rest-auth/logout> داریم
+
+|![نقطه پایانی API خارج شدن کاربر](images/4.jpg)|
+|:--:|
+|نقطه پایانی API ورود کاربر|
+
+و همچنین نقاط پایانی بازنشانی رمز عبور نیز به صورت زیر در نظر گرفته شده است:
+
+<http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/>
+
+|![API بازنشانی رمز عبور](images/5.jpg)|
+|:--:|
+|API بازنشانی رمز عبور|
+
+و برای تایید بازنشانی رمز عبور: 
+
+<http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/confirm>
+
+|![API تایید بازنشانی رمز عبور](images/6.jpg)|
+|:--:|
+|API تایید بازنشانی رمز عبور|                                                                                      
                                                                                           
  
-### User Registration
-                                                                                         
-                                                                                          
-Next up is our user registration, or sign up, endpoint. Traditional Django does not ship with builtin views or 
-URLs for user registration and neither does Django REST Framework. Which means
-we need to write our own code from scratch; a somewhat risky approach given the seriousness–
-and security implications–of getting this wrong                                                                                          
-                                                                                          
-                                                                                          
-A popular approach is to use the third-party package [django-allauth](https://github.com/pennersr/django-allauth) which comes with user
-registration as well as a number of additional features to the Django auth system such as social authentication via Facebook, Google, Twitter, etc.
-If we add dj_rest_auth.registration from the dj-rest-auth package then we have user registration endpoints too!
+## ثبت نام کاربر
 
-                                                                                        
-Stop the local server with `Control+c` and install django-allauth.                                                                                         
-                                                                                          
- 
-<div dir="ltr">
-  
-Command Line
+مرحله بعدی طراحی و پیاده سازی نقطه پایانی  ثبت نام کاربر است. جنگو سنتی یا حتی فریمورک رست جنگو، ویوها یا URLهایی را به صورت پیش ساخته برای ثبت نام کاربر طراحی نکرده است؛ به این معنا که نیاز داریم برای ثبت نام خودمان از صفر کد بنویسیم. این روش قدری با توجه به جدی بودن اشتباه و پیامدهای امنیتی آن قدری خطرناک است.
+
+یک روش محبوب استفاده از پکیج واسط [django-allauth](https://github.com/pennersr/django-allauth) است که ویژگی ثبت نام کاربر را به همراه ویژگی‌های اضافه‌تری برای سیستم احراز هویت جنگو مانند احراز هویت از طریق فیس بوک، گوگل، توییتر و ... را دارد. اگر ما `dj-rest-auth.registration` را از پکیج `dj-rest-auth` اضافه کنیم در نتیجه نقاط پایانی  ثبت نام کاربر را نیز خواهیم داشت. 
+
+سرور محلی را با `Control + c` متوقف کرده و پکیج `django-allauth` را نصب کنید.
+
+کامند لاین
 ```shell
 (blogapi) $ pipenv install django-allauth~=0.42.0
 ```
-  
-</div>
-                                                                                          
-                                                                                          
-Then update our `INSTALLED_APPS` setting. We must add several new configs:                                                                                        
-                                                                                          
-                                                                                          
+
+سپس بخش INSTALLED_APPS را بروز رسانی می‌کنیم. ما باید بعد از آن پیکربندی‌های جدیدی را اضافه کنیم:
+
 - django.contrib.sites
 - allauth
 - allauth.account
 - allauth.socialaccount
-- dj_rest_auth.registration                                                                                          
-                                                                                          
-   
-Make sure to also include EMAIL_BACKEND and SITE_ID. Technically it does not matter where in
-the `config/settings.py` file they are placed, but it’s common to add additional configs like that
-at the bottom.
+- dj_rest_auth.registration
 
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+اطمینان حاصل کنید که ` EMAIL_BACKEND` و ` SITE_ID` را اضافه کرده باشید. از نظر فنی مهم نیست این تنظیمات را کجای فایل `config/settings.py` قرار داده باشید اما معمولاً پیکربندی‌های اضافه را مانند قسمت زیر به انتهای  فایل اضافه می‌کنند. 
+
+کد
 ```python
 # config/settings.py
 INSTALLED_APPS = [
@@ -581,39 +368,21 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # new
   
 SITE_ID = 1 # new
 ```
-  
-</div>                                                                                          
-                                                                                          
-                                                                                        
-The email back-end config is needed since by default an email will be sent when a new user is
-registered, asking them to confirm their account. Rather than also set up an email server, we will
-output the emails to the console with the console.EmailBackend setting.
-                                                                                          
-                                                                                          
-`SITE_ID` is part of the built-in Django [“sites” framework](https://docs.djangoproject.com/en/3.1/ref/contrib/sites/), which is a way to host multiple
-websites from the same Django project. We obviously only have one site we are working on here
-but django-allauth uses the sites framework, so we must specify a default setting.
-                                                                                          
-                                                                                          
-Ok. We’ve added new apps so it’s time to update the database.                                                                                          
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Command Line
+
+پیکربندی email backend مورد نیاز است زیرا به صورت پیش فرض یک ایمیل  زمانی که یک کاربر جدید ثبت نام می‌کند ارسال خواهد شد، و از آن‌ها می‌خواهد که حساب کاربری خود را تایید کنند. *همچنین* بجای راه اندازی کردن یک سرور ایمیل، ایمیل‌ها را با تنظیم کردن `console.EmailBackend` درون کنسول نمایش خواهیم داد. 
+
+پیکربندی `SITE_ID` یک بخش از [فریمورک «sites»](https://docs.djangoproject.com/en/3.1/ref/contrib/sites/) جنگو است که یک راهی برای میزبانی چندین وب سایت از یک پروژه جنگو یکسان است. در اینجا ما فقط یک وب سایت داریم که روی آن کار می‌کنیم اما `django-allauth` از فریمورک سایت استفاده می‌کند، پس ما باید تنظیمات پیش فرض را مشخص کنیم. 
+
+حال که اپ‌های جدیدی را افزودیم، لازم است که پایگاه داده را بروزرسانی کنیم.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py migrate
 ```
-  
-</div>                                                                                          
-                                                                                          
-                                                                                          
-Then add a new URL route for registration.                                                                                       
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Code
+
+سپس مسیر URL جدیدی را برای ثبت نام اضافه می‌کنیم.
+
+کد
 ```python
 # config/urls.py
 from django.contrib import admin
@@ -628,57 +397,38 @@ urlpatterns = [
     include('dj_rest_auth.registration.urls')),
 ]
 ```
-  
-</div>                                                                                         
-                                                                                          
-                                                                                          
-And we’re done. We can run the local server.                                                                                          
-                                                                                          
-                                                                                          
-<div dir="ltr">
-  
-Command Line
+
+و تمام است. می‌توانیم سرور محلی را اجرا کنیم.
+
+کامند لاین
 ```shell
 (blogapi) $ python manage.py runserver
 ```
-  
-</div>                                                                                          
+
+اکنون نقطه پایانی جدیدی برای ثبت نام کاربر در <http://127.0.0.1:8000/api/v1/dj-rest-auth/registration/> وجود دارد.
+
+|![API ثبت نام کاربر](images/7.jpg)|
+|:--:|
+|API ثبت نام کاربر|                                                                                       
                                                                                           
                                                                                           
-                                                                                          
-There is now a user registration endpoint at http://127.0.0.1:8000/api/v1/dj-rest-auth/registration/.
-                                                                                          
-                                                                                          
-                                                                                          
-                                                                                          
-![API Register](images/7.jpg)                                                                                         
-                                                                                          
-                                                                                          
-### Tokens                                                                                        
-      
-                                                                                          
-To make sure everything works, create a third user account via the browsable API endpoint. I’ve
-called my user testuser2. Then click on the “POST” button.                                                                                        
-                                                                                          
-                                                                                          
-![API Register New User](images/8.jpg)                                                                                        
-                                                                                          
-The next screen shows the HTTP response from the server. Our user registration POST was
-successful, hence the status code HTTP 201 Created at the top. The return value key is the
-auth token for this new user.                                                                                         
-                                                                                          
-                                                                                          
-![API Auth Key](images/9.jpg)                                                                                         
-                                                                                          
-                                                                                          
-If you look at the command line console, an email has been automatically generated by django-allauth.
-This default text can be updated and an email SMTP server added with additional configuration
-that is covered in the book [Django for Beginners](https://djangoforbeginners.com/).                                                                                         
-                                                                                          
-   
-<div dir="ltr">
-  
-Command Line
+## توکن‌ها
+
+برای اینکه اطمینان حاصل کنید همه چیز کار میکند، حساب کاربری سومی را از طریق نقطه پایانی API قابل مرور ایجاد کنید. من کاربرم را `testusers2` نامیدم. سپس روی دکمه «POST» کلیک کنید. 
+
+|![API ثبت نام کاربر جدید](images/8.jpg)|
+|:--:|
+|API ثبت نام کاربر جدید|
+
+تصویر بعدی پاسخ HTTP از طرف سرور را نمایش می‌دهد. درخواست `POST` ثبت نام کاربر ما موفقیت آمیز بود و از این رو کد وضعیت `201 ایجاد شده(201 Created at)`  در بالا نمایش داده شده است. و مقدار برگشتی `key(کلید)` همان توکن احراز هویت برای کاربر جدید است.
+
+|![کلید احراز هویت API](images/9.jpg)|
+|:--:|
+|کلید احراز هویت API|
+
+اگر به کنسول کامند لاین نگاه کنید یک ایمیل که به صورت خودکار توسط `django-allauth` تولید شده را می‌بینید. متن پیش فرض ایمیل بعداً می‌تواند بروزرسانی شود و یک سرور ایمیل SMTP با پیکربندی اضافه افزوده شود که در کتاب [جنگو برای تازه کارها](https://djangoforbeginners.com/) پوشش داده شده است. 
+
+کامند لاین
 ```shell
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
@@ -702,71 +452,34 @@ registration/account-confirm-email/MQ:1k0t5m:6l0l09er1p_cbxgkJWDuSw2j00M/
 Thank you from example.com!
 example.com
 ```
-  
-</div>                                                                                         
-                                                                                          
-                                                                                          
-Switch over to the Django admin in your web browser at http://127.0.0.1:8000/admin/. You
-will need to use your superuser account for this. Then click on the link for Tokens at the top of
-the page. You will be redirected to the Tokens page.
-                                                                                        
-                                                                                          
-                                                                                          
-![Admin Tokens](images/10.jpg)                                                                                        
-                                                                                          
-                                                                                          
-A single token has been generated by Django REST Framework for the testuser2 user. As
-additional users are created via the API, their tokens will appear here, too.
-  
-  
-A logical question is, Why are there are no tokens for our superuser account or testuser? The
-answer is that we created those accounts before token authentication was added. But no worries,
-once we log in with either account via the API a token will automatically be added and available.
-  
-  
-Moving on, let’s log in with our new testuser2 account. In your web browser, navigate to
-http://127.0.0.1:8000/api/v1/dj-rest-auth/login/. Enter the information for our testuser2
-account. Click on the “POST” button.                                                                                         
-                                                                                          
-                                                                                          
-                                                                                          
-![API Log In testuser2](images/11.jpg)                                                                                          
-         
-  
-Two things have happened. In the upper righthand corner, our user account testuser2 is visible,
-confirming that we are now logged in. Also the server has sent back an HTTP response with the
-token.                                                                                       
+
+به آدرس پنل مدیریت جنگو در آدرس <http://127.0.0.1:8000/admin/> بروید. به حساب سوپریوزر برای اینکار نیاز خواهید داشت. سپس بر روی لینک `Tokens` در بالای صفحه کليک کنيد. شما به صفحه توکن‌ها منتقل خواهید شد.
+
+|![توکن‌های مدیر](images/10.jpg)|
+|:--:|
+|توکن‌های مدیر|
+
+تنها یک توکن توسط فریمورک رست جنگو برای کاربر `testuser2` ایجاد شده است. هر تعداد کاربر جدید که از طریق API ثبت نام کنند توکن آنها در این بخش نشان داده می‌شود.
+
+یک سوال منطقی در اینجا این است که چرا هیچ توکنی برای حساب سوپریوزر یا `testuser` وجود ندارد؟ پاسخ این است که ما این حساب‌ها را قبل از اینکه احراز هویت توسط توکن را بیافزاییم ساخته‌ایم. اما جای نگرانی نیست، اگر یک بار با این حساب از طریق API وارد شویم، توکن به صورت خودکار اضافه شده و در دسترس خواهد بود.
+
+بگذریم.بیاید با حساب جدید `testuser2` وارد شویم. در مرورگر وبتان به آدرس <http://127.0.0.1:8000/api/v1/dj-rest-auth/login/> بروید. اطلاعات کاربری را برای حساب `testuser2` وارد کنید. بر روی دکمه «POST» کليک کنید.
+
+|![وارد شدن testuser2 با API](images/11.jpg)|
+|:--:|
+|وارد شدن testuser2 با API|
+
+دو چیز اتفاق افتاده است. در گوشه بالا سمت راست حساب کاربری ما `testuser2` نمایان است که تایید می‌کند ما وارد شده‌ایم. و همچنین سرور نیز پاسخی HTTP به همراه توکن برگردانده است.
+
+|![توکن ورود با API](images/12.jpg)|
+|:--:|
+|توکن ورود با API|
+
+ما نیاز داریم این توکن را در فریمورک فرانت اندمان دریافت و ذخیره کنیم. به طور سنتی این اتفاق سمت کلاینت، یا در [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) یا به عنوان یک کوکی، رخ می‌دهد و سپس همه درخواست‌های بعدی شامل این توکن در هدر درخواست به عنوان راهی برای احراز هویت کاربر  قرار داده میشود. توجه داشته باشید که نگرانی‌های امنیتی بیشتری در این مورد وجود دارد، بنابراین باید مراقب باشید که بهترین روش‌ها را در چارچوب انتخابی فرانت‌اند خود اجرا کنید.
 
   
-![API Log In Token](images/12.jpg)
-  
-  
-In our front-end framework, we would need to capture and store this token. Traditionally this
-happens on the client, either in [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) or as a cookie, and then all future requests include
-the token in the header as a way to authenticate the user. Note that there are additional security
-concerns on this topic so you should take care to implement the best practices of your front-end
-framework of choice.
+## نتیجه گیری
 
-  
-### Conclusion  
-  
-  
-User authentication is one of the hardest areas to grasp when first working with web APIs.
-Without the benefit of a monolithic structure, we as developers have to deeply understand and
-configure our HTTP request/response cycles appropriately. 
-  
-  
-  
-Django REST Framework comes with a lot of built-in support for this process, including
-built-in TokenAuthentication. However developers must configure additional areas like user
-registration and dedicated urls/views themselves. As a result, a popular, powerful, and secure
-approach is to rely on the third-party packages dj-rest-auth and django-allauth to minimize
-the amount of code we have to write from scratch.
-  
-  
-  
-  
-  
-  
-  
-</div>
+احراز هویت کاربران زمانی که برای اولین بار با APIهای وب کار می‌کنید، یکی از سخت‌ترین بخش‌ها برای درک کردن است. بدون بهرمندی از ساختار یکپارچه، ما به عنوان توسعه دهنده باید چرخه درخواست/پاسخ HTTPمان را عمیقاً درک و پیکربندی کنیم.
+
+فریمورک رست جنگو به همراه پشتیبانی‌های زیادی برای این هدف آمده است که شامل `احراز هویت مبتنی بر توکن` به صورت پیش ساخته نیز است. هر چند توسعه دهندگان باید بخش‌های اضافی مثل ثبت نام کاربر و ویوها/urlsهای مختص آن‌ها را پیکربندی کنند. در نتیجه روش محبوب، قدرتمند و امن این است که به پکیج‌های واسط `dj-rest-auth` و `django-allauth` برای کم کردن حجم کدهایی که می‌خواهیم از صفر بنویسیم، تکیه کنیم.
