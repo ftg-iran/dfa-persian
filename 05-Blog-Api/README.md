@@ -385,21 +385,15 @@ class PostSerializer(serializers.ModelSerializer):
 در بالای فایل، کلاس سریالایزرهای Django REST Framework و مدل های خودمان را وارد کرده ایم. سپس یک PostSerializer ایجاد کردیم و یک کلاس Meta اضافه کردیم که در آن مشخص کردیم کدام فیلدها را شامل شود و به صراحت مدل را برای استفاده تنظیم کردیم. راه‌های زیادی برای سفارشی‌سازی سریالایزرها وجود دارد، اما برای موارد استفاده رایج، مانند وبلاگ اولیه، این روش پیاده سازی شده کفایت می کند.
     
     
-### ویوها 
-    
-The final step is to create our views. Django REST Framework has several generic views that
-are helpful. We have already used 
-[ListAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listapiview) in both the Library and Todos APIs to create a
-**read-only** endpoint collection, essentially a list of all model instances. In the Todos API we also used 
-[RetrieveAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveapiview) for a **read-only** single endpoint, which is analogous to a detail view in traditional Django.    
+### ویوها
+  
+مرحله نهایی ساخت ویوهای برنامه است. Django Rest Framework چندین ویو عمومی مناسب و کمک کننده برای این کار در اختیار دارد. در حال حاضر ما از [ListAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listapiview) در کتابخانه و برنامه todolist برای ساخت اندپوینت های فقط قابل خواندن جهت گرفتن لیست مدل های ساخته شده در برنامه استفاده می کنیم. در برنامه Todos همچنین از [RetrieveAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveapiview) جهت ساخت اندپوینت تکی فقط خواندنی که مشابه نمای جزئیات در جنگو سنتی است نیز استفاده میکنیم.       
     
    
-For our Blog API we want to list all available blog posts as a read-write endpoint which means using 
-[ListCreateAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listcreateapiview), which is similar to the ListAPIView we’ve used previously but allows for writes. We also want to make the individual blog posts available to be read, updated, or
-deleted. And sure enough, there is a built-in generic Django REST Framework view just for this
-purpose: [RetrieveUpdateDestroyAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveupdatedestroyapiview). That’s what we’ll use here    
+برای API وبلاگ ما میخواهیم لیستی از همه پست های بلاگ را به صورت اندپوینت خواندنی-نوشتنی در اختیار داشته باشیم که به این منظور از [ListCreateAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listcreateapiview) استفاده می نماییم که بسیار شبیه بهListAPIView است که قبلا از آن استفاده میکردیم با این تفاوت که به کاربر امکان نوشتن نیز میدهد. ما همچنین نیاز داریم که برای هر پست به صورت جدا امکانات شامل خواندن، ادیت کردن و حذف پست را نیز داشته باشیم. که به این منظوری کتابخونه عمومی ای برای این هدف با نام  [RetrieveUpdateDestroyAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveupdatedestroyapiview) در Django REST Framework وجود دارد که ما در این برنامه از آن استفاده میکنیم. 
     
-Update the views.py file as follows. 
+  
+اکنون فایل views.py را به شکل زیر آپدیت میکنیم.
     
     
 <div dir="ltr">
@@ -424,20 +418,10 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 </div>   
     
+در بالاب فایل کتابخانه generic را از Django REST Framework همانند فایل مدل هاو سریالایزر خود وارد میکنیم. لیست پست ها از کتابخانه عمومی  `ListCreateAPIView` و هر پست از `RetrieveUpdateDestroyAPIView` استفاده میکند.       
+
     
-At the top of the file we import generics from Django REST Framework as well as our models
-and serializers files. Then we create two views. PostList uses the generic `ListCreateAPIView`
-while PostDetail uses the `RetrieveUpdateDestroyAPIView`.
-    
-It’s pretty amazing that all we have to do is update our generic view to radically change the
-behavior of a given API endpoint. This is the advantage of using a full-featured framework like
-Django REST Framework: all of this functionality is available, tested, and just works. As developers
-we do not have to reinvent the wheel here.
-    
-Phew. Our API is now complete and we really did not have to write much code on our own. We
-will make additional improvements to our API in the coming chapters but it is worth appreciating
-that it already performs the basic list and CRUD functionality we desire. Time to test things out
-with the Django Rest Framework’s browsable API. 
+بسیار شگفت انگیز است که تنها کاری که باید انجام دهیم این است که نمای کلی خود را به روز کنیم تا رفتار یک نقطه پایانی API را به طور اساسی تغییر دهیم. این مزیت استفاده از یک فریم ورک با ویژگی‌های کامل مانند Django REST Framework است. همه این قابلیت‌ها در دسترس هستند، آزمایش شده‌اند و فقط کار می‌کنند. به عنوان توسعه دهندگان، مجبور نیستیم چرخ را در اینجا دوباره اختراع کنیم.
     
     
 ### ای پی آی قابل مرور   
