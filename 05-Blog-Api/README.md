@@ -284,9 +284,7 @@ REST_FRAMEWORK = {
     
 ### URL ها   
 
-Let’s start with the URL routes for the actual location of the endpoints. Update the project-level
-`urls.py` file with the include import on the second line and a new api/v1/ route for our posts
-app.
+بیایید با مسیرهای URL برای مکان های واقعی endpoint ها شروع کنیم. ابتدا فایل `url.py` را با وارد کردن در خط دوم در آدرس api/v1/ برای پست های برنامه آپدیت می کنیم.
  
     
 <div dir="ltr">
@@ -305,19 +303,14 @@ urlpatterns = [
 ```
 
 </div>    
+
+این مسئله تمرین مناسبی است برای اینکه همیشه ورژن API ها را به صورت v1/ ، v2/ ، ... نگه داریم. به دلیل اینکه ممکن است زمانی که تغییرات حجیمی بر روی API ها اعمال میکنیم باعث باگ یا لگ شود و نیاز به ورژن های قبلی داشته باشیم. به این ترتیب میتوانیم در زمان لانچ ورژن جدید API از ورژن های قبلی نیز ساپورت کنیم. زیرا ممکن است سرویس برخی از مشتریان بر روی ورژن های قبلی لانچ شده باشد.
+
+
     
-It is a good practice to always version your APIs—v1/, v2/, etc—since when you make a large
-change there may be some lag time before various consumers of the API can also update. That
-way you can support a v1 of an API for a period of time while also launching a new, updated v2
-and avoid breaking other apps that rely on your API back-end.
+توجه داشته باشید که از آنجایی که تنها برنامه ما در این مرحله پست است، می توانیم آن را مستقیماً در اینجا قرار دهیم. اگر ما چندین برنامه در یک پروژه داشتیم، ممکن است منطقی تر باشد که یک برنامه اختصاصی api ایجاد کنیم و سپس همه مسیرهای آدرس API دیگر را در آن قرار دهیم. اما برای پروژه‌های اساسی مانند این، ترجیح می‌دهم از یک برنامه api که فقط برای مسیریابی استفاده می‌شود اجتناب کنم. در صورت نیاز همیشه می‌توانیم یکی را بعداً اضافه کنیم.
     
-Note that since our only app at this point is posts we can include it directly here. If we had
-multiple apps in a project it might make more sense to create a dedicated api app and then
-include all the other API url routes into it. But for basic projects like this one, I prefer to avoid an
-api app that is just used for routing. We can always add one later, if needed.
-    
-Next create our posts app urls.py file.    
-    
+در مرحله بعد فایل url.py برنامه را ایجاد میکنیم.
     
 <div dir="ltr">
   
@@ -328,8 +321,7 @@ Command Line
 
 </div>   
     
-    
-And then include the code below    
+سپس کد زیر را در آن فایل وارد میکنیم. 
     
     
 <div dir="ltr">
@@ -351,16 +343,12 @@ urlpatterns = [
 </div>     
     
     
-All blog routes will be at api/v1/ so our PostList view (which we’ll write shortly) has the empty
-string '' will be at api/v1/ and the PostDetail view (also to be written) at api/v1/# where #
-represents the primary key of the entry. For example, the first blog post has a primary id of 1 so
-it will be at the route api/v1/1, the second post at api/v1/2, and so on.    
+همه مسیرهای وبلاگ در api/v1/ خواهند بود، بنابراین نمای PostList ما (که به زودی خواهیم نوشت) دارای رشته خالی '' در api/v1/ خواهد بود و نمای PostDetail (همچنین باید نوشته شود) در api/v1/ # که در آن # کلید اصلی ورودی را نشان می دهد. به عنوان مثال، اولین پست وبلاگ دارای شناسه اولیه 1 است، بنابراین در مسیر api/v1/1، پست دوم در api/v1/2 و غیره خواهد بود.   
     
     
-### Serializers    
+### سریالایزرها    
     
-Now for our serializers. Create a new serializers.py file in our posts app.    
-    
+اکنون زمان سریالایز کردن است. یک فایل serializers.py جدید در برنامه پست های خود ایجاد کنید.    
 <div dir="ltr">
   
 Command Line
@@ -371,14 +359,9 @@ Command Line
 </div>     
     
     
-The serializer not only transforms data into JSON, it can also specify which fields to include or
-exclude. In our case, we will include the id field Django automatically adds to database models
-but we will exclude the `updated_at` field by not including it in our fields.
+سریالایز نه تنها داده ها را به JSON تبدیل می کند، بلکه می تواند تعیین کند که کدام فیلدها را شامل یا حذف کند. در مورد ما، فیلد شناسه‌ای را که Django به‌طور خودکار به مدل‌های پایگاه داده اضافه می‌کند، اضافه می‌کنیم، اما فیلد «updated_at» را با درج نکردن آن در فیلدهای خود حذف می‌کنیم.
     
-The ability to include/exclude fields in our API this easily is a remarkable feature. More often
-than not, an underlying database model will have far more fields than what needs to be exposed.
-Django REST Framework’s powerful serializer class makes it extremely straightforward to control
-this.    
+توانایی گنجاندن/حذف فیلدها در API ما یک ویژگی قابل توجه است. اغلب اوقات، یک مدل پایگاه داده زیربنایی، فیلد‌های بسیار بیشتری نسبت به آنچه باید در معرض نمایش قرار گیرد، خواهد داشت. کلاس سریالایز قدرتمند Django REST Framework کنترل این مورد را بسیار ساده می کند.   
     
     
 <div dir="ltr">
@@ -399,13 +382,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 </div>      
     
-At the top of the file we have imported Django REST Framework’s serializers class and our
-own models. Then we created a PostSerializer and added a Meta class where we specified
-which fields to include and explicitly set the model to use. There are many ways to customize a
-serializer but for common use cases, such as a basic blog, this is all we need.
+در بالای فایل، کلاس سریالایزرهای Django REST Framework و مدل های خودمان را وارد کرده ایم. سپس یک PostSerializer ایجاد کردیم و یک کلاس Meta اضافه کردیم که در آن مشخص کردیم کدام فیلدها را شامل شود و به صراحت مدل را برای استفاده تنظیم کردیم. راه‌های زیادی برای سفارشی‌سازی سریالایزرها وجود دارد، اما برای موارد استفاده رایج، مانند وبلاگ اولیه، این روش پیاده سازی شده کفایت می کند.
     
     
-### Views 
+### ویوها 
     
 The final step is to create our views. Django REST Framework has several generic views that
 are helpful. We have already used 
