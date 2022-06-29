@@ -284,9 +284,7 @@ REST_FRAMEWORK = {
     
 ### URL ها   
 
-Let’s start with the URL routes for the actual location of the endpoints. Update the project-level
-`urls.py` file with the include import on the second line and a new api/v1/ route for our posts
-app.
+بیایید با مسیرهای URL برای مکان های واقعی endpoint ها شروع کنیم. ابتدا فایل `url.py` را با وارد کردن در خط دوم در آدرس api/v1/ برای پست های برنامه آپدیت می کنیم.
  
     
 <div dir="ltr">
@@ -305,19 +303,14 @@ urlpatterns = [
 ```
 
 </div>    
+
+این مسئله تمرین مناسبی است برای اینکه همیشه ورژن API ها را به صورت v1/ ، v2/ ، ... نگه داریم. به دلیل اینکه ممکن است زمانی که تغییرات حجیمی بر روی API ها اعمال میکنیم باعث باگ یا لگ شود و نیاز به ورژن های قبلی داشته باشیم. به این ترتیب میتوانیم در زمان لانچ ورژن جدید API از ورژن های قبلی نیز ساپورت کنیم. زیرا ممکن است سرویس برخی از مشتریان بر روی ورژن های قبلی لانچ شده باشد.
+
+
     
-It is a good practice to always version your APIs—v1/, v2/, etc—since when you make a large
-change there may be some lag time before various consumers of the API can also update. That
-way you can support a v1 of an API for a period of time while also launching a new, updated v2
-and avoid breaking other apps that rely on your API back-end.
+توجه داشته باشید که از آنجایی که تنها برنامه ما در این مرحله پست است، می توانیم آن را مستقیماً در اینجا قرار دهیم. اگر ما چندین برنامه در یک پروژه داشتیم، ممکن است منطقی تر باشد که یک برنامه اختصاصی api ایجاد کنیم و سپس همه مسیرهای آدرس API دیگر را در آن قرار دهیم. اما برای پروژه‌های اساسی مانند این، ترجیح می‌دهم از یک برنامه api که فقط برای مسیریابی استفاده می‌شود اجتناب کنم. در صورت نیاز همیشه می‌توانیم یکی را بعداً اضافه کنیم.
     
-Note that since our only app at this point is posts we can include it directly here. If we had
-multiple apps in a project it might make more sense to create a dedicated api app and then
-include all the other API url routes into it. But for basic projects like this one, I prefer to avoid an
-api app that is just used for routing. We can always add one later, if needed.
-    
-Next create our posts app urls.py file.    
-    
+در مرحله بعد فایل url.py برنامه را ایجاد میکنیم.
     
 <div dir="ltr">
   
@@ -328,8 +321,7 @@ Command Line
 
 </div>   
     
-    
-And then include the code below    
+سپس کد زیر را در آن فایل وارد میکنیم. 
     
     
 <div dir="ltr">
@@ -351,16 +343,12 @@ urlpatterns = [
 </div>     
     
     
-All blog routes will be at api/v1/ so our PostList view (which we’ll write shortly) has the empty
-string '' will be at api/v1/ and the PostDetail view (also to be written) at api/v1/# where #
-represents the primary key of the entry. For example, the first blog post has a primary id of 1 so
-it will be at the route api/v1/1, the second post at api/v1/2, and so on.    
+همه مسیرهای وبلاگ در api/v1/ خواهند بود، بنابراین نمای PostList ما (که به زودی خواهیم نوشت) دارای رشته خالی '' در api/v1/ خواهد بود و نمای PostDetail (همچنین باید نوشته شود) در api/v1/ # که در آن # کلید اصلی ورودی را نشان می دهد. به عنوان مثال، اولین پست وبلاگ دارای شناسه اولیه 1 است، بنابراین در مسیر api/v1/1، پست دوم در api/v1/2 و غیره خواهد بود.   
     
     
-### Serializers    
+### سریالایزرها    
     
-Now for our serializers. Create a new serializers.py file in our posts app.    
-    
+اکنون زمان سریالایز کردن است. یک فایل serializers.py جدید در برنامه پست های خود ایجاد کنید.    
 <div dir="ltr">
   
 Command Line
@@ -371,14 +359,9 @@ Command Line
 </div>     
     
     
-The serializer not only transforms data into JSON, it can also specify which fields to include or
-exclude. In our case, we will include the id field Django automatically adds to database models
-but we will exclude the `updated_at` field by not including it in our fields.
+سریالایز نه تنها داده ها را به JSON تبدیل می کند، بلکه می تواند تعیین کند که کدام فیلدها را شامل یا حذف کند. در مورد ما، فیلد شناسه‌ای را که Django به‌طور خودکار به مدل‌های پایگاه داده اضافه می‌کند، اضافه می‌کنیم، اما فیلد «updated_at» را با درج نکردن آن در فیلدهای خود حذف می‌کنیم.
     
-The ability to include/exclude fields in our API this easily is a remarkable feature. More often
-than not, an underlying database model will have far more fields than what needs to be exposed.
-Django REST Framework’s powerful serializer class makes it extremely straightforward to control
-this.    
+توانایی گنجاندن/حذف فیلدها در API ما یک ویژگی قابل توجه است. اغلب اوقات، یک مدل پایگاه داده زیربنایی، فیلد‌های بسیار بیشتری نسبت به آنچه باید در معرض نمایش قرار گیرد، خواهد داشت. کلاس سریالایز قدرتمند Django REST Framework کنترل این مورد را بسیار ساده می کند.   
     
     
 <div dir="ltr">
@@ -399,27 +382,18 @@ class PostSerializer(serializers.ModelSerializer):
 
 </div>      
     
-At the top of the file we have imported Django REST Framework’s serializers class and our
-own models. Then we created a PostSerializer and added a Meta class where we specified
-which fields to include and explicitly set the model to use. There are many ways to customize a
-serializer but for common use cases, such as a basic blog, this is all we need.
+در بالای فایل، کلاس سریالایزرهای Django REST Framework و مدل های خودمان را وارد کرده ایم. سپس یک PostSerializer ایجاد کردیم و یک کلاس Meta اضافه کردیم که در آن مشخص کردیم کدام فیلدها را شامل شود و به صراحت مدل را برای استفاده تنظیم کردیم. راه‌های زیادی برای سفارشی‌سازی سریالایزرها وجود دارد، اما برای موارد استفاده رایج، مانند وبلاگ اولیه، این روش پیاده سازی شده کفایت می کند.
     
     
-### Views 
-    
-The final step is to create our views. Django REST Framework has several generic views that
-are helpful. We have already used 
-[ListAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listapiview) in both the Library and Todos APIs to create a
-**read-only** endpoint collection, essentially a list of all model instances. In the Todos API we also used 
-[RetrieveAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveapiview) for a **read-only** single endpoint, which is analogous to a detail view in traditional Django.    
+### ویوها
+  
+مرحله نهایی ساخت ویوهای برنامه است. Django Rest Framework چندین ویو عمومی مناسب و کمک کننده برای این کار در اختیار دارد. در حال حاضر ما از [ListAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listapiview) در کتابخانه و برنامه todolist برای ساخت اندپوینت های فقط قابل خواندن جهت گرفتن لیست مدل های ساخته شده در برنامه استفاده می کنیم. در برنامه Todos همچنین از [RetrieveAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveapiview) جهت ساخت اندپوینت تکی فقط خواندنی که مشابه نمای جزئیات در جنگو سنتی است نیز استفاده میکنیم.       
     
    
-For our Blog API we want to list all available blog posts as a read-write endpoint which means using 
-[ListCreateAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listcreateapiview), which is similar to the ListAPIView we’ve used previously but allows for writes. We also want to make the individual blog posts available to be read, updated, or
-deleted. And sure enough, there is a built-in generic Django REST Framework view just for this
-purpose: [RetrieveUpdateDestroyAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveupdatedestroyapiview). That’s what we’ll use here    
+برای API وبلاگ ما میخواهیم لیستی از همه پست های بلاگ را به صورت اندپوینت خواندنی-نوشتنی در اختیار داشته باشیم که به این منظور از [ListCreateAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#listcreateapiview) استفاده می نماییم که بسیار شبیه بهListAPIView است که قبلا از آن استفاده میکردیم با این تفاوت که به کاربر امکان نوشتن نیز میدهد. ما همچنین نیاز داریم که برای هر پست به صورت جدا امکانات شامل خواندن، ادیت کردن و حذف پست را نیز داشته باشیم. که به این منظوری کتابخونه عمومی ای برای این هدف با نام  [RetrieveUpdateDestroyAPIView](https://www.django-rest-framework.org/api-guide/generic-views/#retrieveupdatedestroyapiview) در Django REST Framework وجود دارد که ما در این برنامه از آن استفاده میکنیم. 
     
-Update the views.py file as follows. 
+  
+اکنون فایل views.py را به شکل زیر آپدیت میکنیم.
     
     
 <div dir="ltr">
@@ -444,20 +418,10 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 </div>   
     
+در بالاب فایل کتابخانه generic را از Django REST Framework همانند فایل مدل هاو سریالایزر خود وارد میکنیم. لیست پست ها از کتابخانه عمومی  `ListCreateAPIView` و هر پست از `RetrieveUpdateDestroyAPIView` استفاده میکند.       
+
     
-At the top of the file we import generics from Django REST Framework as well as our models
-and serializers files. Then we create two views. PostList uses the generic `ListCreateAPIView`
-while PostDetail uses the `RetrieveUpdateDestroyAPIView`.
-    
-It’s pretty amazing that all we have to do is update our generic view to radically change the
-behavior of a given API endpoint. This is the advantage of using a full-featured framework like
-Django REST Framework: all of this functionality is available, tested, and just works. As developers
-we do not have to reinvent the wheel here.
-    
-Phew. Our API is now complete and we really did not have to write much code on our own. We
-will make additional improvements to our API in the coming chapters but it is worth appreciating
-that it already performs the basic list and CRUD functionality we desire. Time to test things out
-with the Django Rest Framework’s browsable API. 
+بسیار شگفت انگیز است که تنها کاری که باید انجام دهیم این است که نمای کلی خود را به روز کنیم تا رفتار یک نقطه پایانی API را به طور اساسی تغییر دهیم. این مزیت استفاده از یک فریم ورک با ویژگی‌های کامل مانند Django REST Framework است. همه این قابلیت‌ها در دسترس هستند، آزمایش شده‌اند و فقط کار می‌کنند. به عنوان توسعه دهندگان، مجبور نیستیم چرخ را در اینجا دوباره اختراع کنیم.
     
     
 ### ای پی آی قابل مرور   
@@ -493,14 +457,14 @@ Command Line
    
 
 در هدر مشاهده میشود که متدهای GET,PUT,PATCH و DELETE ساپورت میشوند ولی نمیتوان از متد POST در اینجا استفاده کرد. در حقیقت شما میتوانید از فرم HTML موجود برای ایجاد تغییرات در فرم و از کلید DELETE برای حذف آن استفاده کنید.
-    
-Let’s try things out. Update our title with the additional text (edited) at the end. Then click
-on the “PUT” button.
+  
+اکنون زمان تست آن ها است. بیایید موضوع را با یه متن اضافه در انتها آن ویرایش کنیم. به این منظور مانند عکس زیر از دکمه PUT استفاده میکنیم.
+
     
 ![API Post Detail edited](images/5.png)  
-    
-Go back to the Post List view by clicking on the link for it at the top of the page or navigating
-directly to http://127.0.0.1:8000/api/v1/ and you can see the updated text there as well.   
+ 
+اکنون با کلیک روی دکمه بالای صفحه یا به صورت مستقیم از آدرس http://127.0.0.1:8000/api/v1/ به صفحه لیست تمامی پست ها برمی گردیم. در اینجا نیز مشاهده میشود که موضوع به درستی ویرایش شده است.
+
     
 ![API Post List edited](images/6.png)  
     
