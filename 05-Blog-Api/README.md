@@ -457,14 +457,14 @@ Command Line
    
 
 در هدر مشاهده میشود که متدهای GET,PUT,PATCH و DELETE ساپورت میشوند ولی نمیتوان از متد POST در اینجا استفاده کرد. در حقیقت شما میتوانید از فرم HTML موجود برای ایجاد تغییرات در فرم و از کلید DELETE برای حذف آن استفاده کنید.
-    
-Let’s try things out. Update our title with the additional text (edited) at the end. Then click
-on the “PUT” button.
+  
+اکنون زمان تست آن ها است. بیایید موضوع را با یه متن اضافه در انتها آن ویرایش کنیم. به این منظور مانند عکس زیر از دکمه PUT استفاده میکنیم.
+
     
 ![API Post Detail edited](images/5.png)  
-    
-Go back to the Post List view by clicking on the link for it at the top of the page or navigating
-directly to http://127.0.0.1:8000/api/v1/ and you can see the updated text there as well.   
+ 
+اکنون با کلیک روی دکمه بالای صفحه یا به صورت مستقیم از آدرس http://127.0.0.1:8000/api/v1/ به صفحه لیست تمامی پست ها برمی گردیم. در اینجا نیز مشاهده میشود که موضوع به درستی ویرایش شده است.
+
     
 ![API Post List edited](images/6.png)  
     
