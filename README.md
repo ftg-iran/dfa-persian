@@ -87,18 +87,18 @@
 </details>
   
 <details>
-  <summary>فصل پنجم : API بلاگ</summary>
+  <summary>فصل پنجم : API بلاگ &check;</summary>
   <br>
   
-  - Init setup &check;
+  - تنظیمات اولیه &check;
   - Models &check;
-  - Tests
-  - Django rest framwork
-  - URLs
-  - Serializers
-  - Views
-  - Browsable APIs
-  - نتیجه گیری
+  - Tests &check;
+  - Django rest framwork &check;
+  - URLs &check;
+  - Serializers &check;
+  - Views &check;
+  - Browsable APIs &check;
+  - نتیجه گیری &check;
   
 </details>
   
@@ -115,19 +115,19 @@
 </details>
   
 <details>
-  <summary>فصل هفتم : احراز هویت کاربر</summary>
+  <summary>فصل هفتم : احراز هویت کاربر &check;</summary>
   <br>
 
-  - Basic authentication 
-  - Session authentication
-  - Tocken authentication
-  - Default authentication
-  - Implementing token authentication
-  - Endpoints
-  - dj-rest-auth
-  - User registration
-  - Tokens
-  - نتیجه گیری
+  - Basic authentication &check;
+  - Session authentication &check;
+  - Tocken authentication &check;
+  - Default authentication &check;
+  - Implementing token authentication &check;
+  - Endpoints &check;
+  - dj-rest-auth &check;
+  - User registration &check;
+  - Tokens &check;
+  - نتیجه گیری &check;
 
 </details>
   
