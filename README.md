@@ -22,7 +22,7 @@
   <summary>فصل اول : API های وب &check;</summary>
   <br>
   
-  - WWW &check;
+  - شبکه جهانی وب &check;
   - URLs &check;
   - Internet protocol suite &check;
   - HTTP verbs &check;
@@ -60,7 +60,7 @@
   <summary>فصل سوم : TODO API &check;</summary>
   <br>
 
-  - Init setup &check;
+  - تنظیمات اولیه &check;
   - Models &check;
   - Django REST framework &check;
   - URLs &check;
@@ -78,8 +78,8 @@
   <summary>فصل چهارم : برنامه TODO با فرانت اند React &check;</summary>
   <br>
   
-  - Install Node &check;
-  - Install React &check;
+  - نصب Node &check;
+  - نصب React &check;
   - Mock data &check;
   - Django rest framwork &check;
   - نتیجه گیری &check;
@@ -106,7 +106,7 @@
   <summary>فصل ششم : مجوز ها &check;</summary>
   <br>
   
-  - Create a new user &check;
+  - ایجاد کاربر جدید &check;
   - Add login to the browsable API &check;
   - AllowAny &check;
   - View-Level Permissions &check;
@@ -118,7 +118,7 @@
   <summary>فصل هفتم : احراز هویت کاربر &check;</summary>
   <br>
 
-  - Basic authentication &check;
+  - احراز هویت اولیه &check;
   - Session authentication &check;
   - Tocken authentication &check;
   - Default authentication &check;
@@ -172,7 +172,7 @@
 |       تمام        |  Sahar Mokarrami |      Todo-React-Front-end-4 |
 |       تمام        | Shamim Sanisales |                  Blog-Api-5 |
 |       تمام       |   Pouya Pargam   |               Permissions-6 |
-|        1/31       |       ELI        |       User-Authentication-7 |
+|        تمام       |       ELI        |       User-Authentication-7 |
 |        تمام       | Amirreza Pasandi & Khalil Farashiani |      Viewsets-and-Routers-8 |
 |         تمام         |   Reza Mobaraki  | Schemas-and-Documentation-9 |
 |         تمام         | khalil farashiani|                  Conclusion |
