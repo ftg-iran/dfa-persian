@@ -1,0 +1,54 @@
+name: Export markdown to Epub/PDF
+on: push
+jobs:
+  exportToPdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Install pandoc and dependencies 📦
+        run: |
+          sudo apt-get update
+          sudo apt install pandoc\
+            texlive-latex-base\
+            texlive-fonts-recommended\
+            texlive-extra-utils\
+            texlive-latex-extra\
+            texlive-xetex\
+            texlive-lang-arabic\
+            wget -y
+          wget https://github.com/rastikerdar/vazirmatn/releases/download/v33.003/vazirmatn-v33.003.zip
+          unzip vazirmatn-v33.003.zip -d /tmp/vazirmatn
+          mv /tmp/vazirmatn/fonts/ttf/* .
+      - name: Config git username and email 🔧
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions[Bot]"
+
+      - name: Export markdown to pdf 📄
+        run: |
+          pandoc -s **/README.md --pdf-engine=xelatex \
+          -V "mainfont:Vazirmatn-Regular.ttf" \
+          -V "sansfont:Vazirmatn-Regular.ttf" \
+          -V "monofont:Vazirmatn-Regular.ttf" \
+          -V "fontsize=16pt" \
+          -V "lang:fa-IR" \
+          -V "geometry:margin=1in" \
+          -o ${{ github.event.repository.name }}.pdf --self-contained
+
+      - name: Export markdown to Epub 📄
+        run: |
+          pandoc -s **/README.md \
+          -V "mainfont:Vazirmatn-Regular.ttf" \
+          -V "sansfont:Vazirmatn-Regular.ttf" \
+          -V "monofont:Vazirmatn-Regular.ttf" \
+          -V "fontsize=16pt" \
+          -V "lang:fa-IR" \
+          -V "geometry:margin=1in" \
+          -o ${{ github.event.repository.name }}.epub --self-contained
+          --epub-cover-image=cover.jpg
+      - name: Push pdf to github 📦
+        run: |
+          git add  ${{ github.event.repository.name }}.pdf
+          git add  ${{ github.event.repository.name }}.epub
+          git commit -m "📦 Export pdf/epub via pandoc" && git push || echo "🚫 Failed to push pdf"
