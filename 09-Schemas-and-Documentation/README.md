@@ -153,7 +153,7 @@ http://127.0.0.1:8000/openapi
 مراجعه کردید schema به صورت خودکار ساخته شده و دردسترس شما قرار میگیرد.
 
 
-![API Schema](images/1.jpg)
+![API Schema](https://github.com/ftg-iran/dfa-persian/blob/main/09-Schemas-and-Documentation/images/1.jpg?raw=true)
   
 من شخصاً رویکرد پویا را در پروژه ها ترجیح می دهم.
 
@@ -275,7 +275,7 @@ urlpatterns = [
 
 http://127.0.0.1:8000/swagger/
   
-![Swagger view](images/2.jpg)
+![Swagger view](https://github.com/ftg-iran/dfa-persian/blob/main/09-Schemas-and-Documentation/images/2.jpg?raw=true)
   
 
 سپس تأیید کنید که نمای
@@ -284,7 +284,7 @@ http://127.0.0.1:8000/redoc/
 کار می کند.
   
   
-![ReDoc view](images/3.jpg)
+![ReDoc view](https://github.com/ftg-iran/dfa-persian/blob/main/09-Schemas-and-Documentation/images/3.jpg?raw=true)
   
 اسناد drf-yasg کاملاً جامع هستند و بسته به نیاز API های شما سفارشی سازی میشوند .
 

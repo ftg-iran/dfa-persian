@@ -15,17 +15,17 @@
  
 به پنل ادمین در `http://127.0.0.1:8000/admin/` بروید.سپس روی “+ Add” کنار Users کلیک کنید. نام‌کاربری و پسورد را برای کاربر جدید وارد کنید و سپس بر روی دکمه‌ی 'Save' کلیک کنید. من در اینجا نام‌کاربری را testuser انتخاب کرده‌ام.
   
-![Admin Add User Page](images/1.jpg)
+![Admin Add User Page](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/1.jpg?raw=true)
 
 تصویر بعدی صفحه‌ی ادمین برای تغییر کاربرها می‌باشد. من کاربر خود را testuser  انتخاب کرده‌ام و در اینجا می‌توانم اطلاعات بیشتری را نظیر نام، نام‌خانوادگی، آدرس ایمیل، آدرس و ...به مدل کاربر اضافه کنم. اما هیچکدام از آنها برای مقصود ما مهم نیستند: ما فقط به نام‌کاربری و پسورد برای آزمایش نیاز داریم. 
   
-![Admin User Change](images/2.jpg)
+![Admin User Change](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/2.jpg?raw=true)
 
 به پایین این صفحه رفته و روی دکمه‌ی 'Save' کلیک کنید. که به صفحه اصلی کاربران در .
 http://127.0.0.1:8000/admin/auth/user/
 هدایت می‌کند.
   
- ![Admin All Users](images/3.jpg)
+ ![Admin All Users](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/3.jpg?raw=true)
   
  همانطور که می‌بینید دو کاربر ما حضور دارند.
   
@@ -53,18 +53,18 @@ urlpatterns = [
 ```
 حال به مسیر API قابل مرور در http://127.0.0.1:8000/api/v1/، بروید.  یک تغییر کوچک بوجود آمده‌است: که یک فلش رو به پایین در کنار نام‌کاربری در گوشه بالا سمت راست ظاهر شده‌است.روی آن کلیک کنید. 
   
-![API Log In](images/4.jpg)
+![API Log In](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/4.jpg?raw=true)
   
  از آنجایی که ما به عنوان کاربر اصلی وارد شده‌ایم در اینجا برای من WSV نمایان شده‌است. بر روی لینک کلیک کنید و یک منو کشویی برای خارج شدن(Logout)ظاهر می‌شود. روی آن کلیک کنید.   
 
 لینک بالا در سمت راست حالا به لاگین(login) تغییر پیدا کرده‌است. روی آن کلیک کنید. به صفحه لاگین `Django Rest Framework` هدایت می‌شویم. در اینجا از اکانت آزمایشی استفاده می‌کنیم. در نهایت به صفحه اصلی API جایی که کاربر آزمایشی در سمت راست و بالا نمایان می‌باشد، هدایت می‌شویم.
   
-![API Log In Testuser](images/5.jpg)
+![API Log In Testuser](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/5.jpg?raw=true)
   
 به عنوان قدم آخر از حساب آزمایشی خود خارج شوید.
 
   
-![API Log In Link](images/6.jpg)
+![API Log In Link](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/6.jpg?raw=true)
 
 باید لینک لاگین را دوباره در سمت راست بالا  ببینید.  
  
@@ -74,7 +74,7 @@ urlpatterns = [
   
  صفحه جزئیات در آدرس /http://127.0.0.1:8000/api/v1/1 اطلاعات قابل مشاهده می‌باشد و هر کاربر تصادفی می‌تواند پستی را در صورت وجود بروزرسانی یا حذف کند. که خوب نیست.
   
-![API Detail Logged Out](images/7.jpg)
+![API Detail Logged Out](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/7.jpg?raw=true)
   
 دلیلی که ما هنوز می‌توانیم پست‌ها و جزئیات آنها را مشاهده کنیم این است که ما تنظیمات مجوزها را در فایل `config/settings.py` روی AllowAny قرار داده‌ایم.
 به عنوان یک یادآوری کوچک، به شکل زیر می‌باشد:  
@@ -120,13 +120,13 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 ```
 این تمام چیزی بود که نیاز داشتیم. صفحه را در http://127.0.0.1:8000/api/v1/ رفرش کنید. ببینید چه اتفاقی افتاد!
 
-![API Post List Logged Out](images/8.jpg)
+![API Post List Logged Out](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/8.jpg?raw=true)
   
 ما دیگر نمی‌توانیم لیست پست‌ها را ببینیم. در عوض با پیام HTTP 403 که کد وضعیت ممنوع می‌باشد زیرا ما لاگین نشده‌ایم. و از آنجایی که مجوز نداریم هیچ فرمی در API برای ویرایش داده‌ها وجود ندارد.
   
 اگر به مسیر جزئیات پست درhttp://127.0.0.1:8000/api/v1/ بروید پیامی مشابه را خواهید دید و همچنین  فرمی برای ویرایش وجود ندارد.
   
-![API Detail Logged Out](images/9.jpg)  
+![API Detail Logged Out](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/9.jpg?raw=true)  
   
 بنابراین از این لحظه تنها کاربران لاگین شده می‌توانند صفحه API را ببینند. اگر با حساب testuser‌ یا superuser خود وارد شوید این صفحات در دسترس هستند.
   
@@ -292,11 +292,11 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 
 و کار ما به پایان رسید، حالا بیایید مجوزها را آزمایش کنیم. به  صفحه جزئیات پست که در آدرس http://127.0.0.1:8000/api/v1/1/ می‌باشد، بروید. مطمئن شوید که به عنوان کاربر superuser که نویسنده پست می‌باشد،  وارد شده‌باشید. نام‌کاربری باید در قسمت سمت راست بالای صفحه مشخص باشد
 
-![API Detail Superuser](images/10.jpg)
+![API Detail Superuser](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/10.jpg?raw=true)
 
 اگرچه، اگر خارج شوید و با کاربر testuser وارد شوید، صفحه تغییر می‌کند.
 
-![API Detail Testuser](images/11.jpg)
+![API Detail Testuser](https://github.com/ftg-iran/dfa-persian/blob/main/06-Permissions/images/11.jpg?raw=true)
 
 ما ***می‌توانیم*** این صفحه را ببینیم زیرا دسترسی‌های فقط خواندنی مجاز هستند. اگرچه به دلیل کلاس مجوز `IsAuthorOrReadOnly ` که ساختیم  ***نمی‌توانیم*** درخواست‌هایی نظیر PUT , DELETE بفرستیم.
   

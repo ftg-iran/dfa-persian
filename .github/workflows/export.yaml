@@ -1,4 +1,4 @@
-name: Export markdown to Epub/PDF
+name: Export markdown to PDF
 on: push
 jobs:
   exportToPdf:
@@ -35,20 +35,7 @@ jobs:
           -V "lang:fa-IR" \
           -V "geometry:margin=1in" \
           -o ${{ github.event.repository.name }}.pdf --self-contained
-
-      - name: Export markdown to Epub 📄
-        run: |
-          pandoc -s **/README.md \
-          -V "mainfont:Vazirmatn-Regular.ttf" \
-          -V "sansfont:Vazirmatn-Regular.ttf" \
-          -V "monofont:Vazirmatn-Regular.ttf" \
-          -V "fontsize=16pt" \
-          -V "lang:fa-IR" \
-          -V "geometry:margin=1in" \
-          -o ${{ github.event.repository.name }}.epub --self-contained
-          --epub-cover-image=cover.jpg
       - name: Push pdf to github 📦
         run: |
           git add  ${{ github.event.repository.name }}.pdf
-          git add  ${{ github.event.repository.name }}.epub
-          git commit -m "📦 Export pdf/epub via pandoc" && git push || echo "🚫 Failed to push pdf"
+          git commit -m "📦 Export pdf via pandoc" && git push || echo "🚫 Failed to push pdf"

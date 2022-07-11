@@ -78,7 +78,7 @@ $ pipenv shell
 
 یک مرورگر وب باز کنید و به آدرس http://127.0.0.1:8000 بروید تا از نصب درست پروژه اطمینان حاصل کنید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/1.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/1.png?raw=true)
 
 
 
@@ -237,30 +237,30 @@ admin.site.register(Book)
 
 به آدرس http://127.0.0.1:8000/admin بروید و وارد شوید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/2.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/2.png?raw=true)
 
 
 
 شما به صفحه خانه admin منتقل خواهید شد.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/3.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/3.png?raw=true)
 
 
 
 روی لینک Books کلیک کنید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/4.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/4.png?raw=true)
 
 
 
 سپس روی دکمه + Add Book در گوشه بالا سمت راست کلیک کنید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/5.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/5.png?raw=true)
 
 
 من جزئیات را برای کتاب Django for Beginners خودم وارد کرده ام. شما می توانید هر متنی که بخواهید اینجا وارد کنید. این اطلاعات صرفا برای اهداف نمایشی است. بعد از کلیک کردن روی دکمه Save به صفحه Books که در آن تمام اطلاعات ثبت شده فعلی لیست شده اند، منتقل می شویم.
 
-![books_list_page](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/6.png?raw=true)
+![books_list_page](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/6.png?raw=true)
 
 
 پروژه جنگو مرسوم ما الآن داده دارد اما ما یک راه برای نمایش آن به عنوان یک صفحه وب نیاز داریم. این یعنی ایجاد فایل های URLs، views و templates. بیاید اینکار را الآن انجام دهیم.
@@ -381,7 +381,7 @@ urlpatterns = [
 
 به آدرس صفحه خانه که http://127.0.0.1:8000/ میباشد بروید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/7.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/7.png?raw=true)
 
 
 
@@ -578,13 +578,13 @@ $ curl http://127.0.0.1:8000/api/
 ## رابط برنامه کاربردی تحت مرورگر(Browsable API)
 در حالیکه سرور محلی همچنان در اولین خط فرمان در حال اجرا است، در مرورگر به آدرس http://127.0.0.1:8000/api بروید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/8.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/8.png?raw=true)
 
  
 
 وای به آن نگاه کنید! Django REST Framework این تجسم را برای ما بطور پیشفرض فراهم کرده است. و امکانات زیادی در این صفحه تعبیه وجود دارد که در طول کتاب آن ها را بررسی می کنیم. حالا میخواهیم این صفحه را با نقطه پایانی JSON خام مقایسه کنیم. بر روی دکمه GET کلیک کنید و از منو گزینه json را انتخاب کنید.
 
-![](https://github.com/Seyyed-Mahdi-Sepahbodi/dfa-persian/blob/main/02-Library-Website-and-API/images/9.png?raw=true)
+![](https://github.com/ftg-iran/dfa-persian/blob/main/02-Library-Website-and-API/images/9.png?raw=true)
 
 
 

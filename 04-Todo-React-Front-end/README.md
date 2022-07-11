@@ -139,7 +139,7 @@ $ npm start
 
 اگر وارد  http://localhost:3000/   شوید صفحه خانه پیشفرض create-react-app را مشاهده خواهید کرد.
 
-![React welcome page](images/1.png)
+![React welcome page](https://github.com/ftg-iran/dfa-persian/blob/main/04-Todo-React-Front-end/images/1.png)
 
 ## ماک دیتا 
 
@@ -261,7 +261,7 @@ export default App;
 آرایه list را در state اپ کامپوننت مورد نظر بارگذاری نموده ایم، پس از آن از map برای جستجو در هر آیتم از لیستی که `title`و `body`را نشان می دهد استفاده می کنیم. همچنین id را به عنوان کلیدی که یک نیازمندی خاص react می باشد، به این مقادیر اضافه کرده ایم، id به طور خودکار توسط جنگو به هر فیلد دیتابیسی اضافه شده است.
 حال باید todo هایمان را که در صفحه اصلی  http://localhost:3000/   لیست شده اند بدون نیاز به رفرش نمودن صفحه ببینید. 
 
-![Dummy data](images/2.png)
+![Dummy data](https://github.com/ftg-iran/dfa-persian/blob/main/04-Todo-React-Front-end/images/2.png)
 
 **توجه کنید:** اگر زمانی را صرف کار با react کنید احتمالا جایی این پیغام خطا را مشاهده نمایید:
 
@@ -372,7 +372,7 @@ export default App;
   
 اگر دوباره به http://localhost:3000/ نگاهی بیاندازید می بینید با وجود اینکه دیگر hardcoded data  نداریم اما صفحه تغییری نکرده و همان است. از حالا تمامی این ها از طریق اندپوینت API و درخواست ما می آیند.
 
-![API Data](images/3.png)
+![API Data](https://github.com/ftg-iran/dfa-persian/blob/main/04-Todo-React-Front-end/images/3.png)
 
 حال این روش با react انجام شده است!
 

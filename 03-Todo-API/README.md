@@ -77,7 +77,7 @@ INSTALLED_APPS = [
 
 اگر اکنون سرور python manager.py را در خط فرمان اجرا کنید و در مرورگر وب خود به آدرس http://127.0.0.1:8000/ بروید، می توانید ببینید که پروژه ما با موفقیت نصب شده است.
 
-![Image 1](images/1.jpg)
+![Image 1](https://github.com/ftg-iran/dfa-persian/blob/main/03-Todo-API/images/1.jpg?raw=true)
 
 برای رفتن به بخش بعد آماده ایم!
 
@@ -162,7 +162,7 @@ admin.site.register(Todo)
 
 اگر به آدرس http://127.0.0.1:8000/admin/ بروید، اکنون می توانید وارد شوید. روی "Add +" در کنار Todos کلیک کنید و 3 مورد جدید برای انجام کار ایجاد کنید، مطمئن شوید که یک عنوان و متن برای هر دو اضافه کنید. مال من به این صورت است:
 
-![Image 2](images/2.jpg)
+![Image 2](https://github.com/ftg-iran/dfa-persian/blob/main/03-Todo-API/images/2.jpg?raw=true)
 
 در واقع در این مرحله کار با بخش سنتی جنگو از Todo API ما تمام شده است. از آنجایی که ما زحمت ایجاد صفحات وب برای این پروژه را نداریم، نیازی به نشانی‌های وب، نماها، یا قالب‌ها نیست. تنها چیزی که ما نیاز داریم یک مدل است و Django REST Framework بقیه را بر عهده خواهد گرفت.
 
@@ -372,13 +372,13 @@ class DetailTodo(generics.RetrieveAPIView):
 
 سپس به http://127.0.0.1:8000/api/ بروید تا نقطه پایانی بازدیدهای لیست API ما را ببینید.
 
-![Image 3](images/3.jpg)
+![Image 3](https://github.com/ftg-iran/dfa-persian/blob/main/03-Todo-API/images/3.jpg?raw=true)
 
 این صفحه سه کاری را که قبلاً در مدل پایگاه داده ایجاد کردیم را نشان می دهد. نقطه پایانی API به عنوان یک مجموعه شناخته می شود زیرا چندین مورد را نشان می دهد.
 
 کارهای زیادی می توانیم با API قابل مرور خود انجام دهیم. برای شروع، بیایید نمای خام JSON را ببینیم - آنچه در واقع از طریق اینترنت منتقل می شود. بر روی دکمه "GET" در گوشه سمت راست بالا کلیک کنید و JSON را انتخاب کنید.
 
-![Image 4](images/4.jpg)
+![Image 4](https://github.com/ftg-iran/dfa-persian/blob/main/03-Todo-API/images/4.jpg?raw=true)
 
 اگر به صفحه نمایش لیست ما در http://127.0.0.1:8000/api/ برگردید، می بینیم که اطلاعات بیشتری وجود دارد. به یاد داشته باشید که فعل HTTP GET برای خواندن داده ها استفاده می شود در حالی که POST برای به روز رسانی یا ایجاد داده ها استفاده می شود.
 
@@ -386,7 +386,7 @@ class DetailTodo(generics.RetrieveAPIView):
 
 ما همچنین یک نمای DetailTodo برای هر مدل جداگانه ایجاد کردیم. این به عنوان یک نمونه شناخته می شود و در http://127.0.0.1:8000/api/1/ قابل مشاهده است.
 
-![Image 5](images/5.jpg)
+![Image 5](https://github.com/ftg-iran/dfa-persian/blob/main/03-Todo-API/images/5.jpg?raw=true)
 
 همچنین می توانید به نقاط پایانی برای موارد زیر بروید:
 

@@ -29,7 +29,7 @@ Enter a username and password for a new user and click on the “Save” button.
 username testuser here.
   
 
-![Admin Add User Page](images/1.jpg)
+![Admin Add User Page](images/1.jpg?raw=true)
  
   
 The next screen is the Admin User Change page. I’ve called my user testuser and here I could
@@ -38,14 +38,14 @@ email address, etc. But none of that is necessary for our purposes: we just need
 password for testing.
   
   
-![Admin User Change](images/2.jpg)
+![Admin User Change](images/2.jpg?raw=true)
 
   
 Scroll down to the bottom of this page and click the “Save” button. It will redirect back to the
 main Users page at http://127.0.0.1:8000/admin/auth/user/.
   
   
-![Admin All Users](images/3.jpg)
+![Admin All Users](images/3.jpg?raw=true)
   
   
 We can see our two users are listed.
@@ -94,7 +94,7 @@ Now navigate to our browsable API at http://127.0.0.1:8000/api/v1/. There is a s
 next to the username in the upper right corner is a little downward-facing arrow.
   
   
-![API Log In](images/4.jpg)
+![API Log In](images/4.jpg?raw=true)
   
 Since we are logged in with our superuser account at this point—wsv for me—that name appears.
 Click on the link and a dropdown menu with “Log out” appears. Click on it.
@@ -105,13 +105,13 @@ The upper righthand link now changes to “Log in.” So go click on that. We ar
 back to the main API page where testuser is present in the upper righthand corner.
   
   
-![API Log In Testuser](images/5.jpg)
+![API Log In Testuser](images/5.jpg?raw=true)
   
 As a final step, log out of our `testuser` account.
   
   
   
-![API Log In Link](images/6.jpg)
+![API Log In Link](images/6.jpg?raw=true)
   
 You should see the “Log in” link in the upper righthand corner again.
   
@@ -127,7 +127,7 @@ And on the detail page at http://127.0.0.1:8000/api/v1/1/ the information is als
 any random user can update or delete an existing blog post. Not good.
   
   
-![API Detail Logged Out](images/7.jpg)
+![API Detail Logged Out](images/7.jpg?raw=true)
   
   
 The reason we can still see the Post List endpoint and also the Detail List endpoint 
@@ -199,7 +199,7 @@ happened!
   
   
   
-![API Post List Logged Out](images/8.jpg)
+![API Post List Logged Out](images/8.jpg?raw=true)
   
  
 We no longer see our Post List page. Instead we are greeted with an unfriendly HTTP 403
@@ -212,7 +212,7 @@ If you use the URL for Post Detail http://127.0.0.1:8000/api/v1/1/ you will see 
 message and also no available forms for edits.
   
   
-![API Detail Logged Out](images/9.jpg)
+![API Detail Logged Out](images/9.jpg?raw=true)
   
   
 Therefore at this point only logged-in users can view our API. If you log back in with either your
@@ -433,13 +433,13 @@ http://127.0.0.1:8000/api/v1/1/. Make sure you are logged-in with your superuser
 who is the author of the post. The username should be visible in the upper righthand corner of the page
   
 
-![API Detail Superuser](images/10.jpg)
+![API Detail Superuser](images/10.jpg?raw=true)
   
  
 However, if you log out and then log in with the testuser account, the page changes.
   
   
-![API Detail Testuser](images/11.jpg)
+![API Detail Testuser](images/11.jpg?raw=true)
   
   
 We **can** view this page since read-only permissions are allowed. However we **can not** make any

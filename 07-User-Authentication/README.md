@@ -211,13 +211,13 @@ Running migrations:
 
 اگر به آدرس پنل مدیریت جنگو در <http://127.0.0.1:8000/admin/> رجوع کنید شما بخش `Tokens` را در بالا مشاهده خواهید کرد. پیش از آن اطمینان حاصل کنید که با کاربر superuser وارد شده‌اید که دسترسی داشته باشید.  
 
-|![صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها](images/1.jpg)|
+|![صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/1.jpg?raw=true)|
 |:--:|
 |صفحه خانه پنل مدیریت جنگو به همراه توکن‌ها|
 
 بر روی لینک `Tokens` کلیک کنید. در حال حاضر هیچ توکنی وجود ندارد که ممکن است برای شما سوپرایز کننده باشد.
 
-|![صفحه مدیریت توکن‌ها](images/2.jpg)|
+|![صفحه مدیریت توکن‌ها](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/2.jpg?raw=true)|
 |:--:|
 |صفحه مدیریت توکن‌ها|
 
@@ -289,13 +289,13 @@ urlpatterns = [
 
 ما یک نقطه پایانی برای وارد شدن در <http://127.0.0.1:8000/api/v1/dj-rest-auth/login/> داریم
 
-|![نقطه پایانی API ورود کاربر](images/3.jpg)|
+|![نقطه پایانی API ورود کاربر](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/3.jpg?raw=true)|
 |:--:|
 |نقطه پایانی API ورود کاربر|
 
 و نقطه پایانی برای خارج شدن در <http://127.0.0.1:8000/api/v1/dj-rest-auth/logout> داریم
 
-|![نقطه پایانی API خارج شدن کاربر](images/4.jpg)|
+|![نقطه پایانی API خارج شدن کاربر](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/4.jpg?raw=true)|
 |:--:|
 |نقطه پایانی API ورود کاربر|
 
@@ -303,7 +303,7 @@ urlpatterns = [
 
 <http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/>
 
-|![API بازنشانی رمز عبور](images/5.jpg)|
+|![API بازنشانی رمز عبور](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/5.jpg?raw=true)|
 |:--:|
 |API بازنشانی رمز عبور|
 
@@ -311,7 +311,7 @@ urlpatterns = [
 
 <http://127.0.0.1:8000/api/v1/dj-rest-auth/password/reset/confirm>
 
-|![API تایید بازنشانی رمز عبور](images/6.jpg)|
+|![API تایید بازنشانی رمز عبور](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/6.jpg?raw=true)|
 |:--:|
 |API تایید بازنشانی رمز عبور|                                                                                      
                                                                                           
@@ -407,7 +407,7 @@ urlpatterns = [
 
 اکنون نقطه پایانی جدیدی برای ثبت نام کاربر در <http://127.0.0.1:8000/api/v1/dj-rest-auth/registration/> وجود دارد.
 
-|![API ثبت نام کاربر](images/7.jpg)|
+|![API ثبت نام کاربر](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/7.jpg?raw=true)|
 |:--:|
 |API ثبت نام کاربر|                                                                                       
                                                                                           
@@ -416,13 +416,13 @@ urlpatterns = [
 
 برای اینکه اطمینان حاصل کنید همه چیز کار میکند، حساب کاربری سومی را از طریق نقطه پایانی API قابل مرور ایجاد کنید. من کاربرم را `testusers2` نامیدم. سپس روی دکمه «POST» کلیک کنید. 
 
-|![API ثبت نام کاربر جدید](images/8.jpg)|
+|![API ثبت نام کاربر جدید](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/8.jpg?raw=true)|
 |:--:|
 |API ثبت نام کاربر جدید|
 
 تصویر بعدی پاسخ HTTP از طرف سرور را نمایش می‌دهد. درخواست `POST` ثبت نام کاربر ما موفقیت آمیز بود و از این رو کد وضعیت `201 ایجاد شده(201 Created at)`  در بالا نمایش داده شده است. و مقدار برگشتی `key(کلید)` همان توکن احراز هویت برای کاربر جدید است.
 
-|![کلید احراز هویت API](images/9.jpg)|
+|![کلید احراز هویت API](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/9.jpg?raw=true)|
 |:--:|
 |کلید احراز هویت API|
 
@@ -455,7 +455,7 @@ example.com
 
 به آدرس پنل مدیریت جنگو در آدرس <http://127.0.0.1:8000/admin/> بروید. به حساب سوپریوزر برای اینکار نیاز خواهید داشت. سپس بر روی لینک `Tokens` در بالای صفحه کليک کنيد. شما به صفحه توکن‌ها منتقل خواهید شد.
 
-|![توکن‌های مدیر](images/10.jpg)|
+|![توکن‌های مدیر](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/10.jpg?raw=true)|
 |:--:|
 |توکن‌های مدیر|
 
@@ -465,13 +465,13 @@ example.com
 
 بگذریم.بیاید با حساب جدید `testuser2` وارد شویم. در مرورگر وبتان به آدرس <http://127.0.0.1:8000/api/v1/dj-rest-auth/login/> بروید. اطلاعات کاربری را برای حساب `testuser2` وارد کنید. بر روی دکمه «POST» کليک کنید.
 
-|![وارد شدن testuser2 با API](images/11.jpg)|
+|![وارد شدن testuser2 با API](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/11.jpg?raw=true)|
 |:--:|
 |وارد شدن testuser2 با API|
 
 دو چیز اتفاق افتاده است. در گوشه بالا سمت راست حساب کاربری ما `testuser2` نمایان است که تایید می‌کند ما وارد شده‌ایم. و همچنین سرور نیز پاسخی HTTP به همراه توکن برگردانده است.
 
-|![توکن ورود با API](images/12.jpg)|
+|![توکن ورود با API](https://github.com/ftg-iran/dfa-persian/blob/main/07-User-Authentication/images/12.jpg?raw=true)|
 |:--:|
 |توکن ورود با API|
 

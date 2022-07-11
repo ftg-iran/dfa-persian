@@ -122,7 +122,7 @@ schema URL endpoint at http://127.0.0.1:8000/openapi the automatically generated
 of our entire API is available.
   
   
-![API Schema](images/1.jpg)
+![API Schema](images/1.jpg?raw=true)
   
 Personally, I prefer the dynamic approach in projects.
   
@@ -234,13 +234,13 @@ Make sure the local server is running. The Swagger endpoint is now available at:
   
 http://127.0.0.1:8000/swagger/
   
-![Swagger view](images/2.jpg)
+![Swagger view](images/2.jpg?raw=true)
   
   
 Then confirm that the ReDoc view is also working at http://127.0.0.1:8000/redoc/.
   
   
-![ReDoc view](images/3.jpg)
+![ReDoc view](images/3.jpg?raw=true)
   
   
 The [drf-yasg docs](https://drf-yasg.readthedocs.io/en/stable/readme.html) are quite comprehensive and spell out many more customizations that can

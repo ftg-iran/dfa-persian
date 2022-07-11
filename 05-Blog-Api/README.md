@@ -144,11 +144,11 @@ Command Line
 
 سپس به آدرس http://127.0.0.1:8000/admin/  رفته و با اطلاعات ابرکاربر خود به داشبورد ادمین وارد می شویم. روی دکمه "+ افزودن" در کنار پست ها کلیک کنید و یک پست وبلاگ جدید ایجاد کنید. در کنار "نویسنده" یک منوی کشویی وجود خواهد داشت که دارای حساب کاربری ابرکاربر شما است (نام کاربر من wsv است). مطمئن شوید که یک نویسنده انتخاب شده باشد.سپس عنوان و محتوای متن را اضافه کنید سپس روی دکمه "ذخیره" کلیک کنید.
 
-![Admin add blog post](images/1.png)
+![Admin add blog post](https://github.com/ftg-iran/dfa-persian/blob/main/05-Blog-Api/images/1.png)
 
 در ادامه شما به صفحه ای هدایت می شوید که همه پست های موجود در وبلاگ را نمایش می دهد.
 
-![Admin blog posts](images/2.png)
+![Admin blog posts](https://github.com/ftg-iran/dfa-persian/blob/main/05-Blog-Api/images/2.png)
 
 ### تست ها
   
@@ -441,7 +441,7 @@ Command Line
 برای دیدن لیست پست های ایجاد شده به آدرس  http://127.0.0.1:8000/api/v1/  میرویم.
   
 
-![API Post List](images/3.png)
+![API Post List](https://github.com/ftg-iran/dfa-persian/blob/main/05-Blog-Api/images/3.png)
     
 
 این صفحه یک لیست از پست های موجود در ای پی آی را با فرمت جیسون نشان می دهد. توجه داشته باشید که هر دو متد GET و POST قابل اجرا هستند.
@@ -452,7 +452,7 @@ Command Line
  
 به آدرس http://127.0.0.1:8000/api/v1/1/ میرویم.
 
-![API Post Detail](images/4.png)   
+![API Post Detail](https://github.com/ftg-iran/dfa-persian/blob/main/05-Blog-Api/images/4.png)   
     
    
 
@@ -461,12 +461,12 @@ Command Line
 اکنون زمان تست آن ها است. بیایید موضوع را با یه متن اضافه در انتها آن ویرایش کنیم. به این منظور مانند عکس زیر از دکمه PUT استفاده میکنیم.
 
     
-![API Post Detail edited](images/5.png)  
+![API Post Detail edited](https://github.com/ftg-iran/dfa-persian/blob/main/05-Blog-Api/images/5.png)  
  
 اکنون با کلیک روی دکمه بالای صفحه یا به صورت مستقیم از آدرس http://127.0.0.1:8000/api/v1/ به صفحه لیست تمامی پست ها برمی گردیم. در اینجا نیز مشاهده میشود که موضوع به درستی ویرایش شده است.
 
     
-![API Post List edited](images/6.png)  
+![API Post List edited](https://github.com/ftg-iran/dfa-persian/blob/main/05-Blog-Api/images/6.png)  
     
  
 ### نتیجه گیری

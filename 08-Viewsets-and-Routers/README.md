@@ -168,14 +168,14 @@ API قابل مرور (browsable API) بروید تا تأیید کنید همه
 
 لیست endpoint کاربران ما در http://127.0.0.1:8000/api/v1/users/ قرار دارد.
 
-![API Users List](images/1.png)
+![API Users List](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/1.png)
 
 کد وضعیت (status code) برابر 200 OK است که به این معنی است که همه چیز کار می کند. ما می توانیم سه کاربر موجود خود را ببینیم.
  
 نقطه پایانی (endpint) جزئیات کاربر در کلید اصلی برای هر کاربر در دسترس است. بنابراین حساب کاربری superuser
 ما در آدرس زیر قرار دارد: http://127.0.0.1:8000/api/v1/users/1/.
  
-![API User Instance](images/2.png)
+![API User Instance](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/2.png)
 
 
 ### ویوست ها Viewsets
@@ -253,25 +253,25 @@ urlpatterns = router.urls
 در خط بالا SimpleRouter همراه با ویوها ایمپورت شده است . روتر بر روی حالت SimpleRouter ست شده است و ما هر کدام از viewsetها برای یوزر و پست ها را ثبت(register) می کنیم. در نهایت ما URL های خود را برای استفاده از روترهای جدید تنظیم می کنیم. پیش میرویم و چهار اندپوینت خود را با دستور python manage.py runserver بررسی میکنیم.
 
 
-![Image 3](images/3.png)
+![Image 3](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/3.png)
 
 توجه داشته باشید که لیست کاربران یکسان است، اما view جزئیات کمی متفاوت است. این مورد به عنوان "User Instance"  به جای "User Detail" شناخته می شود و یک آپشن اضافه "delete" وجود دارد که در [ModelViewSet](https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset) تعبیه شده است.
 
 
-![Image 4](images/4.png)
+![Image 4](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/4.png)
 امکان شخص سازی viewsetها وجود دارد اما یک  بده و بستان (tradeoff) مهم در ازای نوشتن کد کمتر با viewset می باشد که تنظیمات پیش فرض ممکن است نیازمند یک سری پیکربندی اضافی برای رفع آنچیزی که میخواهید باشد. 
 
 با رفتن به اندپویت لیست پست ها به آدرس http://127.0.0.1:8000/api/v1/ می توانیم ببینیم که با حالت قبل (بدون viewset) یکسان است. 
 
-![Image 5](images/5.png)
+![Image 5](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/5.png)
 
 و مورد مهم این که همچنان دسترسی ها و مجوزها کار میکند. وقتی که به عنوان کاربر testuser2 لاگین کنید آبجکت پست در آدرس http://127.0.0.1:8000/api/v1/1/ همچنان در حالت read-only می باشد.
 
-![Image 6](images/6.png)
+![Image 6](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/6.png)
 
 به هر حال اگر به عنوان کاربر superuser ما لاگین کنیم که تنها نویسنده بلاگ پست نیز هست ما تمام دسترسی ها از جمله خواندن نوشتن ویرایش کردن و حذف پست را داریم.  
 
-![Image 7](images/7.png)
+![Image 7](https://github.com/ftg-iran/dfa-persian/blob/main/08-Viewsets-and-Routers/images/7.png)
 
 
 ### نتیجه گیری
