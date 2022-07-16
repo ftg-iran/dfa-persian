@@ -41,7 +41,7 @@
   
   - [جنگو](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D8%AC%D9%86%DA%AF%D9%88-%D9%85%D8%B1%D8%B3%D9%88%D9%85) ✓
   - [اولین برنامه](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D8%A7%D9%88%D9%84%DB%8C%D9%86-%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87) ✓
-  - [مدل ها](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D9%85%D8%AF%D9%84-%D9%87%D8%A7) ✓
+  - [مدل‌ها](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D9%85%D8%AF%D9%84-%D9%87%D8%A7) ✓
   - [ادمین](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D9%85%D8%AF%DB%8C%D8%B1) ✓
   - [ویو ها](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D9%86%D9%85%D8%A7-%D9%87%D8%A7views) ✓
   - [URLs](https://github.com/ftg-iran/dfa-persian/tree/main/02-Library-Website-and-API#%D9%85%DA%A9%D8%A7%D9%86-%DB%8C%D8%A7%D8%A8-%D9%87%D8%A7%DB%8C-%D9%85%D9%86%D8%A8%D8%B9-%DB%8C%DA%A9%D8%B3%D8%A7%D9%86urls) ✓
