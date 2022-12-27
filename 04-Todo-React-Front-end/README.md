@@ -5,12 +5,13 @@
 به منظور برقراری ارتباط با برنامه دیگر یک API وجود دارد. در این فصل ما از Todo API فصل قبلی از طریق فرانت اند [React](https://reactjs.org/) استفاده خواهیم کرد. درنتیجه می‌توانید ببینید که چطور در عمل همه چیز در کنار هم کار می‌کنند.
 
 
- در این جا از React استفاده کرده‌ام به این دلیل که اخیرا معروف‌ترین کتابخانه ی فرانت اند جاوااسکریپت می‌باشد اما تکنولوژی هایی که در اینجا توصیف می‌شوند با هر فریم ورک معروف فرانت اند دیگری مثل [Vue](https://vuejs.org/), [Angular](https://angular.io/), یا [Ember](https://emberjs.com/) هم کار می‌کنند. حتی با اپ‌های موبایلی iOS یا اندروید، اپ‌های دسکتاپ، یا هر چیز دیگری هم کار می‌کنند. فرآیند اتصال به یک بکند API به طرز قابل توجهی مشابه است.
+ در این جا از React استفاده کرده‌ام به این دلیل که اخیرا معروف‌ترین کتابخانه ی فرانت اند جاوااسکریپت می‌باشد اما تکنولوژی هایی که در اینجا توصیف می‌شوند با هر فریم ورک معروف فرانت اند دیگری مثل [Vue](https://vuejs.org/)، [Angular](https://angular.io/) یا [Ember](https://emberjs.com/) هم کار می‌کنند. حتی با اپ‌های موبایلی iOS یا اندروید، اپ‌های دسکتاپ، یا هر چیز دیگری هم کار می‌کنند. فرآیند اتصال به یک بکند API به طرز قابل توجهی مشابه است.
 
 
 اگر درگیر این مسئله شده‌اید و یا می‌خواهید بیشتر بدانید که واقعا چه اتفاقی با React می‌افتد، [official tutorial](https://reactjs.org/tutorial/tutorial.html) که واقعا خوب هستند را بررسی نمایید.
+
 ## نصب Node
-با پیکره‌بندی React  به عنوان فرانت اند خودمان شروع می‌کنیم. در ابتدا یک کنسول خط فرمان (کامند لاین) جدید را باز می‌کنیم پس حالا **دو کنسول باز هستند**. این مهم هست. چون باید todo بک اندی که در فصل قبل راه‌اندازی کردیم هم چنان در سرور محلی درحال اجرا باشد. از کنسول دوم نیز برای ساخت و اجرای فرانت اند React روی یک پورت محلی مجزا استفاده خواهیم کرد.
+با پیکره‌بندی React  به عنوان فرانت اند خودمان شروع می‌کنیم. در ابتدا یک کنسول خط فرمان (کامند لاین) جدید را باز می‌کنیم پس حالا **دو کنسول باز هستند**. این مهم هست. چون باید todo بک‌اندی که در فصل قبل راه‌اندازی کردیم هم چنان در سرور محلی در حال اجرا باشد. از کنسول دوم نیز برای ساخت و اجرای فرانت اند React روی یک پورت محلی مجزا استفاده خواهیم کرد.
 اینگونه ما به تقلید اینکه تنظیمات پروداکشن سفارشی شده و استقرار یافته ی front/back چگونه باشد، می‌پردازیم.
 
 
@@ -20,15 +21,13 @@
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ brew install node
 ```
 
 </div>
 
-روی ویندوز روش‌های زیادی برای نصب وجود دارد که معروف‌ترین آن‌هااستفاده از [nvm-windows](https://github.com/coreybutler/nvm-windows) است که در مخزن گیت آن دستورات نصب کامل و به روزی در این باره وجود دارد.  
+روی ویندوز روش‌های زیادی برای نصب وجود دارد که معروف‌ترین آن‌ها استفاده از [nvm-windows](https://github.com/coreybutler/nvm-windows) است که در مخزن گیت آن دستورات نصب کامل و به روزی در این باره وجود دارد.  
   
 
 
@@ -37,9 +36,7 @@ $ brew install node
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/\
 install.sh | bash
 ```
@@ -52,9 +49,7 @@ install.sh | bash
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/\
 install.sh | bash
 ```
@@ -65,9 +60,8 @@ install.sh | bash
 
 <div dir="ltr">
 
-خط فرمان
 
-```shell
+```powershell
 $ command -v nvm
 ```
 
@@ -80,16 +74,15 @@ $ command -v nvm
 برای اجرای سریع یک پروژه React جدید از پکیج بسیار خوب [create-react-app](https://github.com/facebookincubator/create-react-app)  استفاده می‌کنیم. این درواقع دیگ بخار پروژه ما را می‌سازد و تمامی وابستگی های مورد نیاز پروژه را با یک دستور نصب می‌کند!
 
 
-برای نصب react از [npm](https://www.npmjs.com/) استفاده می‌کنیم. npm ابزار مدیریت پکیج جاوااسکریپت است. npm همانند pipenv در پایتون مدیریت و نصب چندین پکیج نرم افزاری را ساده تر می‌کند. نسخه های اخیر npm، شامل [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) هم هستند. npx یک روش پیشرفته برای نصب پکیج ها به صورت محلی بدون آلودگی فضای نام سراسری است (polluting the global namespace). این روش پیشنهادی برای نصب React می‌باشد که ما در این جا از آن استفاده خواهیم کرد.
+برای نصب react از [npm](https://www.npmjs.com/) استفاده می‌کنیم. npm ابزار مدیریت پکیج جاوااسکریپت است. npm همانند pipenv در پایتون مدیریت و نصب چندین پکیج نرم افزاری را ساده‌تر می‌کند. نسخه‌های اخیر npm، شامل [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) هم هستند. npx یک روش پیشرفته برای نصب پکیج ها به صورت محلی بدون آلودگی فضای نام سراسری است (polluting the global namespace). این روش پیشنهادی برای نصب React می‌باشد که ما در این جا از آن استفاده خواهیم کرد.
 
 
 با ورود به Desktop (اگر روی مک هستید) و سپس فولدر todo از اینکه در مسیر درستی قرار گرفته اید، اطمینان حاصل نمایید.
 
 <div dir="ltr">
 
-خط فرمان
 
-```shell
+```powershell
 $ cd ~/Desktop
 $ cd todo
 ```
@@ -100,9 +93,7 @@ $ cd todo
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ npx create-react-app frontend
 ```
 
@@ -112,9 +103,7 @@ $ npx create-react-app frontend
 
 <div dir="ltr">
 
-دیاگرام
-
-```code
+```
 todo
 |   ├──frontend
 |       ├──React...
@@ -128,9 +117,7 @@ todo
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ cd frontend
 $ npm start
 ```
@@ -147,7 +134,6 @@ $ npm start
 
 <div dir="ltr">
 
-Code
 ```json
 [
     {
@@ -166,7 +152,6 @@ Code
         "body":"It's important."
     }
 ]
-
 ```
 
 </div>
@@ -178,7 +163,6 @@ Code
 
 <div dir="ltr">
 
-کد
 ```js
 // src/App.js
 import React, { Component } from 'react';
@@ -210,7 +194,6 @@ const list = [
 عمدا سریع از این بخش عبور می‌کنم، پس اگر قبلا از react استفاده نکرده‌اید، فقط کد را کپی کنید تا با این کار ببینید که اتصال یک فرانت اند react به بک اند جنگو چگونه انجام می‌شود. این کد کاملی است که باید آن را در فایل `src/App.js` قرار دهید. 
 <div dir="ltr">
 
-کد
 ```js
 // src/App.js
 import React, { Component } from 'react';
@@ -258,7 +241,7 @@ export default App;
 
 </div>
 
-آرایه list را در state اپ کامپوننت مورد نظر بارگذاری نموده ایم، پس از آن از map برای جستجو در هر آیتم از لیستی که `title`و `body`را نشان می‌دهد استفاده می‌کنیم. همچنین id را به عنوان کلیدی که یک نیازمندی خاص react می‌باشد، به این مقادیر اضافه کرده‌ایم، id به طور خودکار توسط جنگو به هر فیلد دیتابیسی اضافه شده است.
+آرایه list را در state اپ کامپوننت مورد نظر بارگذاری نموده ایم، پس از آن از map برای جستجو در هر آیتم از لیستی که `title` و `body` را نشان می‌دهد استفاده می‌کنیم. همچنین id را به عنوان کلیدی که یک نیازمندی خاص react می‌باشد، به این مقادیر اضافه کرده‌ایم، id به طور خودکار توسط جنگو به هر فیلد دیتابیسی اضافه شده است.
 حال باید todo هایمان را که در صفحه اصلی  http://localhost:3000/   لیست شده اند بدون نیاز به رفرش نمودن صفحه ببینید. 
 
 ![Dummy data](images/2.png)
@@ -273,13 +256,11 @@ sh: `react-scripts: command not found while running npm start`.
 
 حال بیایید به جای استفاده از mock data در متغیر list، به طور واقعی به Todo API خودمان متصل شویم. در کنسول خط فرمان دیگر، سرور جنگو در حال اجراست و می‌دانیم که اندپوینت API که تمامی todo ها را لیست نموده در  http://127.0.0.1:8000/api/ قرار دارد. پس ما باید یک درخواست GET را به آن صادر کنیم.
 
-برای ایجاد درخواست‌های HTTP دو روش معروف وجود دارد: با استفاده از [built-in Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)  و یا با استفاده از [axios](https://github.com/axios/axios) که با چندین فیچر اضافی همراه است. در این مثال از axios استفاده خواهیم کرد. React app  که روی خط فرمان در حال اجرا است را با دستور `Control+c` متوقف کنید. سپس `axios` را نصب نمایید.
+برای ایجاد درخواست‌های HTTP دو روش معروف وجود دارد: با استفاده از [built-in Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)  و یا با استفاده از [axios](https://github.com/axios/axios) که با چندین فیچر اضافی همراه است. در این مثال از axios استفاده خواهیم کرد. React app  که روی خط فرمان در حال اجرا است را با دستور `Ctrl+c` متوقف کنید. سپس `axios` را نصب نمایید.
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ npm install axios
 ```
 
@@ -290,9 +271,7 @@ $ npm install axios
 
 <div dir="ltr">
 
-خط فرمان
-
-```shell
+```powershell
 $ npm start
 ```
 
@@ -302,7 +281,6 @@ $ npm start
 
 <div dir="ltr">
 
-کد
 ```js
 // src/App.js
 import React, { Component } from 'react';
@@ -322,7 +300,6 @@ import axios from 'axios'; // new
 
 <div dir="ltr">
 
-کد
 ```js
 // src/App.js
 import React, { Component } from 'react';
